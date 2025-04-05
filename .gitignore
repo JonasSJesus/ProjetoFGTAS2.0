@@ -1,0 +1,9 @@
+/vendor/
+
+.env
+.env.backup
+.env.production
+
+/.idea/
+/.vscode/
+/123TESTE/

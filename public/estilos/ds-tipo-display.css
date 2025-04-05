@@ -1,0 +1,16 @@
+.escondido {
+    display: none;
+}
+
+.bloco_linha {
+    display: inline-block;
+}
+
+.linha {
+    display: inline;
+}
+
+.bloco {
+    display: bloco;
+}
+
