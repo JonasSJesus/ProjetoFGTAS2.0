@@ -11,7 +11,6 @@ class PermissionMiddleware
     // Implementar métodos para checar o cargo/role do usuario, e impedir acesso não autorizado
     public function process(Request $request, RequestHandler $handler): Response
     {
-
         return $handler->handle($request);
     }
 }

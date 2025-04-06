@@ -12,24 +12,28 @@ use SlimSession\Helper;
 class AuthMiddleware implements MiddlewareInterface
 {
     private ResponseFactoryInterface $responseFactory;
+    private Helper $session;
 
-    public function __construct(ResponseFactoryInterface $responseFactory)
+    public function __construct(ResponseFactoryInterface $responseFactory, Helper $session)
     {
         $this->responseFactory = $responseFactory;
+        $this->session = $session;
     }
 
 
     // implementar métodos para checar se $_SESSION esta definido
     public function process(Request $request, RequestHandler $handler): Response
     {
-        $session = new Helper();
+        session_regenerate_id(true);
 
-        if (!$session->exists('user')) {
+        $session = $this->session;
+
+        if (!isset($_SESSION['is_logged'])) {
             $response = $this->responseFactory->createResponse();
 
             return $response
                     ->withHeader('Location', '/login')
-                    ->withStatus(301);
+                    ->withStatus(302);
         }
 
         return $handler->handle($request);

@@ -22,6 +22,7 @@ class AuthController
 
     public function loginPage(Request $request, Response $response, array $args): Response
     {
+        dump($_SESSION);
         $view = Twig::fromRequest($request);
 
         return $view->render($response, 'login.php');
@@ -46,7 +47,6 @@ class AuthController
                 ->withHeader('Location', '/login')
                 ->withStatus(302);
         }
-
 
         return $response
             ->withHeader('Location', '/home')

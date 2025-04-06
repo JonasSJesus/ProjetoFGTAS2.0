@@ -8,6 +8,7 @@ use Slim\Views\TwigMiddleware;
 
 require_once "../config/config.php";
 require_once ROOT_APP . "/vendor/autoload.php";
+session_regenerate_id(true);
 
 // Inicializando .env
 $dotenv = Dotenv::createImmutable(ROOT_APP);
@@ -45,7 +46,7 @@ $middleware = require __DIR__ . '/../app/middleware.php';
 $middleware($app);
 
 // Error handler Middleware
-$errorMiddleware = $app->addErrorMiddleware(false, false, false);
+$errorMiddleware = $app->addErrorMiddleware(true, false, false);
 
 // Register routes
 $routes = require __DIR__ . '/../app/routes.php';

@@ -43,6 +43,7 @@ class AuthService
 
         $this->createSession($user);
 
+
         if(password_needs_rehash($user->senha, PASSWORD_ARGON2ID)){
             $hashPWD = password_hash($password, PASSWORD_ARGON2ID);
             $this->repository->updatePWD($user->id, $hashPWD);

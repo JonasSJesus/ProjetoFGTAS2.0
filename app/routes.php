@@ -14,18 +14,29 @@ return function (App $app) {
         $group->post('', [AuthController::class, 'login']);
     });
 
+    $app->get('/logout', [AuthController::class, 'logout']);
+
     $app->group('/register', function (Group $group) {
         $group->get('', [AuthController::class, 'registerUserPage']);
         $group->post('', [AuthController::class, 'registerUser']);
-    })->add(AuthMiddleware::class)->add(PermissionMiddleware::class);
+    })->add(PermissionMiddleware::class)->add(AuthMiddleware::class);
 
-    $app->get('/logout', [AuthController::class, 'logout']);
 
-    // Testes de rotas
+    /**
+     * =====================Rotas de Teste ============================
+     */
     $app->get('/home', function ($request, $response) {
+        dump($_SESSION);
         $view = Twig::fromRequest($request);
 
         return $view->render($response, 'home.php');
-    });//->add(AuthMiddleware::class);
+    })->add(AuthMiddleware::class);
+
+    $app->get('/admin', function ($request, $response) {
+        dump($_SESSION);
+        $view = Twig::fromRequest($request);
+
+        return $view->render($response, 'admin.php');
+    });
 
 };

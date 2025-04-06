@@ -9,6 +9,11 @@ return function (App $app) {
         'name' => 'user_session',
         'autorefresh' => true,
         'httponly' => true,
-        'samesite' => ''
+        'samesite' => '',
+        'lifetime' => '1 hour',
+
     ]));
+
+    // TODO: implementar um middleware para regenerar o ID da sessão a cada X minutos
+
 };
