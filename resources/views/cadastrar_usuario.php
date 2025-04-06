@@ -1,17 +1,13 @@
-<?php
-    session_start();
-?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../public/estilos/ds.css">
+    <link rel="stylesheet" href="/estilos/ds.css">
     <title>Cadastrar Usuário</title>
 </head>
 <body>
-    <form method="post" class="formulario mt12-5 centralizado" action="../src/controller/cadastraUsuario.php">
+    <form method="post" class="formulario mt12-5 centralizado">
         <fieldset class="formulario__campo w80">
             <legend class="formulario__subtitulo">Usuário</legend>
             <section class="centralizado">
@@ -59,6 +55,6 @@
         </div>
     </form>
 <script src="https://kit.fontawesome.com/df85906e6a.js" crossorigin="anonymous"></script>
-<script src="../../public/js/olho.js"></script>
+<script src="/js/olho.js"></script>
 </body>
 </html>

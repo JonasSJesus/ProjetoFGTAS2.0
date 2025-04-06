@@ -2,10 +2,10 @@
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
-    cargo ENUM('atendente', 'admin') NOT NULL DEFAULT 'usuario',
+    cargo ENUM('atendente', 'admin') NOT NULL DEFAULT 'atendente',
     email VARCHAR(255) UNIQUE NOT NULL,
     senha VARCHAR(255) NOT NULL,
-    ativo BOOLEAN DEFAULT True
+    ativo ENUM('S', 'N') DEFAULT 'S'
 );
 
 -- Tabela de Formas de Atendimento

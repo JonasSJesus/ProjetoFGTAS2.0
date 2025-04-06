@@ -12,9 +12,9 @@
 <body>
     <header class="grid100  menu ">
         <nav class="w100 direita pv1">
-            <a href="admin.php" class="menu__botao">Admin</a>
-            <a href="../src/controller/deslogando.php" class="menu__botao__secundario">Deslogar</a>
-            <a href="usuario.php" class="menu__botao">Usuário</a>
+            <a href="/admin" class="menu__botao">Admin</a>
+            <a href="/logout" class="menu__botao__secundario">Deslogar</a>
+            <a href="/usuario" class="menu__botao">Usuário</a>
         </nav>
     </header>
     <form class="formulario mt12-5" method="post">
