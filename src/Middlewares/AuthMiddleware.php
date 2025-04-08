@@ -24,11 +24,10 @@ class AuthMiddleware implements MiddlewareInterface
     // implementar métodos para checar se $_SESSION esta definido
     public function process(Request $request, RequestHandler $handler): Response
     {
-        session_regenerate_id(true);
-
         $session = $this->session;
+        session_regenerate_id(true); // TODO trocar por um middleware dedicado
 
-        if (!isset($_SESSION['is_logged'])) {
+        if (!$session->exists('user') && $session->user['is_logged'] !== true) {
             $response = $this->responseFactory->createResponse();
 
             return $response

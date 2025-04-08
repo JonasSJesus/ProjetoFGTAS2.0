@@ -8,7 +8,6 @@ use Slim\Views\TwigMiddleware;
 
 require_once "../config/config.php";
 require_once ROOT_APP . "/vendor/autoload.php";
-session_regenerate_id(true);
 
 // Inicializando .env
 $dotenv = Dotenv::createImmutable(ROOT_APP);

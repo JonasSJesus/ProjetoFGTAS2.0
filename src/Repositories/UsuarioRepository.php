@@ -85,6 +85,19 @@ class UsuarioRepository
 
     }
 
+    public function update(Usuario $user): bool
+    {
+        $sql = "UPDATE usuario SET nome = :nome, email = :email, cargo = :cargo, ativo = :ativo WHERE id = :id;";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':nome', $user->nome);
+        $stmt->bindValue(':email', $user->email);
+        $stmt->bindValue(':cargo', $user->cargo);
+        $stmt->bindValue(':ativo', $user->ativo);
+        $stmt->bindValue(':id', $user->getId());
+
+        return $stmt->execute();
+    }
+
     public function updatePWD(int $id, string $password)
     {
         $sql = "UPDATE usuario SET senha = :password WHERE id = :id;";
@@ -95,8 +108,17 @@ class UsuarioRepository
         return $stmt->execute();
     }
 
-    public function createObj(array $data): Usuario
+
+    /**
+     * Metodo interno. Usado para criar usuarios a partir dos dados do banco de dados
+     * @param array $data
+     * @return Usuario
+     */
+    private function createObj(array $data): Usuario
     {
-        return new Usuario($data['nome'], $data['email'], $data['senha'], $data['cargo'], $data['ativo'], $data['id']);
+        $user = new Usuario($data['nome'], $data['email'], $data['senha'], $data['cargo'], $data['ativo']);
+        $user->setId($data['id']);
+
+        return $user;
     }
 }

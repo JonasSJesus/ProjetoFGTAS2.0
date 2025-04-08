@@ -43,10 +43,9 @@ class AuthService
 
         $this->createSession($user);
 
-
         if(password_needs_rehash($user->senha, PASSWORD_ARGON2ID)){
             $hashPWD = password_hash($password, PASSWORD_ARGON2ID);
-            $this->repository->updatePWD($user->id, $hashPWD);
+            $this->repository->updatePWD($user->getId(), $hashPWD);
         }
 
         return true;
@@ -54,15 +53,23 @@ class AuthService
 
     private function createSession(Usuario $user): void
     {
-        $this->session->set('id', $user->id);
-        $this->session->set('name', $user->nome);
-        $this->session->set('email', $user->email);
-        $this->session->set('role', $user->cargo);
-        $this->session->set('is_logged', true);
+        $dataUser = [
+            'id' => $user->getId(),
+            'name' => $user->nome,
+            'email' => $user->email,
+            'role' => $user->cargo,
+            'is_logged' => true,
+        ];
+        $this->session->set('user', $dataUser);
     }
 
     public function destroySession(): void
     {
         $this->session::destroy();
+    }
+
+    public function verifySession(): bool
+    {
+        return $this->session->exists('user');
     }
 }

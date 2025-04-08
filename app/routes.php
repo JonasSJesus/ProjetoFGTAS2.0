@@ -9,21 +9,52 @@ use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 use Slim\Views\Twig;
 
 return function (App $app) {
-    $app->group('/login', function (Group $group) {
-        $group->get('', [AuthController::class, 'loginPage']);
-        $group->post('', [AuthController::class, 'login']);
+    // Redireciona a rota raiz para home para toda a aplicação
+    $app->redirect('/', '/home', 301);
+
+    // Rotas publicas ===============================
+    $app->group('', function (Group $group){
+
+        $group->group('/login', function ($g){
+            $g->get('', [AuthController::class, 'loginPage']);
+            $g->post('', [AuthController::class, 'login']);
+        });
+
+        $group->get('/logout', [AuthController::class, 'logout']);
+
     });
 
-    $app->get('/logout', [AuthController::class, 'logout']);
 
-    $app->group('/register', function (Group $group) {
-        $group->get('', [AuthController::class, 'registerUserPage']);
-        $group->post('', [AuthController::class, 'registerUser']);
+    // Rotas protegidas ==============================
+    $app->group('', function (Group $group) {
+
+        $group->group('/update-user/{id}', function ($g) {
+            $g->get('', [UsuarioController::class, 'userUpdatePage']);
+            $g->post('', [UsuarioController::class, 'updateUser']);
+        });
+
+    })->add(AuthMiddleware::class);
+
+
+    // Rotas de acesso exclusivo de Usuarios Administradores ==============
+    $app->group('', function (Group $group) {
+
+        $group->group('/register', function ($g){
+            $g->get('', [UsuarioController::class, 'registerUserPage']);
+            $g->post('', [UsuarioController::class, 'registerUser']);
+        });
+
     })->add(PermissionMiddleware::class)->add(AuthMiddleware::class);
 
 
     /**
-     * =====================Rotas de Teste ============================
+     * ===========Rotas de Teste usando controllers==================
+     */
+
+
+
+    /**
+     * =====================Rotas de Teste============================
      */
     $app->get('/home', function ($request, $response) {
         dump($_SESSION);
@@ -32,11 +63,24 @@ return function (App $app) {
         return $view->render($response, 'home.php');
     })->add(AuthMiddleware::class);
 
-    $app->get('/admin', function ($request, $response) {
+    $app->get('/usuario', function ($vem, $vai){
+        $view = Twig::fromRequest($vem);
+
+        return $view->render($vai, 'usuario.php');
+    });
+
+    $app->get('/admin',function ($request, $response) {
+            $view = Twig::fromRequest($request);
+
+            return $view->render($response, 'admin.php');
+
+    })->add(PermissionMiddleware::class)->add(AuthMiddleware::class);
+
+
+    $app->get('/register-user', function ($request, $response) {
         dump($_SESSION);
         $view = Twig::fromRequest($request);
 
-        return $view->render($response, 'admin.php');
-    });
-
+        return $view->render($response, 'cadastrar_usuario.php');
+    })->add(PermissionMiddleware::class)->add(AuthMiddleware::class);
 };

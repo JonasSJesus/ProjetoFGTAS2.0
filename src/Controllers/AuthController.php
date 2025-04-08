@@ -35,7 +35,7 @@ class AuthController
         $email = filter_var($data['email']);
         $password = filter_var($data['senha']);
 
-        if (!$email){
+        if (empty($email) || empty($password)){
             // TODO: cadastrar FlashMessages
             return $response
                 ->withHeader('Location', '/login')

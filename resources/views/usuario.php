@@ -1,16 +1,10 @@
-<?php
-    require_once __DIR__ . "/../src/controller/SessaoController.php";
-    $controle = new SessaoController();
-    $controle->protecao();
-?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../public/estilos/ds.css">
+    <link rel="stylesheet" href="/estilos/ds.css">
     <title>Usuário</title>
 </head>
 
@@ -78,8 +72,8 @@
             </table>
         </section>
         <div class="centralizado mt1">
-            <a href="./home.php" class="formulario__botao__padrao formulario__botao__terceario">Voltar</a>
-            <a href="./relatorio.php" class="formulario__botao__padrao formulario__botao">Gerar Relatório</a>
+            <a href="/home" class="formulario__botao__padrao formulario__botao__terceario">Voltar</a>
+            <a href="/relatorio" class="formulario__botao__padrao formulario__botao">Gerar Relatório</a>
         </div>
         <script src="https://kit.fontawesome.com/df85906e6a.js" crossorigin="anonymous"></script>
     </body>

@@ -10,7 +10,7 @@ return function (App $app) {
         'autorefresh' => true,
         'httponly' => true,
         'samesite' => '',
-        'lifetime' => '1 hour',
+        'lifetime' => '20 min',
 
     ]));
 

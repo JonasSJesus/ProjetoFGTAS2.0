@@ -1,17 +1,10 @@
-<?php
-require_once __DIR__ . "/../src/controller/SessaoController.php";
-$controle = new SessaoController();
-$controle->protecao();
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../public/estilos/ds.css">
+    <link rel="stylesheet" href="/estilos/ds.css">
     <title>Editar Usuário</title>
 </head>
 
