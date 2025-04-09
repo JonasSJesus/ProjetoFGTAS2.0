@@ -9,8 +9,6 @@ use PDOException;
 class UsuarioRepository
 {
     // Filtros usados no metodo getBy
-    const EMAIL = 'email';
-    const ID = 'id';
     private PDO $pdo;
 
     public function __construct(PDO $pdo)
@@ -38,21 +36,38 @@ class UsuarioRepository
     }
 
     /**
-     * retorna apenas um usuario cadastrado no banco.
-     *
-     * aplica um filtro que pode ser 'id' ou 'email' para buscar o usuario
-     *
-     * @param string $column indica a coluna de que queremos usar para buscar o usuario
-     * @param string $value indica o valor cadastrado na coluna.
-     * @return Usuario|null se a busca for bem sucedida, retorna uma instancia do objeto Usuario, caso contrario, retorna nulo
+     * Busca um usuario com base no id
+     * @param int $id
+     * @return Usuario|null
      */
-    public function getBy(string $column, string $value): ?Usuario
+    public function getById(int $id): ?Usuario
     {
 
-        $sql = "SELECT * FROM usuario WHERE {$column} = :value";
+        $sql = "SELECT * FROM usuario WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
-//        $stmt->bindValue(':column', $column);
-        $stmt->bindValue(':value', $value);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$data) {
+            return null;
+        }
+
+        return $this->createObj($data);
+    }
+
+    /**
+     * Busca um usuario com base no e-mail
+     * @param string $email
+     * @return Usuario|null
+     */
+    public function getByEmail(string $email): ?Usuario
+    {
+
+        $sql = "SELECT * FROM usuario WHERE email = :email";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':email', $email);
         $stmt->execute();
 
         $data = $stmt->fetch(PDO::FETCH_ASSOC);

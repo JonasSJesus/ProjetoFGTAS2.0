@@ -2,25 +2,26 @@
 
 namespace Fgtas\Controllers;
 
+use Dotenv\Exception\ValidationException;
 use Exception;
 use Fgtas\Entities\Usuario;
+use Fgtas\Repositories\UsuarioRepository;
 use Fgtas\Services\UsuarioService;
 use Slim\Views\Twig;
+use Respect\Validation\Validator as v;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 class UsuarioController
 {
-    //private Twig $view;
     private UsuarioService $usuarioService;
 
     public function __construct(UsuarioService $usuarioService)
     {
-        //$this->view = $twig;
         $this->usuarioService = $usuarioService;
+//        $this->usuarioRepository = $usuarioRepository;
     }
 
-    /** métodos para devolver paginas na resposta */
     /**
      * Renderiza a página de criação de usuários
      *
@@ -31,7 +32,7 @@ class UsuarioController
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function registerUserPage(Request $request, Response $response): Response
+    public function registerPage(Request $request, Response $response): Response
     {
         dump($_SESSION);
         $view = Twig::fromRequest($request);
@@ -49,7 +50,7 @@ class UsuarioController
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function userUpdatePage(Request $request, Response $response, array $args): Response
+    public function updatePage(Request $request, Response $response, array $args): Response
     {
         dump($_SESSION);
         $view = Twig::fromRequest($request);
@@ -66,11 +67,6 @@ class UsuarioController
 
 
     /**
-     * =====================================================================================================================
-     */
-
-    /** Métodos com ações */
-    /**
      * Envia os dados do formulário para a camada service.
      * Salva os dados no banco
      *
@@ -79,26 +75,21 @@ class UsuarioController
      * @return Response
      * @throws Exception
      */
-    public function registerUser(Request $request, Response $response): Response
+    public function store(Request $request, Response $response): Response
     {
         $data = $request->getParsedBody();
+        $dataValidation = v::key('nomeUsuario', v::notEmpty()->stringType())
+                        ->key('emailUsuario', v::notEmpty()->email())
+                        ->key('senhaUsuario', v::notEmpty());
 
-        if (!isset($data['nomeUsuario']) || !isset($data['emailUsuario']) || !isset($data['senhaUsuario'])) {
-            $response->getBody()->write('Todos os principais campos estão vazios, corrija isso!'); // Flash Message
+        if (!$dataValidation->validate($data)) {
+            echo "Dados invalidos"; // TODO implementar flash messages depois!
+
             return $response;
         }
 
         $this->usuarioService->create($data);
 
-//        TODO Descomentar este codigo em producao! (ou quando o sistema de flash messages estiver implementado)
-//        por enquanto, estou usando o sistema de Error Handler do proprio slim para printar meus erros na tela
-//        quando a aplicação estiver em produção, vou usar flash messages para lidar com as mensagens de erro
-//        try {
-//            $this->usuarioService->create($data);
-//        } catch (Exception $e) {
-//            $response->getBody()->write('Erro ao cadastrar usuario no sistema:' . $e->getMessage());
-//            return $response;
-//        }
         return $response
                 ->withHeader('Location', '/register')
                 ->withStatus(302);
@@ -106,21 +97,28 @@ class UsuarioController
 
 
     /**
+     * Atualiza os dados de um usuario existente no banco de dados
+     *
      * @param Request $request
      * @param Response $response
      * @return Response
      * @throws Exception
      */
-    public function updateUser(Request $request, Response $response, array $args): Response
+    public function update(Request $request, Response $response, array $args): Response
     {
         $data = $request->getParsedBody();
-        $id = $args['id'];
+        $dataValidation = v::key('nomeUsuario', v::notEmpty()->stringType())
+            ->key('emailUsuario', v::notEmpty()->email())
+            ->key('senhaUsuario', v::notEmpty());
 
-        if (!isset($data['nomeUsuario']) || !isset($data['emailUsuario']) || !isset($data['senhaUsuario'])) {
-            $response->getBody()->write('Nem todos os principais campos foram preenchidos, corrija isso!'); // Flash Message
+        if (!$dataValidation->validate($data)) {
+            echo "Dados invalidos"; // TODO implementar flash messages depois!
+
             return $response;
         }
 
+        $id = $args['id'];
+        
         $this->usuarioService->update($data, $id);
 
         return $response;

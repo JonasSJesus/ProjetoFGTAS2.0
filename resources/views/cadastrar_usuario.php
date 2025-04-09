@@ -19,7 +19,7 @@
             <section class="centralizado mv1">
                 <label class="formulario__etiqueta" for="emailUsuario ">E-mail</label>
                 <div>
-                    <input class="formulario__entrada w90" type="email" value='' name="emailUsuario"  id="emailUsuario"
+                    <input class="formulario__entrada w90" type="text" value='' name="emailUsuario"  id="emailUsuario"
                     placeholder="exemploEmail@gmail.com" >
                 </div>
             </section>

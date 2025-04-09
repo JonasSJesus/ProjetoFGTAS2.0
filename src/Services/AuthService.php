@@ -28,7 +28,7 @@ class AuthService
      */
     public function authenticate(string $email, string $password) : bool
     {
-        $user = $this->repository->getBy(UsuarioRepository::EMAIL, $email);
+        $user = $this->repository->getByEmail($email);
         $dbPassword = password_hash(' ', PASSWORD_ARGON2ID);
 
         if ($user) {
@@ -68,7 +68,7 @@ class AuthService
         $this->session::destroy();
     }
 
-    public function verifySession(): bool
+    private function verifySession(): bool
     {
         return $this->session->exists('user');
     }

@@ -28,7 +28,7 @@
                 <th>Ativado</th>
                 <td>
                     <i class="fa-solid fa-pen icone"></i>
-                    <a href="./editar_usuario.php" class="tabela__link">Editar</a>
+                    <a href="/editar-usuario" class="tabela__link">Editar</a>
                 </td>
                 <td>
                     <i class="fa-solid fa-x icone "></i>

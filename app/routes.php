@@ -29,35 +29,49 @@ return function (App $app) {
     $app->group('', function (Group $group) {
 
         $group->group('/update-user/{id}', function ($g) {
-            $g->get('', [UsuarioController::class, 'userUpdatePage']);
-            $g->post('', [UsuarioController::class, 'updateUser']);
+            $g->get('', [UsuarioController::class, 'updatePage']);
+            $g->post('', [UsuarioController::class, 'update']);
         });
 
     })->add(AuthMiddleware::class);
 
 
     // Rotas de acesso exclusivo de Usuarios Administradores ==============
+
     $app->group('', function (Group $group) {
 
         $group->group('/register', function ($g){
-            $g->get('', [UsuarioController::class, 'registerUserPage']);
-            $g->post('', [UsuarioController::class, 'registerUser']);
+            $g->get('', [UsuarioController::class, 'registerPage']);
+            $g->post('', [UsuarioController::class, 'store']);
         });
 
     })->add(PermissionMiddleware::class)->add(AuthMiddleware::class);
 
 
+
+
+
+
     /**
-     * ===========Rotas de Teste usando controllers==================
+     * ===============================================================
      */
 
+
+    /**
+     * ===============================================================
+     */
+
+
+    /**
+     * ===============================================================
+     */
 
 
     /**
      * =====================Rotas de Teste============================
      */
     $app->get('/home', function ($request, $response) {
-        dump($_SESSION);
+        dump($_SERVER);
         $view = Twig::fromRequest($request);
 
         return $view->render($response, 'home.php');

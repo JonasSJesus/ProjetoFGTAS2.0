@@ -27,23 +27,24 @@ class UsuarioService
      */
     public function create(array $data): void
     {
-        $user = $this->validateData($data);
+        $passwordHashed = $this->hashPWD($data['senhaUsuario']);
+        $user = new Usuario(
+            $data['nomeUsuario'],
+            $data['emailUsuario'],
+            $passwordHashed,
+            $data['cargo']
+        );
 
-//        $this->repository->create($user);
-        try { // Descomentar este codigo em producao! (ou quando o sistema de flash messages estiver implementado)
-            $this->repository->create($user);
-        } catch (PDOException $e) {
-            throw new Exception("Database Error: " . $e->getMessage());
-        }
+        $this->repository->create($user);
     }
 
 
     /**
      * Retorna Usuarios salvos no banco de dados. Um (com base nos filtros) ou todos (sem filtros)
-     * @param array $filters Um array contendo os filtros necessarios para buscar Usuarios no banco de dados. Se nao tiver nenhum filtro setado, retorna todos os Usuarios salvos.
+     * @param ?array $args Um array contendo os filtros necessarios para buscar Usuarios no banco de dados. Se nao tiver nenhum filtro setado, retorna todos os Usuarios salvos.
      * @return array|Usuario
      */
-    public function getUser(array $filters = null): array|Usuario
+    public function getUser(array $args = null): array|Usuario
     {
         if (isset($args)) {
             return $this->repository->getBy($args['column'], $args['filter']);
@@ -57,19 +58,25 @@ class UsuarioService
      * @return void
      * @throws Exception
      */
-    public function update(array $data, int $id): void
+    public function update(array $data, int $id): bool
     {
-        try {
-            $data = $this->validateData($data, $id);
-            $passwordHashed = $this->hashPWD($data['password']);
-            $user = new Usuario($data['name'], $data['email'], $passwordHashed, $data['role']);
-            $user->setId($data['id']);
-
-        } catch (Exception $e) {
-            throw new Exception('Data Error: ' . $e->getMessage());
+        if ($this->repository->getById($id)) {
+            return false;
         }
 
+        $passwordHashed = $this->hashPWD($data['password']);
+        $user = new Usuario(
+            $data['name'],
+            $data['email'],
+            $passwordHashed,
+            $data['role']
+        );
+        $user->setId($data['id']);
+
+
         $this->repository->update($user);
+
+        return true;
     }
 
 
@@ -81,7 +88,7 @@ class UsuarioService
      * @return Usuario|null
      * @throws Exception
      */
-    private function validateData(array $data, int $id): array|null
+    private function validateData(array $data, ?int $id = null): array|null
     {
         $name = filter_var($data['nomeUsuario']);
         $email = filter_var($data['emailUsuario'], FILTER_VALIDATE_EMAIL);
@@ -93,7 +100,7 @@ class UsuarioService
         }
 
         if (empty($name) || empty($role)) {
-            throw new Exception('Insira os dados necessários!');
+            throw new Exception('nome e cargo não foram inseridos');
         }
 
         if (!$email) {
