@@ -29,8 +29,8 @@ return function (App $app) {
     $app->group('', function (Group $group) {
 
         $group->group('/update-user/{id}', function ($g) {
-            $g->get('', [UsuarioController::class, 'updatePage']);
-            $g->post('', [UsuarioController::class, 'update']);
+            $g->get('', [UsuarioController::class, 'updatePage'])->setName('user.update.form');
+            $g->post('', [UsuarioController::class, 'update'])->setName('user.update.submit');
         });
 
     })->add(AuthMiddleware::class);
@@ -44,6 +44,15 @@ return function (App $app) {
             $g->get('', [UsuarioController::class, 'registerPage']);
             $g->post('', [UsuarioController::class, 'store']);
         });
+
+        $group->group('/admin', function ($g) {
+            $g->get('', [UsuarioController::class, 'adminPage']);
+            $g->post('', [UsuarioController::class, '']);
+
+        });
+
+
+        $group->get('/delete-user/{id}', [UsuarioController::class, 'destroy'])->setName('user.delete');
 
     })->add(PermissionMiddleware::class)->add(AuthMiddleware::class);
 
@@ -83,10 +92,10 @@ return function (App $app) {
         return $view->render($vai, 'usuario.php');
     });
 
-    $app->get('/admin',function ($request, $response) {
+    $app->get('/adminasd',function ($request, $response) {
             $view = Twig::fromRequest($request);
 
-            return $view->render($response, 'admin.php');
+            return $view->render($response, 'admin.html.twig');
 
     })->add(PermissionMiddleware::class)->add(AuthMiddleware::class);
 

@@ -21,6 +21,7 @@ class UsuarioService
 
 
     /**
+     * Cria usuarios no banco
      * @param array $data
      * @return void
      * @throws Exception
@@ -40,14 +41,14 @@ class UsuarioService
 
 
     /**
-     * Retorna Usuarios salvos no banco de dados. Um (com base nos filtros) ou todos (sem filtros)
-     * @param ?array $args Um array contendo os filtros necessarios para buscar Usuarios no banco de dados. Se nao tiver nenhum filtro setado, retorna todos os Usuarios salvos.
+     * Retorna um usuario com base no ID, ou todos os usuarios sem nenhum ID for passado
+     * @param array|null $args
      * @return array|Usuario
      */
     public function getUser(array $args = null): array|Usuario
     {
         if (isset($args)) {
-            return $this->repository->getBy($args['column'], $args['filter']);
+            return $this->repository->getById($args['id']);
         }
         return $this->repository->getAll();
     }
@@ -60,7 +61,7 @@ class UsuarioService
      */
     public function update(array $data, int $id): bool
     {
-        if ($this->repository->getById($id)) {
+        if (!$this->repository->getById($id)) {
             return false;
         }
 
@@ -80,45 +81,49 @@ class UsuarioService
     }
 
 
-    // TODO -> melhorar o metodo de validacao de dados
-    // deve-se verificar a existencia e o formato dos dados
-    /**
-     * Metodo interno para validacao de dados vindos do formulario pelo controller
-     * @param array $data
-     * @return Usuario|null
-     * @throws Exception
-     */
-    private function validateData(array $data, ?int $id = null): array|null
+    public function delete(int $id): bool
     {
-        $name = filter_var($data['nomeUsuario']);
-        $email = filter_var($data['emailUsuario'], FILTER_VALIDATE_EMAIL);
-        $role = filter_var($data['cargo']);
-        $password = strlen($data['senhaUsuario']) >= 5 ? $data['senhaUsuario'] : null;
-
-        if (!filter_var($id, FILTER_VALIDATE_INT)) {
-            throw new Exception('Usuario não encontrado');
+        if (!$this->repository->getById($id)) {
+            return false;
         }
 
-        if (empty($name) || empty($role)) {
-            throw new Exception('nome e cargo não foram inseridos');
-        }
-
-        if (!$email) {
-            throw new Exception('E-mail inválido. Por favor, insira um e-mail válido.');
-        }
-
-        if ($password === null) {
-            throw new Exception('Senha muito curta, escreva uma senha com 5 caracteres ou mais');
-        }
-
-        return [
-            'name' => $name,
-            'email' => $email,
-            'role' => $role,
-            'password' => $password,
-            'id' => $id
-        ];
+        return $this->repository->delete($id);
     }
+
+
+    // TODO -> apagar este metodo
+    // deve-se verificar a existencia e o formato dos dados
+//    private function validateData(array $data, ?int $id = null): array|null
+//    {
+//        $name = filter_var($data['nomeUsuario']);
+//        $email = filter_var($data['emailUsuario'], FILTER_VALIDATE_EMAIL);
+//        $role = filter_var($data['cargo']);
+//        $password = strlen($data['senhaUsuario']) >= 5 ? $data['senhaUsuario'] : null;
+//
+//        if (!filter_var($id, FILTER_VALIDATE_INT)) {
+//            throw new Exception('Usuario não encontrado');
+//        }
+//
+//        if (empty($name) || empty($role)) {
+//            throw new Exception('nome e cargo não foram inseridos');
+//        }
+//
+//        if (!$email) {
+//            throw new Exception('E-mail inválido. Por favor, insira um e-mail válido.');
+//        }
+//
+//        if ($password === null) {
+//            throw new Exception('Senha muito curta, escreva uma senha com 5 caracteres ou mais');
+//        }
+//
+//        return [
+//            'name' => $name,
+//            'email' => $email,
+//            'role' => $role,
+//            'password' => $password,
+//            'id' => $id
+//        ];
+//    }
 
 
     /**

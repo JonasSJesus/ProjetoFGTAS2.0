@@ -19,22 +19,23 @@
                 <th>Cargo</th>
                 <th>Ativo</th>
             </tr>
+            {% for user in users %}
             <tr>
-                <td>1</td>
-                <td>gusthavorsoares@gmail.com</td>
-                <td>Gusthavo</td>
-                <td>glsoares</td>
-                <td>admin</td>
-                <th>Ativado</th>
+                <td>{{ user.getId() }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.nome }}</td>
+                <td>{{ user.cargo }}</td>
+                <th>{{ user.ativo }}</th>
                 <td>
                     <i class="fa-solid fa-pen icone"></i>
-                    <a href="/editar-usuario" class="tabela__link">Editar</a>
+                    <a href="{{ url_for('user.update.form', { id: user.getId() }) }}" class="tabela__link">Editar</a>
                 </td>
                 <td>
                     <i class="fa-solid fa-x icone "></i>
-                    <a href="/excluir_usuario" class="tabela__link">Excluir</a>
+                    <a href="{{ url_for('user.delete', { id: user.getId() }) }}" class="tabela__link">Excluir</a>
                 </td>
             </tr>
+            {% endfor %}
         </table>
     </section>
     <div class="centralizado mt1">

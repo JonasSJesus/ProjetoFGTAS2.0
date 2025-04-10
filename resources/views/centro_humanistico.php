@@ -20,7 +20,7 @@ $controle->protecao();
             <?php
             if ($_SESSION['nome'] == 'admin') {
                 ?>
-                <a href="admin.php" class="menu__botao">Admin</a>
+                <a href="admin.html.twig" class="menu__botao">Admin</a>
                 <?php
             }
             ?>

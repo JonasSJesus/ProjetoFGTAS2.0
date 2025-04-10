@@ -14,6 +14,8 @@ return function (App $app) {
 
     ]));
 
+
+
     // TODO: implementar um middleware para regenerar o ID da sessão a cada X minutos
 
 };

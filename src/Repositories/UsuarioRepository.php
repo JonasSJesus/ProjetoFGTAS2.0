@@ -124,6 +124,16 @@ class UsuarioRepository
     }
 
 
+    public function delete(int $id): bool
+    {
+        $sql = "DELETE FROM usuario WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':id', $id);
+
+        return $stmt->execute();
+    }
+
+
     /**
      * Metodo interno. Usado para criar usuarios a partir dos dados do banco de dados
      * @param array $data

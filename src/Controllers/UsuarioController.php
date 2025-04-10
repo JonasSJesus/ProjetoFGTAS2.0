@@ -2,10 +2,7 @@
 
 namespace Fgtas\Controllers;
 
-use Dotenv\Exception\ValidationException;
 use Exception;
-use Fgtas\Entities\Usuario;
-use Fgtas\Repositories\UsuarioRepository;
 use Fgtas\Services\UsuarioService;
 use Slim\Views\Twig;
 use Respect\Validation\Validator as v;
@@ -52,17 +49,22 @@ class UsuarioController
      */
     public function updatePage(Request $request, Response $response, array $args): Response
     {
-        dump($_SESSION);
         $view = Twig::fromRequest($request);
+        $user = $this->usuarioService->getUser($args);
 
-        return $view->render($response, 'editar_usuario.php');
+        return $view->render($response, 'editar_usuario.html.twig', [
+            'user' => $user
+        ]);
     }
 
     public function adminPage(Request $request, Response $response): Response
     {
         $view = Twig::fromRequest($request);
+        $users = $this->usuarioService->getUser();
 
-        return $view->render($response, 'admin');
+        return $view->render($response, 'admin.html.twig', [
+            'users' => $users
+        ]);
     }
 
 
@@ -124,4 +126,18 @@ class UsuarioController
         return $response;
     }
 
+
+    public function destroy(Request $request, Response $response, array $args): Response
+    {
+        $id = $args['id'] ?? '';
+
+        if (!$this->usuarioService->delete($id)) {
+            $response->getBody()->write("Erro ao deletar usuario!"); // Flash message
+            return $response;
+        }
+
+        return $response
+            ->withHeader('Location', '/register')
+            ->withStatus(302);
+    }
 }
