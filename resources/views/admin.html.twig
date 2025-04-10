@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -40,7 +39,7 @@
     </section>
     <div class="centralizado mt1">
         <a href="/home" class="formulario__botao__padrao formulario__botao__terceario">Voltar</a>
-        <a href="/cadastrar_usuario" class="formulario__botao__secundario formulario__botao__padrao ">Cadastrar</a>
+        <a href="{{ url_for('user.register.form') }}" class="formulario__botao__secundario formulario__botao__padrao ">Cadastrar</a>
         <a href="/relatorio" type="submit" class="formulario__botao formulario__botao__padrao">Gerar Relatório
         </a>
     </div>

@@ -41,7 +41,7 @@ return function (App $app) {
     $app->group('', function (Group $group) {
 
         $group->group('/register', function ($g){
-            $g->get('', [UsuarioController::class, 'registerPage']);
+            $g->get('', [UsuarioController::class, 'registerPage'])->setName('user.register.form');
             $g->post('', [UsuarioController::class, 'store']);
         });
 
@@ -80,7 +80,6 @@ return function (App $app) {
      * =====================Rotas de Teste============================
      */
     $app->get('/home', function ($request, $response) {
-        dump($_SERVER);
         $view = Twig::fromRequest($request);
 
         return $view->render($response, 'home.php');
@@ -92,18 +91,4 @@ return function (App $app) {
         return $view->render($vai, 'usuario.php');
     });
 
-    $app->get('/adminasd',function ($request, $response) {
-            $view = Twig::fromRequest($request);
-
-            return $view->render($response, 'admin.html.twig');
-
-    })->add(PermissionMiddleware::class)->add(AuthMiddleware::class);
-
-
-    $app->get('/register-user', function ($request, $response) {
-        dump($_SESSION);
-        $view = Twig::fromRequest($request);
-
-        return $view->render($response, 'cadastrar_usuario.php');
-    })->add(PermissionMiddleware::class)->add(AuthMiddleware::class);
 };

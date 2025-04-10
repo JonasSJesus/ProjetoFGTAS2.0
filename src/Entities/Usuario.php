@@ -4,31 +4,27 @@ namespace Fgtas\Entities;
 
 class Usuario
 {
-    private ?int $id;
+    private int $id;
+    private string $senha;
     public readonly string $nome;
     public readonly string $email;
-    public readonly string $senha;
     public readonly string $cargo; // Atendente ou adm
     public readonly ?string $ativo;
 
     /**
-     * @param int|null $id
      * @param string $nome
      * @param string $email
-     * @param string $senha
      * @param string $cargo
      * @param string|null $ativo
      */
     public function __construct(
         string $nome,
         string $email,
-        string $senha,
         string $cargo,
         ?string $ativo = 'S'
     ) {
         $this->nome = $nome;
         $this->email = $email;
-        $this->senha = $senha;
         $this->cargo = $cargo;
         $this->ativo = $ativo;
     }
@@ -38,9 +34,19 @@ class Usuario
         return $this->id;
     }
 
-    public function setId(?int $id): void
+    public function setId(int $id): void
     {
         $this->id = $id;
+    }
+
+    public function setSenha(string $senha): void
+    {
+        $this->senha = $senha;
+    }
+
+    public function getSenha(): string
+    {
+        return $this->senha;
     }
 
 

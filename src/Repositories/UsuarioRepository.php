@@ -92,7 +92,7 @@ class UsuarioRepository
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':nome', $user->nome);
         $stmt->bindValue(':email', $user->email);
-        $stmt->bindValue(':senha', $user->senha);
+        $stmt->bindValue(':senha', $user->getSenha());
         $stmt->bindValue(':cargo', $user->cargo);
         $stmt->bindValue(':ativo', $user->ativo);
 
@@ -141,7 +141,8 @@ class UsuarioRepository
      */
     private function createObj(array $data): Usuario
     {
-        $user = new Usuario($data['nome'], $data['email'], $data['senha'], $data['cargo'], $data['ativo']);
+        $user = new Usuario($data['nome'], $data['email'], $data['cargo'], $data['ativo']);
+        $user->setSenha($data['senha']);
         $user->setId($data['id']);
 
         return $user;

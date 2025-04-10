@@ -32,9 +32,9 @@ class UsuarioService
         $user = new Usuario(
             $data['nomeUsuario'],
             $data['emailUsuario'],
-            $passwordHashed,
             $data['cargo']
         );
+        $user->setSenha($passwordHashed);
 
         $this->repository->create($user);
     }
@@ -65,15 +65,13 @@ class UsuarioService
             return false;
         }
 
-        $passwordHashed = $this->hashPWD($data['password']);
+//        $passwordHashed = $this->hashPWD($data['password']);
         $user = new Usuario(
-            $data['name'],
-            $data['email'],
-            $passwordHashed,
-            $data['role']
+            $data['nomeUsuario'],
+            $data['emailUsuario'],
+            $data['cargoUsuario']
         );
-        $user->setId($data['id']);
-
+        $user->setId($id);
 
         $this->repository->update($user);
 

@@ -109,9 +109,10 @@ class UsuarioController
     public function update(Request $request, Response $response, array $args): Response
     {
         $data = $request->getParsedBody();
+
+
         $dataValidation = v::key('nomeUsuario', v::notEmpty()->stringType())
-            ->key('emailUsuario', v::notEmpty()->email())
-            ->key('senhaUsuario', v::notEmpty());
+            ->key('emailUsuario', v::notEmpty()->email());
 
         if (!$dataValidation->validate($data)) {
             echo "Dados invalidos"; // TODO implementar flash messages depois!
@@ -123,7 +124,9 @@ class UsuarioController
         
         $this->usuarioService->update($data, $id);
 
-        return $response;
+        return $response
+            ->withHeader('Location', '/usuario')
+            ->withStatus(302);
     }
 
 
@@ -137,7 +140,7 @@ class UsuarioController
         }
 
         return $response
-            ->withHeader('Location', '/register')
+            ->withHeader('Location', '/admin')
             ->withStatus(302);
     }
 }
