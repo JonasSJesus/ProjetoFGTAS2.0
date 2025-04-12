@@ -6,8 +6,8 @@ use DateTime;
 
 class Atendimento
 {
-    public readonly int $id;
-    public readonly DateTime $dataDeRegistro;
+    private int $id;
+//    public readonly DateTime $dataDeRegistro;
     public readonly FormaAtendimento $formaAtendimento;
     public readonly TipoAtendimento $tipoAtendimento;
     public readonly Usuario $usuario;
@@ -15,17 +15,27 @@ class Atendimento
 
 
     public function __construct(
-        DateTime $dataDeRegistro,
+//        DateTime $dataDeRegistro,
         FormaAtendimento $formaAtendimento,
         TipoAtendimento $tipoAtendimento,
         Usuario $usuario,
         Publico $publico
     ) {
-        $this->dataDeRegistro = $dataDeRegistro;
+//        $this->dataDeRegistro = $dataDeRegistro;
         $this->formaAtendimento = $formaAtendimento;
         $this->tipoAtendimento = $tipoAtendimento;
         $this->usuario = $usuario;
         $this->publico = $publico;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
 

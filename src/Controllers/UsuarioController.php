@@ -88,7 +88,7 @@ class UsuarioController
             return $response;
         }
 
-        $this->usuarioService->create($data);
+        $this->usuarioService->registerUser($data);
 
         return $response
                 ->withHeader('Location', '/register')

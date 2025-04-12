@@ -25,7 +25,7 @@ class UsuarioService
      * @return void
      * @throws Exception
      */
-    public function create(array $data): void
+    public function registerUser(array $data): void
     {
         if ($this->repository->findByEmail($data['emailUsuario'])) {
             echo "Email ja cadastrado!";

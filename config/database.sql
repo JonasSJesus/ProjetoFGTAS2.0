@@ -21,8 +21,17 @@ CREATE TABLE forma_atendimento (
 -- Tabela de Público
 CREATE TABLE publico (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    perfil_cliente VARCHAR(100) NOT NULL, -- (empregador, trabalhador, outras ag, ads, fgtas, interesados mercado trabalho, outra (personalizado))
-    campos_especificos JSON -- no caso de empregador, trabalhador ou outra, adiciona os seguintes campos: nome, cpf|cnpj, telefone
+    perfil_cliente VARCHAR(100) NOT NULL -- (empregador, trabalhador, outras ag, ads, fgtas, interesados mercado trabalho, outra (personalizado))
+);
+
+-- Tabela para campos especificos do Publico. Usada no caso de Publico ser empregador, trabalhador ou outra (personalizado)
+CREATE TABLE campos_publico (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    publico_id INT UNIQUE,
+    nome VARCHAR(255) NOT NULL,
+    contato varchar(20) NOT NULL,
+    documento VARCHAR(30) NOT NULL, -- CPF ou CNPJ
+    FOREIGN KEY (publico_id) REFERENCES publico(id)
 );
 
 -- Tabela de Tipos de Atendimento
