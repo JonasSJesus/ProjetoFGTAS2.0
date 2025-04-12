@@ -1,7 +1,9 @@
 <?php
 namespace Fgtas\Repositories;
 
-class TipoAtendimentoRepository
+use Fgtas\Repositories\Interfaces\ITipoAtendimentoRepository;
+
+class TipoAtendimentoRepository implements ITipoAtendimentoRepository
 {
 
 }

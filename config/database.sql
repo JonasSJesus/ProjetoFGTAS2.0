@@ -1,3 +1,7 @@
+CREATE DATABASE atendimentos;
+
+USE atendimentos;
+
 -- Tabela de Usuários
 CREATE TABLE usuario (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -22,12 +26,10 @@ CREATE TABLE publico (
 );
 
 -- Tabela de Tipos de Atendimento
-CREATE TABLE tipos_atendimento (
+CREATE TABLE tipo_atendimento (
     id INT AUTO_INCREMENT PRIMARY KEY,
     tipo VARCHAR(255) NOT NULL, -- (VCH, "C,SD,V", orientações sobre cursos ou empreendedorismo)
-    descricao TEXT, -- Dependendo do tipo, pode ter ou não algo aqui
-    publico_id INT NOT NULL,
-    FOREIGN KEY (publico_id) REFERENCES publicos(id)
+    descricao TEXT -- Dependendo do tipo, pode ter ou não algo aqui
 );
 
 -- Tabela de Atendimentos
@@ -40,7 +42,7 @@ CREATE TABLE atendimento (
     publico_id INT NOT NULL,
     detalhes_atendimento TEXT, -- Campo para armazenar os detalhes específicos do atendimento (JSON ou texto)
     FOREIGN KEY (forma_atendimento_id) REFERENCES forma_atendimento(id),
-    FOREIGN KEY (tipo_atendimento_id) REFERENCES tipos_atendimento(id),
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
-    FOREIGN KEY (publico_id) REFERENCES publicos(id)
+    FOREIGN KEY (tipo_atendimento_id) REFERENCES tipo_atendimento(id),
+    FOREIGN KEY (usuario_id) REFERENCES usuario(id),
+    FOREIGN KEY (publico_id) REFERENCES publico(id)
 );

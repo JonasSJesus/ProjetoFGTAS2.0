@@ -3,6 +3,7 @@
 use DI\ContainerBuilder;
 use Fgtas\Entities\FormaAtendimento;
 use Fgtas\Repositories\AtendimentoRepository;
+use Fgtas\Repositories\Interfaces\IUsuarioRepository;
 use Fgtas\Repositories\PublicoRepository;
 use Fgtas\Repositories\TipoAtendimentoRepository;
 use Fgtas\Repositories\UsuarioRepository;
@@ -20,6 +21,6 @@ return function (ContainerBuilder $container) {
         FormaAtendimento::class => autowire(FormaAtendimento::class),
         PublicoRepository::class => autowire(PublicoRepository::class),
         TipoAtendimentoRepository::class => autowire(TipoAtendimentoRepository::class),
-        UsuarioRepository::class => autowire(UsuarioRepository::class),
+        IUsuarioRepository::class => autowire(UsuarioRepository::class),
     ]);
 };

@@ -3,10 +3,11 @@
 namespace Fgtas\Repositories;
 
 use Fgtas\Entities\Usuario;
+use Fgtas\Repositories\Interfaces\IUsuarioRepository;
 use PDO;
 use PDOException;
 
-class UsuarioRepository
+class UsuarioRepository implements IUsuarioRepository
 {
     // Filtros usados no metodo getBy
     private PDO $pdo;
@@ -22,7 +23,7 @@ class UsuarioRepository
      *
      * @return Usuario[]
      */
-    public function getAll(): array
+    public function findAll(): array
     {
         try {
             $sql = "SELECT * FROM usuario";
@@ -40,7 +41,7 @@ class UsuarioRepository
      * @param int $id
      * @return Usuario|null
      */
-    public function getById(int $id): ?Usuario
+    public function findById(int $id): ?Usuario
     {
 
         $sql = "SELECT * FROM usuario WHERE id = :id";
@@ -62,7 +63,7 @@ class UsuarioRepository
      * @param string $email
      * @return Usuario|null
      */
-    public function getByEmail(string $email): ?Usuario
+    public function findByEmail(string $email): ?Usuario
     {
 
         $sql = "SELECT * FROM usuario WHERE email = :email";
@@ -76,6 +77,7 @@ class UsuarioRepository
             return null;
         }
 
+//        return Usuario::fromArray($data); // Implementar isso depois!
         return $this->createObj($data);
     }
 
@@ -87,7 +89,6 @@ class UsuarioRepository
      */
     public function create(Usuario $user): bool
     {
-
         $sql = "INSERT INTO usuario (nome, email, senha, cargo, ativo) VALUES (:nome, :email, :senha, :cargo, :ativo);";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':nome', $user->nome);
@@ -97,10 +98,9 @@ class UsuarioRepository
         $stmt->bindValue(':ativo', $user->ativo);
 
         return $stmt->execute();
-
     }
 
-    public function update(Usuario $user): bool
+    public function update(Usuario $user, int $id): bool
     {
         $sql = "UPDATE usuario SET nome = :nome, email = :email, cargo = :cargo, ativo = :ativo WHERE id = :id;";
         $stmt = $this->pdo->prepare($sql);
@@ -108,12 +108,12 @@ class UsuarioRepository
         $stmt->bindValue(':email', $user->email);
         $stmt->bindValue(':cargo', $user->cargo);
         $stmt->bindValue(':ativo', $user->ativo);
-        $stmt->bindValue(':id', $user->getId());
+        $stmt->bindValue(':id', $id);
 
         return $stmt->execute();
     }
 
-    public function updatePWD(int $id, string $password)
+    public function updatePWD(int $id, string $password): bool
     {
         $sql = "UPDATE usuario SET senha = :password WHERE id = :id;";
         $stmt = $this->pdo->prepare($sql);

@@ -49,5 +49,8 @@ class Usuario
         return $this->senha;
     }
 
-
+    public static function fromArray(array $data): Usuario
+    {
+        return new Usuario($data['nome'], $data['email'], $data['cargo'], $data['ativo']);
+    }
 }

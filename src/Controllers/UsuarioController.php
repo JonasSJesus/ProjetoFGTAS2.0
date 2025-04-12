@@ -16,7 +16,6 @@ class UsuarioController
     public function __construct(UsuarioService $usuarioService)
     {
         $this->usuarioService = $usuarioService;
-//        $this->usuarioRepository = $usuarioRepository;
     }
 
     /**
@@ -31,7 +30,6 @@ class UsuarioController
      */
     public function registerPage(Request $request, Response $response): Response
     {
-        dump($_SESSION);
         $view = Twig::fromRequest($request);
 
         return $view->render($response, 'cadastrar_usuario.php');

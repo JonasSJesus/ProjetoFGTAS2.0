@@ -2,17 +2,16 @@
 
 namespace Fgtas\Services;
 
-use Exception;
 use Fgtas\Entities\Usuario;
-use Fgtas\Repositories\UsuarioRepository;
+use Fgtas\Repositories\Interfaces\IUsuarioRepository;
 use SlimSession\Helper;
 
 class AuthService
 {
-    private UsuarioRepository $repository;
+    private IUsuarioRepository $repository;
     private Helper $session;
 
-    public function __construct(UsuarioRepository $repository, Helper $session)
+    public function __construct(IUsuarioRepository $repository, Helper $session)
     {
         $this->repository = $repository;
         $this->session = $session;
@@ -28,7 +27,7 @@ class AuthService
      */
     public function authenticate(string $email, string $password) : bool
     {
-        $user = $this->repository->getByEmail($email);
+        $user = $this->repository->findByEmail($email);
         $dbPassword = password_hash(' ', PASSWORD_ARGON2ID);
 
         if ($user) {

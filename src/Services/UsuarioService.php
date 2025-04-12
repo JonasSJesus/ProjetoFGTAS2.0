@@ -4,17 +4,16 @@ namespace Fgtas\Services;
 
 use Exception;
 use Fgtas\Entities\Usuario;
-use Fgtas\Repositories\UsuarioRepository;
-use PDOException;
+use Fgtas\Repositories\Interfaces\IUsuarioRepository;
 
 class UsuarioService
 {
-    private UsuarioRepository $repository;
+    private IUsuarioRepository $repository;
 
     /**
-     * @param UsuarioRepository $repository
+     * @param IUsuarioRepository $repository
      */
-    public function __construct(UsuarioRepository $repository)
+    public function __construct(IUsuarioRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -28,6 +27,10 @@ class UsuarioService
      */
     public function create(array $data): void
     {
+        if ($this->repository->findByEmail($data['emailUsuario'])) {
+            echo "Email ja cadastrado!";
+            exit();
+        }
         $passwordHashed = $this->hashPWD($data['senhaUsuario']);
         $user = new Usuario(
             $data['nomeUsuario'],
@@ -48,9 +51,9 @@ class UsuarioService
     public function getUser(array $args = null): array|Usuario
     {
         if (isset($args)) {
-            return $this->repository->getById($args['id']);
+            return $this->repository->findById($args['id']);
         }
-        return $this->repository->getAll();
+        return $this->repository->findAll();
     }
 
 
@@ -61,8 +64,8 @@ class UsuarioService
      */
     public function update(array $data, int $id): bool
     {
-        if (!$this->repository->getById($id)) {
-            return false;
+        if (!$this->repository->findById($id)) {
+            return false; // Melhor tratado com Exception talvez?
         }
 
 //        $passwordHashed = $this->hashPWD($data['password']);
@@ -71,9 +74,8 @@ class UsuarioService
             $data['emailUsuario'],
             $data['cargoUsuario']
         );
-        $user->setId($id);
 
-        $this->repository->update($user);
+        $this->repository->update($user, $id);
 
         return true;
     }
@@ -81,8 +83,8 @@ class UsuarioService
 
     public function delete(int $id): bool
     {
-        if (!$this->repository->getById($id)) {
-            return false;
+        if (!$this->repository->findById($id)) {
+            return false; // Melhor se tratado com Exception?
         }
 
         return $this->repository->delete($id);
