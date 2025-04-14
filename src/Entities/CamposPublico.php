@@ -5,15 +5,16 @@ namespace Fgtas\Entities;
 class CamposPublico
 {
     private int $id;
+    //public readonly $perfil;
     public readonly string $nome;
-    public readonly string $contato;
     public readonly string $documento;
+    public readonly string $contato;
 
-    public function __construct(string $nome, string $contato, string $documento)
+    public function __construct(string $nome, string $documento, string $contato)
     {
         $this->nome = $nome;
-        $this->contato = $contato;
         $this->documento = $documento;
+        $this->contato = $contato;
     }
 
     public function getId(): int

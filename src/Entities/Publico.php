@@ -2,11 +2,13 @@
 
 namespace Fgtas\Entities;
 
+use Exception;
+
 class Publico
 {
     private int $id;
     public readonly string $perfilCliente; // (empregador, trabalhador, fgtas, ads, interessados mercado de trabalho, outras agencias, outra(personalizado))
-    private ?CamposPublico $camposPublico = null;
+    private ?CamposPublico $informacoesPessoais = null;
 
     public function __construct(string $perfilCliente)
     {
@@ -23,25 +25,31 @@ class Publico
         $this->id = $id;
     }
 
-    public function haveExtraInfo(): bool
+    public function haveExtraFields(): bool
     {
-        return $this->camposPublico instanceof CamposPublico;
+        return $this->informacoesPessoais instanceof CamposPublico;
     }
 
-    public function getCamposPublico(): ?CamposPublico
+
+    public function getExtraFields(): CamposPublico
     {
-        return $this->camposPublico;
+        return $this->informacoesPessoais;
     }
 
-    public function setCamposPublico(?CamposPublico $camposPublico): void
+    public function setExtraFields(string $nome, string $documento, string $contato): void
     {
-        $this->camposPublico = $camposPublico;
+        $extraFields = new CamposPublico($nome, $documento, $contato);
+        $this->informacoesPessoais = $extraFields;
     }
 
     public static function fromArray(array $data): Publico
     {
         $publico = new Publico($data['perfil_cliente']);
         $publico->setId($data['id']);
+
+        if ($publico->perfilCliente == 'Empregador' || $publico->perfilCliente == 'Trabalhador') {
+            $publico->setExtraFields($data['nome'], $data['documento'], $data['contato']);
+        }
 
         return $publico;
     }

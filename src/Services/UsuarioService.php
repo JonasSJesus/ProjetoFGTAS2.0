@@ -29,7 +29,7 @@ class UsuarioService
     {
         if ($this->repository->findByEmail($data['emailUsuario'])) {
             echo "Email ja cadastrado!";
-            exit();
+            return;
         }
         $passwordHashed = $this->hashPWD($data['senhaUsuario']);
         $user = new Usuario(

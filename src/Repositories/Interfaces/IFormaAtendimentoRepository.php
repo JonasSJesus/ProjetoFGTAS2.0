@@ -6,7 +6,7 @@ use Fgtas\Entities\FormaAtendimento;
 
 interface IFormaAtendimentoRepository
 {
-    public function create(FormaAtendimento $formAtend): bool;
+    public function create(FormaAtendimento $formAtend): int;
 
     /** @return null|FormaAtendimento[] */
     public function findAll(): ?array;

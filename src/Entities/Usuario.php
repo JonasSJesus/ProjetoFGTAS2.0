@@ -11,12 +11,6 @@ class Usuario
     public readonly string $cargo; // Atendente ou adm
     public readonly ?string $ativo;
 
-    /**
-     * @param string $nome
-     * @param string $email
-     * @param string $cargo
-     * @param string|null $ativo
-     */
     public function __construct(
         string $nome,
         string $email,
@@ -51,6 +45,10 @@ class Usuario
 
     public static function fromArray(array $data): Usuario
     {
-        return new Usuario($data['nome'], $data['email'], $data['cargo'], $data['ativo']);
+        return new Usuario(
+            $data['nome'],
+            $data['email'],
+            $data['cargo'],
+            $data['ativo']);
     }
 }

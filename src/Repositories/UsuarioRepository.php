@@ -25,13 +25,9 @@ class UsuarioRepository implements IUsuarioRepository
      */
     public function findAll(): array
     {
-        try {
-            $sql = "SELECT * FROM usuario";
-            $stmt = $this->pdo->query($sql);
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            echo $e;
-        }
+        $sql = "SELECT * FROM usuario";
+        $stmt = $this->pdo->query($sql);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return array_map($this->createObj(...), $data);
     }

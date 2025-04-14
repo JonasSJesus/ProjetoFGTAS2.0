@@ -7,7 +7,7 @@ use DateTime;
 class Atendimento
 {
     private int $id;
-//    public readonly DateTime $dataDeRegistro;
+    public readonly ?DateTime $dataDeRegistro;
     public readonly FormaAtendimento $formaAtendimento;
     public readonly TipoAtendimento $tipoAtendimento;
     public readonly Usuario $usuario;
@@ -15,17 +15,17 @@ class Atendimento
 
 
     public function __construct(
-//        DateTime $dataDeRegistro,
         FormaAtendimento $formaAtendimento,
         TipoAtendimento $tipoAtendimento,
         Usuario $usuario,
-        Publico $publico
+        Publico $publico,
+        DateTime $dataDeRegistro = null
     ) {
-//        $this->dataDeRegistro = $dataDeRegistro;
         $this->formaAtendimento = $formaAtendimento;
         $this->tipoAtendimento = $tipoAtendimento;
         $this->usuario = $usuario;
         $this->publico = $publico;
+        $this->dataDeRegistro = $dataDeRegistro;
     }
 
     public function getId(): int
@@ -38,5 +38,8 @@ class Atendimento
         $this->id = $id;
     }
 
+    public function setDataRegistro(string $data): void
+    {
 
+    }
 }

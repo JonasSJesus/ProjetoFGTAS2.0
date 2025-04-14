@@ -2,7 +2,11 @@
 
 use DI\ContainerBuilder;
 use Fgtas\Entities\FormaAtendimento;
-use Fgtas\Repositories\AtendimentoRepository;
+use Fgtas\Repositories\Atendimentos\AtendimentoRepository;
+use Fgtas\Repositories\Interfaces\IAtendimentoRepository;
+use Fgtas\Repositories\Interfaces\IFormaAtendimentoRepository;
+use Fgtas\Repositories\Interfaces\IPublicoRepository;
+use Fgtas\Repositories\Interfaces\ITipoAtendimentoRepository;
 use Fgtas\Repositories\Interfaces\IUsuarioRepository;
 use Fgtas\Repositories\PublicoRepository;
 use Fgtas\Repositories\TipoAtendimentoRepository;
@@ -13,14 +17,21 @@ return function (ContainerBuilder $container) {
     $container->addDefinitions([
         // Mapeando banco de dados
         PDO::class => function (ContainerBuilder $c) {
-            return new PDO("mysql:host={$_ENV['DB_HOST']};dbname={$_ENV['DB_NAME']}", $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD']);
-        },
+            $pdo = new PDO(
+                "mysql:host={$_ENV['DB_HOST']};dbname={$_ENV['DB_NAME']}",
+                $_ENV['DB_USERNAME'],
+                $_ENV['DB_PASSWORD'], [
+                    // Colocar as configuracoes do PDO aqui!
+            ]);
+
+            return $pdo;
+            },
 
         // Mapeando os repositorios
-        AtendimentoRepository::class => autowire(AtendimentoRepository::class),
-        FormaAtendimento::class => autowire(FormaAtendimento::class),
-        PublicoRepository::class => autowire(PublicoRepository::class),
-        TipoAtendimentoRepository::class => autowire(TipoAtendimentoRepository::class),
+        IAtendimentoRepository::class => autowire(AtendimentoRepository::class),
+        IFormaAtendimentoRepository::class => autowire(FormaAtendimento::class),
+        IPublicoRepository::class => autowire(PublicoRepository::class),
+        ITipoAtendimentoRepository::class => autowire(TipoAtendimentoRepository::class),
         IUsuarioRepository::class => autowire(UsuarioRepository::class),
     ]);
 };

@@ -15,14 +15,18 @@ class TipoAtendimentoRepository implements ITipoAtendimentoRepository
         $this->pdo = $pdo;
     }
 
-    public function create(TipoAtendimento $tipoAtend): bool
+    public function create(TipoAtendimento $tipoAtend): int
     {
         $sql = "INSERT INTO tipo_atendimento (tipo, descricao) VALUES (:tipo, :descricao)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':tipo', $tipoAtend->tipo);
         $stmt->bindValue(':descricao', $tipoAtend->descricao);
+        $stmt->execute();
 
-        return $stmt->execute();
+        $id = $this->pdo->lastInsertId();
+        $tipoAtend->setId(intval($id));
+
+        return $id;
     }
 
     /**

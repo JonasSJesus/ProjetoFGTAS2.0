@@ -16,9 +16,22 @@ class PublicoRepository implements IPublicoRepository
     }
 
 
-    public function create(Publico $publico): bool
+    public function create(Publico $publico): int
     {
         $sql = "INSERT INTO publico (perfil_cliente) VALUES (:perfil_cliente)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':perfil_cliente', $publico->perfilCliente);
+        $stmt->execute();
+
+        $id = $this->pdo->lastInsertId();
+        $publico->setId(intval($id));
+
+        return $id;
+    }
+
+    public function createWithExtraFields(Publico $publico)
+    {
+        $sql = "INSERT INTO publico (perfil_cliente, nome, documento, contato) VALUES (:perfil_cliente)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':perfil_cliente', $publico->perfilCliente);
 

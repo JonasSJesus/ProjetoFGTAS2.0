@@ -25,7 +25,7 @@ CREATE TABLE publico (
 );
 
 -- Tabela para campos especificos do Publico. Usada no caso de Publico ser empregador, trabalhador ou outra (personalizado)
-CREATE TABLE campos_publico (
+CREATE TABLE informacoes_pessoais (
     id INT AUTO_INCREMENT PRIMARY KEY,
     publico_id INT UNIQUE,
     nome VARCHAR(255) NOT NULL,

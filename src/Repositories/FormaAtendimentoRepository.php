@@ -14,13 +14,17 @@ class FormaAtendimentoRepository implements Interfaces\IFormaAtendimentoReposito
         $this->pdo = $pdo;
     }
 
-    public function create(FormaAtendimento $formAtend): bool
+    public function create(FormaAtendimento $formAtend): int
     {
         $sql = "INSERT INTO forma_atendimento (forma) VALUES (:forma)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':forma', $formAtend->forma);
+        $stmt->execute();
 
-        return $stmt->execute();
+        $id = $this->pdo->lastInsertId();
+//        $formAtend->setId(intval($id));
+
+        return $id;
     }
 
     /**
