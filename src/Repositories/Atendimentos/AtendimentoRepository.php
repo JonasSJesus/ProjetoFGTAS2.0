@@ -41,7 +41,7 @@ class AtendimentoRepository implements IAtendimentoRepository
             $stmt = $this->pdo->prepare($sqlAtendimento);
             $stmt->bindValue(':forma_id', $idFormaAtend);
             $stmt->bindValue(':tipo_id', $idTipoAtend);
-//            $stmt->bindValue(':usuario_id', $atendimento->usuario->getId());
+//            $stmt->bindValue(':forma_atendimento, $atendimento->formaAtendimento);
             $stmt->bindValue(':usuario_id', $idUsuario);
             $stmt->bindValue(':publico_id', $idPublico);
             $stmt->execute();
@@ -53,7 +53,7 @@ class AtendimentoRepository implements IAtendimentoRepository
             }
         } catch (PDOException $e) {
             $this->pdo->rollBack();
-            echo $e->getMessage();
+            throw $e;
         }
 
         return true;
@@ -64,7 +64,9 @@ class AtendimentoRepository implements IAtendimentoRepository
      */
     public function findAll(): ?array
     {
-        // TODO: Implement findAll() method.
+        $sql = "SELECT a.";
+
+        return [];
     }
 
     public function findById(int $id): ?Atendimento

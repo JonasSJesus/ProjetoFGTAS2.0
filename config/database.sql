@@ -12,12 +12,6 @@ CREATE TABLE usuario (
     ativo ENUM('S', 'N') DEFAULT 'S'
 );
 
--- Tabela de Formas de Atendimento
-CREATE TABLE forma_atendimento (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    forma VARCHAR(100) NOT NULL -- (presencial, whats, ligacao, email, redes soc, team ou outra)
-);
-
 -- Tabela de Público
 CREATE TABLE publico (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -45,12 +39,11 @@ CREATE TABLE tipo_atendimento (
 CREATE TABLE atendimento (
     id INT AUTO_INCREMENT PRIMARY KEY,
     data_de_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
-    forma_atendimento_id INT NOT NULL,
     tipo_atendimento_id INT NOT NULL,
     usuario_id INT NOT NULL,
     publico_id INT NOT NULL,
+    forma_atendimento TEXT, -- Campo para armazenar a forma de atendimento (presencial, whats, ligacao, email, redes soc, team ou outra)
     detalhes_atendimento TEXT, -- Campo para armazenar os detalhes específicos do atendimento (JSON ou texto)
-    FOREIGN KEY (forma_atendimento_id) REFERENCES forma_atendimento(id),
     FOREIGN KEY (tipo_atendimento_id) REFERENCES tipo_atendimento(id),
     FOREIGN KEY (usuario_id) REFERENCES usuario(id),
     FOREIGN KEY (publico_id) REFERENCES publico(id)

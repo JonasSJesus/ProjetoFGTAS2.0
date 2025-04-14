@@ -8,10 +8,11 @@ class Atendimento
 {
     private int $id;
     public readonly ?DateTime $dataDeRegistro;
-    public readonly FormaAtendimento $formaAtendimento;
     public readonly TipoAtendimento $tipoAtendimento;
     public readonly Usuario $usuario;
     public readonly Publico $publico;
+    public readonly FormaAtendimento $formaAtendimento;
+    public readonly string $detalhesAtendimento;
 
 
     public function __construct(

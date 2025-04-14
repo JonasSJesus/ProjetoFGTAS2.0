@@ -33,6 +33,9 @@ class Publico
 
     public function getExtraFields(): CamposPublico
     {
+        if (!$this->haveExtraFields()) {
+            throw new Exception("Campos extras não disponíveis para este perfil.");
+        }
         return $this->informacoesPessoais;
     }
 

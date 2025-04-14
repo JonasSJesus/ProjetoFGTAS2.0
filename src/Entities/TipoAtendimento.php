@@ -10,8 +10,26 @@ class TipoAtendimento
 
     public function __construct(string $tipo, ?string $descricao = null)
     {
-        $this->tipo = $tipo;
+        $this->setTipo($tipo);
         $this->descricao = $descricao;
+    }
+
+    private function setTipo(string $tipo): void
+    {
+        $tipoPermitidos = [
+            "carteira de trabalho, SD, vagas",
+            "programa gaucho de artesanato",
+            "vida Centro Humanistico",
+            "orientações sobre empreendedorismo",
+            "orientações sobre cursos de qualificação",
+            "informações sobre mercado de trabalho"
+        ];
+
+        if (!in_array($tipo, $tipoPermitidos)) {
+            throw new \Exception("Tipo de Atendimento não permitido!");
+        }
+
+        $this->tipo = $tipo;
     }
 
     public function getId(): int

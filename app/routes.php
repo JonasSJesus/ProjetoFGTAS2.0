@@ -25,7 +25,9 @@ return function (App $app) {
     });
 
 
-    // Rotas protegidas ==============================
+    /**
+     * Rotas protegidas ==============================
+     */
     $app->group('', function (Group $group) {
 
         $group->group('/update-user/{id}', function ($g) {
