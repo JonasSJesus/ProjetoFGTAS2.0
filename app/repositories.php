@@ -1,8 +1,8 @@
 <?php
 
 use DI\ContainerBuilder;
-use Fgtas\Entities\FormaAtendimento;
 use Fgtas\Repositories\Atendimentos\AtendimentoRepository;
+use Fgtas\Repositories\FormaAtendimentoRepository;
 use Fgtas\Repositories\Interfaces\IAtendimentoRepository;
 use Fgtas\Repositories\Interfaces\IFormaAtendimentoRepository;
 use Fgtas\Repositories\Interfaces\IPublicoRepository;
@@ -29,7 +29,7 @@ return function (ContainerBuilder $container) {
 
         // Mapeando os repositorios
         IAtendimentoRepository::class => autowire(AtendimentoRepository::class),
-        IFormaAtendimentoRepository::class => autowire(FormaAtendimento::class),
+        IFormaAtendimentoRepository::class => autowire(FormaAtendimentoRepository::class),
         IPublicoRepository::class => autowire(PublicoRepository::class),
         ITipoAtendimentoRepository::class => autowire(TipoAtendimentoRepository::class),
         IUsuarioRepository::class => autowire(UsuarioRepository::class),

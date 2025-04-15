@@ -19,7 +19,7 @@ class TipoAtendimento
         $tipoPermitidos = [
             "carteira de trabalho, SD, vagas",
             "programa gaucho de artesanato",
-            "vida Centro Humanistico",
+            "Vida Centro Humanistico",
             "orientações sobre empreendedorismo",
             "orientações sobre cursos de qualificação",
             "informações sobre mercado de trabalho"

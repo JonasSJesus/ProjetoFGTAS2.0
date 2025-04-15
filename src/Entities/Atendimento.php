@@ -9,7 +9,7 @@ class Atendimento
     private int $id;
     public readonly ?DateTime $dataDeRegistro;
     public readonly TipoAtendimento $tipoAtendimento;
-    public readonly Usuario $usuario;
+//    public readonly int $idUsuario;
     public readonly Publico $publico;
     public readonly FormaAtendimento $formaAtendimento;
     public readonly string $detalhesAtendimento;
@@ -18,13 +18,13 @@ class Atendimento
     public function __construct(
         FormaAtendimento $formaAtendimento,
         TipoAtendimento $tipoAtendimento,
-        Usuario $usuario,
+//        int $idUsuario,
         Publico $publico,
         DateTime $dataDeRegistro = null
     ) {
         $this->formaAtendimento = $formaAtendimento;
         $this->tipoAtendimento = $tipoAtendimento;
-        $this->usuario = $usuario;
+//        $this->idUsuario = $idUsuario;
         $this->publico = $publico;
         $this->dataDeRegistro = $dataDeRegistro;
     }

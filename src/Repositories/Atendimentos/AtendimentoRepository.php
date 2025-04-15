@@ -40,8 +40,8 @@ class AtendimentoRepository implements IAtendimentoRepository
             $sqlAtendimento = "INSERT INTO atendimento (forma_atendimento_id, tipo_atendimento_id, usuario_id, publico_id) VALUES (:forma_id, :tipo_id, :usuario_id, :publico_id);";
             $stmt = $this->pdo->prepare($sqlAtendimento);
             $stmt->bindValue(':forma_id', $idFormaAtend);
-            $stmt->bindValue(':tipo_id', $idTipoAtend);
 //            $stmt->bindValue(':forma_atendimento, $atendimento->formaAtendimento);
+            $stmt->bindValue(':tipo_id', $idTipoAtend);
             $stmt->bindValue(':usuario_id', $idUsuario);
             $stmt->bindValue(':publico_id', $idPublico);
             $stmt->execute();

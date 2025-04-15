@@ -1,5 +1,6 @@
 <?php
 
+use Fgtas\Controllers\AtendimentoController;
 use Fgtas\Controllers\AuthController;
 use Fgtas\Controllers\UsuarioController;
 use Fgtas\Middlewares\AuthMiddleware;
@@ -33,6 +34,11 @@ return function (App $app) {
         $group->group('/update-user/{id}', function ($g) {
             $g->get('', [UsuarioController::class, 'updatePage'])->setName('user.update.form');
             $g->post('', [UsuarioController::class, 'update'])->setName('user.update.submit');
+        });
+
+        $group->group('/home', function ($g) {
+            $g->get('', [AtendimentoController::class, 'formsAtendimento']);
+            $g->post('', [AtendimentoController::class, 'store']);
         });
 
     })->add(AuthMiddleware::class);
@@ -81,10 +87,10 @@ return function (App $app) {
     /**
      * =====================Rotas de Teste============================
      */
-    $app->get('/home', function ($request, $response) {
+    $app->get('/homeASD', function ($request, $response) {
         $view = Twig::fromRequest($request);
 
-        return $view->render($response, 'home.php');
+        return $view->render($response, 'formulario_de_testes.html.twig');
     })->add(AuthMiddleware::class);
 
     $app->get('/usuario', function ($vem, $vai){
