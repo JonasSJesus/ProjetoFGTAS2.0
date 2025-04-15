@@ -96,140 +96,140 @@
     </style>
 </head>
 <body>
-<main>
-    <fieldset>
-        <form method="post">
-            <h1>Atendimentos</h1>
-            <fieldset>
-                <legend>Identificação</legend>
-                <section>
-                    <label for="identificacaoAtendente">Nome do Atendente</label>
+    <main>
+        <fieldset>
+            <form method="post">
+                <h1>Atendimentos</h1>
+                <fieldset>
+                    <legend>Identificação</legend>
+                    <section>
+                        <label for="identificacaoAtendente">Nome do Atendente</label>
+                        <div>
+                            <input class="readonly__input" type="text" value="{{ userName['name'] }}" id="identificacaoAtendente" name="identificacaoAtendente"
+                                   minlength="5" maxlength="100" readonly>
+                        </div>
+                    </section>
+                    <section>
+                        <label for="formaAtendimento">Forma de atendimento</label>
+                        <div>
+                            <select name="formaAtendimento" id="formaAtendimento">
+                                <option value="tipo">Escolha a forma de atendimento...</option>
+                                <option value="presencial">Presencial</option>
+                                <option value="whats">Whatsapp</option>
+                                <option value="telefone">Ligação telefônica</option>
+                                <option value="email">E-mail</option>
+                                <option value="rede_social">Redes sociais</option>
+                                <option value="teams">Teams</option>
+                                <option value="outro">Outra</option>
+                            </select>
+                        </div>
+                    </section>
                     <div>
-                        <input class="readonly__input" type="text" value="{{ userName['name'] }}" id="identificacaoAtendente" name="identificacaoAtendente"
-                               minlength="5" maxlength="100" readonly>
+                        <label for="perfilPublico">Quem estou atendendo</label>
                     </div>
-                </section>
-                <section>
-                    <label for="formaAtendimento">Forma de atendimento</label>
+                    <section>
+                        <div>
+                            <select name="perfilPublico" id="perfilPublico">
+                                <option value="perfil">Escolha o perfil do Atendido</option>
+                                <option value="empregador">Empregador</option>
+                                <option value="trabalhador">Trabalhador</option>
+                                <option value="ADS">ADS</option>
+                                <option value="fgtas">Setores da FGTAS</option>
+                                <option value="mercadoTrabalho">Interessado no Mercado de trabalho</option>
+                                <option value="outro">Outro</option>
+                            </select>
+                        </div>
+                    </section>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Informações sobre o Atendido</legend>
+                    <label for="nomePublico">Nome Atendido</label>
                     <div>
-                        <select name="formaAtendimento" id="formaAtendimento">
-                            <option value="tipo">Escolha a forma de atendimento...</option>
-                            <option value="presencial">Presencial</option>
-                            <option value="whats">Whatsapp</option>
-                            <option value="telefone">Ligação telefônica</option>
-                            <option value="email">E-mail</option>
-                            <option value="rede_social">Redes sociais</option>
-                            <option value="teams">Teams</option>
-                            <option value="outro">Outra</option>
+                        <input type="text" name="nomePublico" id="nomePublico">
+                    </div>
+                    <label for="documentoPublico">CPF/CNPJ</label>
+                    <div>
+                        <input type="text" name="documentoPublico" id="documentoPublico">
+                    </div>
+                    <label for="contatoPublico">Contato (telefone/e-mail)</label>
+                    <div>
+                        <input type="text" name="contatoPublico" id="contatoPublico">
+                    </div>
+                </fieldset>
+
+                <!-- Campos de Tipo de Atendimento -->
+                <fieldset>
+                    <legend>Tipo de Atendimento</legend>
+                    <div class="radio-group">
+                        <input type="radio" name="tipoAtendimento" value="carteira de trabalho, SD, vagas" id="carteira_de_trabalho">
+                        <label for="carteira_de_trabalho">Carteira de Trabalho, SD, Vagas</label>
+                        <select id="carteira_de_trabalho_select" name="carteira_de_trabalho_campos" class="hidden">
+                            <option value="">Descricao De Tipo</option>
+                            <option value="informacoes carteira trabalho">Informações sobre carteira de trabalho física e digital</option>
+                            <option value="informacao direito e beneficio sd">Informações sobre direito e ao benefício SD</option>
+                            <option value="Informações sobre vagas - cadastramento, registro de retorno, administração">Informações sobre vagas - cadastramento, registro de retorno, administração</option>
+                            <option value="Informações sobre outros serviços">Informações sobre outros serviços (carteira de identidade, serviços de outros órgãos, atestado de bons antecedentes, Fundo de garantia por Tempo de Serviço - FGTS, benefícios previdenciários)</option>
+                            <option value="outra">Outra</option>
                         </select>
                     </div>
-                </section>
-                <div>
-                    <label for="perfilPublico">Quem estou atendendo</label>
-                </div>
-                <section>
-                    <div>
-                        <select name="perfilPublico" id="perfilPublico">
-                            <option value="perfil">Escolha o perfil do Atendido</option>
-                            <option value="empregador">Empregador</option>
-                            <option value="trabalhador">Trabalhador</option>
-                            <option value="ADS">ADS</option>
-                            <option value="fgtas">Setores da FGTAS</option>
-                            <option value="mercadoTrabalho">Interessado no Mercado de trabalho</option>
-                            <option value="outro">Outro</option>
+                    <div class="radio-group">
+                        <input type="radio" name="tipoAtendimento" value="programa gaucho de artesanato" id="programa_gaucho_artesanato">
+                        <label for="programa_gaucho_artesanato">Programa Gaucho do Artesanato</label>
+                        <select id="programa_gaucho_artesanato_select" name="programa_gaucho_artesanato_campos" class="hidden">
+                            <option value="">Descricao De Tipo</option>
+                            <option value="oreintacao carteira do artesao PGA e PAB">Orientação carteira do artesão PGA e PAB</option>
+                            <option value="Orientações sobre participação em feiras de artesanato">Orientações sobre participação em feiras de artesanato</option>
+                            <option value="Orientação participação em Casas do Artesão">Orientação participação em Casas do Artesão</option>
+                            <option value="Orientação para inscrição e acesso ao portal do artesanato gaúcho">Orientação para inscrição e acesso ao portal do artesanato gaúcho</option>
+                            <option value="outra">Outra</option>
                         </select>
                     </div>
-                </section>
-            </fieldset>
-
-            <fieldset>
-                <legend>Informações sobre o Atendido</legend>
-                <label for="nomePublico">Nome Atendido</label>
-                <div>
-                    <input type="text" name="nomePublico" id="nomePublico">
-                </div>
-                <label for="documentoPublico">CPF/CNPJ</label>
-                <div>
-                    <input type="text" name="documentoPublico" id="documentoPublico">
-                </div>
-                <label for="contatoPublico">Contato (telefone/e-mail)</label>
-                <div>
-                    <input type="text" name="contatoPublico" id="contatoPublico">
-                </div>
-            </fieldset>
-
-            <!-- Campos de Tipo de Atendimento -->
-            <fieldset>
-                <legend>Tipo de Atendimento</legend>
-                <div class="radio-group">
-                    <input type="radio" name="tipoAtendimento" value="carteira de trabalho, SD, vagas" id="carteira_de_trabalho">
-                    <label for="carteira_de_trabalho">Carteira de Trabalho, SD, Vagas</label>
-                    <select id="carteira_de_trabalho_select" name="carteira_de_trabalho_campos" class="hidden">
-                        <option value="">Descricao De Tipo</option>
-                        <option value="informacoes carteira trabalho">Informações sobre carteira de trabalho física e digital</option>
-                        <option value="informacao direito e beneficio sd">Informações sobre direito e ao benefício SD</option>
-                        <option value="Informações sobre vagas - cadastramento, registro de retorno, administração">Informações sobre vagas - cadastramento, registro de retorno, administração</option>
-                        <option value="Informações sobre outros serviços">Informações sobre outros serviços (carteira de identidade, serviços de outros órgãos, atestado de bons antecedentes, Fundo de garantia por Tempo de Serviço - FGTS, benefícios previdenciários)</option>
-                        <option value="outra">Outra</option>
-                    </select>
-                </div>
-                <div class="radio-group">
-                    <input type="radio" name="tipoAtendimento" value="programa gaucho de artesanato" id="programa_gaucho_artesanato">
-                    <label for="programa_gaucho_artesanato">Programa Gaucho do Artesanato</label>
-                    <select id="programa_gaucho_artesanato_select" name="programa_gaucho_artesanato_campos" class="hidden">
-                        <option value="">Descricao De Tipo</option>
-                        <option value="oreintacao carteira do artesao PGA e PAB">Orientação carteira do artesão PGA e PAB</option>
-                        <option value="Orientações sobre participação em feiras de artesanato">Orientações sobre participação em feiras de artesanato</option>
-                        <option value="Orientação participação em Casas do Artesão">Orientação participação em Casas do Artesão</option>
-                        <option value="Orientação para inscrição e acesso ao portal do artesanato gaúcho">Orientação para inscrição e acesso ao portal do artesanato gaúcho</option>
-                        <option value="outra">Outra</option>
-                    </select>
-                </div>
-                <div class="radio-group">
-                    <input type="radio" name="tipoAtendimento" value="Vida Centro Humanistico" id="vida_centro_humanistico">
-                    <label for="vida_centro_humanistico">Vida Centro Humanistico</label>
-                    <select id="vida_centro_humanistico_select" name="vida_centro_humanistico_campos" class="hidden">
-                        <option value="">Descricao De Tipo</option>
-                        <option value="Orientações para atividades lúdicas e pedagógicas">Orientações para atividades lúdicas e pedagógicas</option>
-                        <option value="Orientações para atividades esportivas e de recreação">Orientações para atividades esportivas e de recreação</option>
-                        <option value="Orientação para entidades parceiras (privadas)">Orientação para entidades parceiras (privadas)</option>
-                        <option value="Orientação para entidades parceiras (públicas)">Orientação para entidades parceiras (públicas)</option>
-                        <option value="Orientações para eventos, festas e mutirões sociais">Orientações para eventos, festas e mutirões sociais</option>
-                        <option value="outra">Outra</option>
-                    </select>
-                </div>
-                <div class="radio-group">
-                    <input type="radio" name="tipoAtendimento" value="orientações sobre empreendedorismo" id="orientacoes_empreendedorismo">
-                    <label for="orientacoes_empreendedorismo">Orientações sobre empreendedorismo</label>
-                </div>
-                <div class="radio-group">
-                    <input type="radio" name="tipoAtendimento" value="orientações sobre cursos de qualificação" id="orientacoes_cursos">
-                    <label for="orientacoes_cursos">Orientações sobre cursos de qualificação</label>
-                </div>
-                <div class="radio-group">
-                    <input type="radio" name="tipoAtendimento" value="informações sobre mercado de trabalho" id="informacoes_mercado_trabalho">
-                    <label for="informacoes_mercado_trabalho">Informações sobre o Mercado de Trabalho</label>
-                    <select id="informacoes_mercado_trabalho_select" name="informacoes_mercado_trabalho_campos" class="hidden">
-                        <option value="">Descricao De Tipo</option>
-                        <option value="Estatísticas da intermediação de mão de obra no âmbito do Sine/RS">Estatísticas da intermediação de mão de obra no âmbito do Sine/RS</option>
-                        <option value="Estatísticas do seguro-desemprego no âmbito do Sine/RS">Estatísticas do seguro-desemprego no âmbito do Sine/RS</option>
-                        <option value="Relação de vagas abertas no Sine/RS">Relação de vagas abertas no Sine/RS</option>
-                        <option value="Resultados do Novo CAGED">Resultados do Novo CAGED</option>
-                        <option value="Resultados da PNAD Contínua">Resultados da PNAD Contínua</option>
-                        <option value="outra">Outra</option>
-                    </select>
-                </div>
-                <div class="radio-group">
-                    <input type="radio" name="tipoAtendimento" value="outro" id="outro">
-                    <label for="outro">Outra</label>
-                    <input type="text" name="outroTipoAtendimento" id="outroTipoAtendimento" class="hidden" placeholder="Especifique">
-                </div>
-            </fieldset>
-            <button type="submit" id="btn">Enviar dados</button>
-            <button type="reset" id="btn">Limpar formulario</button>
-        </form>
-    </fieldset>
-</main>
+                    <div class="radio-group">
+                        <input type="radio" name="tipoAtendimento" value="Vida Centro Humanistico" id="vida_centro_humanistico">
+                        <label for="vida_centro_humanistico">Vida Centro Humanistico</label>
+                        <select id="vida_centro_humanistico_select" name="vida_centro_humanistico_campos" class="hidden">
+                            <option value="">Descricao De Tipo</option>
+                            <option value="Orientações para atividades lúdicas e pedagógicas">Orientações para atividades lúdicas e pedagógicas</option>
+                            <option value="Orientações para atividades esportivas e de recreação">Orientações para atividades esportivas e de recreação</option>
+                            <option value="Orientação para entidades parceiras (privadas)">Orientação para entidades parceiras (privadas)</option>
+                            <option value="Orientação para entidades parceiras (públicas)">Orientação para entidades parceiras (públicas)</option>
+                            <option value="Orientações para eventos, festas e mutirões sociais">Orientações para eventos, festas e mutirões sociais</option>
+                            <option value="outra">Outra</option>
+                        </select>
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" name="tipoAtendimento" value="orientações sobre empreendedorismo" id="orientacoes_empreendedorismo">
+                        <label for="orientacoes_empreendedorismo">Orientações sobre empreendedorismo</label>
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" name="tipoAtendimento" value="orientações sobre cursos de qualificação" id="orientacoes_cursos">
+                        <label for="orientacoes_cursos">Orientações sobre cursos de qualificação</label>
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" name="tipoAtendimento" value="informações sobre mercado de trabalho" id="informacoes_mercado_trabalho">
+                        <label for="informacoes_mercado_trabalho">Informações sobre o Mercado de Trabalho</label>
+                        <select id="informacoes_mercado_trabalho_select" name="informacoes_mercado_trabalho_campos" class="hidden">
+                            <option value="">Descricao De Tipo</option>
+                            <option value="Estatísticas da intermediação de mão de obra no âmbito do Sine/RS">Estatísticas da intermediação de mão de obra no âmbito do Sine/RS</option>
+                            <option value="Estatísticas do seguro-desemprego no âmbito do Sine/RS">Estatísticas do seguro-desemprego no âmbito do Sine/RS</option>
+                            <option value="Relação de vagas abertas no Sine/RS">Relação de vagas abertas no Sine/RS</option>
+                            <option value="Resultados do Novo CAGED">Resultados do Novo CAGED</option>
+                            <option value="Resultados da PNAD Contínua">Resultados da PNAD Contínua</option>
+                            <option value="outra">Outra</option>
+                        </select>
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" name="tipoAtendimento" value="outro" id="outro">
+                        <label for="outro">Outra</label>
+                        <input type="text" name="outroTipoAtendimento" id="outroTipoAtendimento" class="hidden" placeholder="Especifique">
+                    </div>
+                </fieldset>
+                <button type="submit" id="btn">Enviar dados</button>
+                <button type="reset" id="btn">Limpar formulario</button>
+            </form>
+        </fieldset>
+    </main>
 
 <footer>
     <p>Feito pelo Claude AI (Todos o diretos reservados)</p>
