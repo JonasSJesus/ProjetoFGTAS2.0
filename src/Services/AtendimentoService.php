@@ -17,7 +17,7 @@ class AtendimentoService
         $this->atendimentoRepository = $atendimentoRepository;
     }
 
-    public function createAtendimento(array $data): Atendimento
+    public function createAtendimento(array $data)
     {
         $tipoAtendimento = new TipoAtendimento($data['tipoAtendimento']);
         $formaAtendimento = new FormaAtendimento($data['formaAtendimento']);
@@ -28,6 +28,15 @@ class AtendimentoService
 
         $this->atendimentoRepository->add($atendimento, $_SESSION['user']['id']);
 
-        return $atendimento;
+//        return $atendimento;
+    }
+
+    /** @return Atendimento[] */
+    public function all(): array
+    {
+        $data = $this->atendimentoRepository->findAll();
+
+
+        return $data;
     }
 }

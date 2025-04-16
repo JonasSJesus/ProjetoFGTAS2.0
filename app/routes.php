@@ -41,6 +41,8 @@ return function (App $app) {
             $g->post('', [AtendimentoController::class, 'store']);
         });
 
+        $group->get('/usuario', [AtendimentoController::class, 'dashboard']);
+
     })->add(AuthMiddleware::class);
 
 
@@ -58,6 +60,7 @@ return function (App $app) {
             $g->post('', [UsuarioController::class, '']);
 
         });
+
 
 
         $group->get('/delete-user/{id}', [UsuarioController::class, 'destroy'])->setName('user.delete');
@@ -93,10 +96,6 @@ return function (App $app) {
         return $view->render($response, 'formulario_de_testes.html.twig');
     })->add(AuthMiddleware::class);
 
-    $app->get('/usuario', function ($vem, $vai){
-        $view = Twig::fromRequest($vem);
 
-        return $view->render($vai, 'usuario.php');
-    });
 
 };

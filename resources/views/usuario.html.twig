@@ -49,26 +49,32 @@
             <table class="tabela w95 centralizado mc">
                 <tr class="cabecalho">
                     <th>Id</th>
-                    <th>Id_Solicitante</th>
-                    <th>Tipo</th>
-                    <th>Informação</th>
+                    <th>nome atendente</th>
+                    <th>Tipo de Atendimento</th>
+                    <th>Descrição do Tipo de Atendimento</th>
+                    <th>Forma de Atendimento</th>
+                    <th>Perfil do Atendido</th>
                     <th>Data Registro</th>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>Carteira de Trabalho, SD, Vagas</td>
-                    <td>Carteira de trabalho física e digital</td>
-                    <td>01/01/2024 14:00:23 </td>
-                    <td>
-                        <i class="fa-solid fa-pen icone"></i>
-                        <a href="./editar_atendimento.php" class="tabela__link">Editar</a>
-                    </td>
-                    <td>
-                        <i class="fa-solid fa-x icone"></i>
-                        <a href="../src/controller/excluir_atendimento.php" class="tabela__link">Excluir</a>
-                    </td>
-                </tr>
+                {% for atendimento in atendimentos %}
+                    <tr>
+                        <td>{{ atendimento.id }}</td>
+                        <td>{{ atendimento.usuario }}</td>
+                        <td>{{ atendimento.tipoAtendimento.tipo }}</td>
+                        <td>{{ atendimento.tipoAtendimento.descricao }}</td>
+                        <td>{{ atendimento.formaAtendimento.forma }}</td>
+                        <td>{{ atendimento.publico.perfilCliente }}</td>
+                        <td>{{ atendimento.dataDeRegistro }}</td>
+                        <td>
+                            <i class="fa-solid fa-pen icone"></i>
+                            <a href="./editar_atendimento.php" class="tabela__link">Editar</a>
+                        </td>
+                        <td>
+                            <i class="fa-solid fa-x icone"></i>
+                            <a href="../src/controller/excluir_atendimento.php" class="tabela__link">Excluir</a>
+                        </td>
+                    </tr>
+                {% endfor %}
             </table>
         </section>
         <div class="centralizado mt1">

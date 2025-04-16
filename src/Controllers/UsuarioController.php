@@ -65,6 +65,14 @@ class UsuarioController
         ]);
     }
 
+    public function usuarioPage(Request $request, Response $response): Response
+    {
+        $view = Twig::fromRequest($request);
+        $atendimentos = $this;
+
+        return $view->render($response, 'usuario.html.twig');
+    }
+
 
     /**
      * Envia os dados do formulário para a camada service.

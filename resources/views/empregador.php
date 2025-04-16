@@ -26,7 +26,7 @@ $controle->protecao();
             }
             ?>
             <a href="../src/controller/deslogando.php" class="menu__botao__secundario">Deslogar</a>
-            <a href="usuario.php" class="menu__botao">Usuário</a>
+            <a href="usuario.html.twig" class="menu__botao">Usuário</a>
         </nav>
     </header>
     <form class="formulario mt12-5 centralizado" method="post" action="processa_login.php">

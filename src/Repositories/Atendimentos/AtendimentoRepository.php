@@ -64,9 +64,29 @@ class AtendimentoRepository implements IAtendimentoRepository
      */
     public function findAll(): ?array
     {
-        $sql = "SELECT a.";
+        $sql = "SELECT
+                    a.id,
+                    a.data_de_registro,
+                    fa.forma,
+                    ta.tipo,
+                    ta.descricao,
+                    u.nome,
+                    p.perfil_cliente
+                FROM
+                    atendimento AS a
+                        INNER JOIN
+                    forma_atendimento AS fa ON a.forma_atendimento_id = fa.id
+                        INNER JOIN
+                    tipo_atendimento AS ta ON a.tipo_atendimento_id = ta.id
+                        INNER JOIN
+                    usuario u ON a.usuario_id = u.id
+                        INNER JOIN
+                    publico AS p ON a.publico_id = p.id;";
+        $stmt = $this->pdo->query($sql);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        return [];
+//        return $data;
+        return array_map(Atendimento::fromArray(...), $data);
     }
 
     public function findById(int $id): ?Atendimento

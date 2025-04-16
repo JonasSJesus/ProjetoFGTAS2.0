@@ -28,6 +28,16 @@ class AtendimentoController
         ]);
     }
 
+    public function dashboard(Request $request, Response $response): Response
+    {
+        $view = Twig::fromRequest($request);
+        $atendimentos = $this->atendimentoService->all();
+
+        return $view->render($response, 'usuario.html.twig', [
+            'atendimentos' => $atendimentos
+        ]);
+    }
+
     public function store(Request $request, Response $response): Response
     {
         $dataFromRequest = $request->getParsedBody();

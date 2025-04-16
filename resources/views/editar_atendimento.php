@@ -25,7 +25,7 @@ $controle->protecao();
             }
             ?>
             <a href="../src/controller/deslogando.php" class="menu__botao__secundario">Deslogar</a>
-            <a href="usuario.php" class="menu__botao">Usuário</a>
+            <a href="usuario.html.twig" class="menu__botao">Usuário</a>
         </nav>
     </header>
     <form method="post" class="formulario mt12-5 centralizado">
@@ -59,7 +59,7 @@ $controle->protecao();
         </fieldset>
         </fieldset>
         <div class="grid50-50 w50 centralizado mv0-5 gp5">
-            <a href="usuario.php" class="formulario__botao__secundario formulario__botao__padrao">Voltar</a>
+            <a href="usuario.html.twig" class="formulario__botao__secundario formulario__botao__padrao">Voltar</a>
             <input type="submit" value="Editar" class="formulario__botao formulario__botao__padrao ">
         </div>
     </form>
