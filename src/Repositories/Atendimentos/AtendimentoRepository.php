@@ -103,4 +103,9 @@ class AtendimentoRepository implements IAtendimentoRepository
     {
         // TODO: Implement delete() method.
     }
+
+    private function hydrateAtendimentos(array $data): Atendimento
+    {
+
+    }
 }

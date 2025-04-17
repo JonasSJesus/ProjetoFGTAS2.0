@@ -44,7 +44,8 @@ class AtendimentoController
         $dataValidation = v::key('identificacaoAtendente', v::notEmpty()->stringType())
                         ->key('formaAtendimento', v::notEmpty()->stringType())
                         ->key('perfilPublico', v::notEmpty())
-                        ->key('tipoAtendimento');
+                        ->key('tipoAtendimento')
+                        ->key('descricao_tipo_atendimento', v::optional(v::notEmpty()));
 
         if ($dataFromRequest['perfilPublico'] === 'empregador' || $dataFromRequest['perfilPublico'] === 'trabalhador') {
 
@@ -54,7 +55,7 @@ class AtendimentoController
 
             /** @var $publicoValidate v */
             if (!$publicoValidate->isValid($dataFromRequest)) {
-                echo "O perfil do publico era {$dataFromRequest['perfilPublico']}, mas faltou os documentos";
+                echo "O perfil do publico era {$dataFromRequest['perfilPublico']}, mas faltou os documentos"; // TODO Criar flash messages aqui!
 
                 return $response;
             }
@@ -62,14 +63,14 @@ class AtendimentoController
 
         /** @var $dataValidation v */
         if (!$dataValidation->isValid($dataFromRequest)) {
-            dump($dataValidation->validate($dataFromRequest));
-            echo "Os testes deram falha";
+            dump($dataFromRequest);
+            echo "Os testes deram falha"; // TODO criar flash messages aqui!
 
             return $response;
         }
 
         try {
-            dump($this->atendimentoService->createAtendimento($dataFromRequest));
+            $this->atendimentoService->createAtendimento($dataFromRequest);
         } catch (Throwable $e) {
             echo "Error: " . $e->getMessage();
         }

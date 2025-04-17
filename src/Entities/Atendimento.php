@@ -47,9 +47,26 @@ class Atendimento
 
     }
 
+    public static function createAtendimentoInstance(
+        string $tipoAtendimento,
+        string $descricaoAtendimento,
+        string $formaAtendimento,
+        string $perfilPublico,
+        string $dataDeRegistro,
+        string $nomeUsuario
+    ) {
+        $tipo = new TipoAtendimento($tipoAtendimento, $descricaoAtendimento);
+        $forma = new FormaAtendimento($formaAtendimento);
+        $publico = new Publico($perfilPublico);
+
+        $atendimento = new Atendimento($forma, $tipo , $publico, $dataDeRegistro, $nomeUsuario);
+
+        return $atendimento;
+    }
+
     public static function fromArray(array $data): Atendimento
     {
-        $tipoAtendimento = new TipoAtendimento($data['tipo'], $data['descricao']);
+        $tipoAtendimento = new TipoAtendimento($data['tipo'], $data['descricao_tipo_atendimento']);
         $formaAtendimento = new FormaAtendimento($data['forma']);
         $publico = new Publico($data['perfil_cliente']);
 
