@@ -41,6 +41,8 @@ class AtendimentoController
     public function store(Request $request, Response $response): Response
     {
         $dataFromRequest = $request->getParsedBody();
+
+        // Validacoes de dados | TODO: mudar isso para uma camada "Validator"
         $dataValidation = v::key('identificacaoAtendente', v::notEmpty()->stringType())
                         ->key('formaAtendimento', v::notEmpty()->stringType())
                         ->key('perfilPublico', v::notEmpty())

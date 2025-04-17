@@ -106,6 +106,6 @@ class AtendimentoRepository implements IAtendimentoRepository
 
     private function hydrateAtendimentos(array $data): Atendimento
     {
-
+        // TODO: implement hydrateAtendimentos() method.
     }
 }
