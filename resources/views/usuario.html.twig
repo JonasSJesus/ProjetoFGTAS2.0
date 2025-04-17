@@ -62,7 +62,7 @@
                         <td>{{ atendimento.usuario }}</td>
                         <td>{{ atendimento.tipoAtendimento.tipo }}</td>
                         <td>{{ atendimento.tipoAtendimento.descricao }}</td>
-                        <td>{{ atendimento.formaAtendimento.forma }}</td>
+                        <td>{{ atendimento.formaAtendimento }}</td>
                         <td>{{ atendimento.publico.perfilCliente }}</td>
                         <td>{{ atendimento.dataDeRegistro }}</td>
                         <td>
@@ -71,7 +71,7 @@
                         </td>
                         <td>
                             <i class="fa-solid fa-x icone"></i>
-                            <a href="../src/controller/excluir_atendimento.php" class="tabela__link">Excluir</a>
+                            <a href="{{ url_for('atendimento.delete', { id: atendimento.getId() }) }}" class="tabela__link">Excluir</a>
                         </td>
                     </tr>
                 {% endfor %}

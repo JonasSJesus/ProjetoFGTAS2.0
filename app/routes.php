@@ -43,6 +43,8 @@ return function (App $app) {
 
         $group->get('/usuario', [AtendimentoController::class, 'dashboard']);
 
+        $group->get('/excluir-atendimento/{id}', [AtendimentoController::class, 'destroy'])->setName('atendimento.delete');
+
     })->add(AuthMiddleware::class);
 
 

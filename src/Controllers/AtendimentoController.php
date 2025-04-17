@@ -38,6 +38,12 @@ class AtendimentoController
         ]);
     }
 
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     */
     public function store(Request $request, Response $response): Response
     {
         $dataFromRequest = $request->getParsedBody();
@@ -47,7 +53,7 @@ class AtendimentoController
                         ->key('formaAtendimento', v::notEmpty()->stringType())
                         ->key('perfilPublico', v::notEmpty())
                         ->key('tipoAtendimento')
-                        ->key('descricao_tipo_atendimento', v::optional(v::notEmpty()));
+                        ->key('descricao_tipo_atendimento', v::optional(v::stringType()));
 
         if ($dataFromRequest['perfilPublico'] === 'empregador' || $dataFromRequest['perfilPublico'] === 'trabalhador') {
 
@@ -76,8 +82,38 @@ class AtendimentoController
         } catch (Throwable $e) {
             echo "Error: " . $e->getMessage();
         }
-//        $this->atendimentoService->createAtendimento($dataFromRequest);
 
-        return $response;
+        return $response
+            ->withStatus(302)
+            ->withHeader('Location', '/usuario');
+    }
+
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     * @return Response
+     */
+    public function destroy(Request $request, Response $response, array $args): Response
+    {
+        $id = $args['id'];
+
+        /** @var $validateId v */
+        if (!v::numericVal()->validate($id)) {
+            return $response
+                ->withStatus(302)
+                ->withHeader('Location', '/usuario');
+        }
+
+        try {
+            $this->atendimentoService->delete($id);
+            return $response
+                ->withStatus(302)
+                ->withHeader('Location', '/usuario');
+        } catch (Throwable $e) {
+            echo "Error -> " . $e->getMessage();
+            return $response;
+        }
     }
 }

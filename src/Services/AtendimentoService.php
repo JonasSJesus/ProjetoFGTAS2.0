@@ -19,15 +19,23 @@ class AtendimentoService
 
     public function createAtendimento(array $data): void
     {
-        $tipoAtendimento = new TipoAtendimento($data['tipoAtendimento'], $data['programa_gaucho_artesanato_campos']);
-        $formaAtendimento = new FormaAtendimento($data['formaAtendimento']);
+        $tipoAtendimento = new TipoAtendimento($data['tipoAtendimento'], $data['descricao_tipo_atendimento']);
+//        $formaAtendimento = new FormaAtendimento($data['formaAtendimento']);
         $publicoPerfil = new Publico($data['perfilPublico']);
-        $publicoPerfil->setExtraFields($data['nomePublico'], $data['documentoPublico'], $data['contatoPublico']);
 
-        $atendimento = new Atendimento($formaAtendimento, $tipoAtendimento, $publicoPerfil);
+        if ($publicoPerfil == 'empregador' || $publicoPerfil == 'trabalhador'){
+            $publicoPerfil->setExtraFields(
+                $data['nomePublico'],
+                $data['documentoPublico'],
+                $data['contatoPublico']
+            );
+        }
+
+        $atendimento = new Atendimento($data['formaAtendimento'], $tipoAtendimento, $publicoPerfil);
 
         $this->atendimentoRepository->add($atendimento, $_SESSION['user']['id']);
     }
+
 
     /** @return Atendimento[] */
     public function all(): array
@@ -36,5 +44,11 @@ class AtendimentoService
 
 
         return $data;
+    }
+
+
+    public function delete(int $id)
+    {
+        $this->atendimentoRepository->delete($id);
     }
 }

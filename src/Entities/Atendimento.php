@@ -11,13 +11,13 @@ class Atendimento
     public readonly TipoAtendimento $tipoAtendimento;
 //    public readonly int $idUsuario;
     public readonly Publico $publico;
-    public readonly FormaAtendimento $formaAtendimento;
+    public readonly string $formaAtendimento;
     public readonly ?string $detalhesAtendimento;
     public readonly ?string $usuario;
 
 
     public function __construct(
-        FormaAtendimento $formaAtendimento,
+        string $formaAtendimento,
         TipoAtendimento $tipoAtendimento,
 //        int $idUsuario,
         Publico $publico,
@@ -56,21 +56,17 @@ class Atendimento
         string $nomeUsuario
     ) {
         $tipo = new TipoAtendimento($tipoAtendimento, $descricaoAtendimento);
-        $forma = new FormaAtendimento($formaAtendimento);
         $publico = new Publico($perfilPublico);
 
-        $atendimento = new Atendimento($forma, $tipo , $publico, $dataDeRegistro, $nomeUsuario);
-
-        return $atendimento;
+        return new Atendimento($formaAtendimento, $tipo , $publico, $dataDeRegistro, $nomeUsuario);
     }
 
     public static function fromArray(array $data): Atendimento
     {
-        $tipoAtendimento = new TipoAtendimento($data['tipo'], $data['descricao_tipo_atendimento']);
-        $formaAtendimento = new FormaAtendimento($data['forma']);
+        $tipoAtendimento = new TipoAtendimento($data['tipo'], $data['descricao']);
         $publico = new Publico($data['perfil_cliente']);
 
-        $atendimento = new Atendimento($formaAtendimento, $tipoAtendimento, $publico, $data['data_de_registro'], $data['nome']);
+        $atendimento = new Atendimento($data['forma_atendimento'], $tipoAtendimento, $publico, $data['data_de_registro'], $data['nome']);
         $atendimento->setId($data['id']);
 
         return $atendimento;

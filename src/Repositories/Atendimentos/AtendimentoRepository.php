@@ -33,24 +33,18 @@ class AtendimentoRepository implements IAtendimentoRepository
     {
         $this->pdo->beginTransaction();
         try {
-            $idFormaAtend = $this->formaRepo->create($atendimento->formaAtendimento);
             $idPublico = $this->publicoRepository->create($atendimento->publico);
             $idTipoAtend = $this->tipoRepository->create($atendimento->tipoAtendimento);
 
-            $sqlAtendimento = "INSERT INTO atendimento (forma_atendimento_id, tipo_atendimento_id, usuario_id, publico_id) VALUES (:forma_id, :tipo_id, :usuario_id, :publico_id);";
+            $sqlAtendimento = "INSERT INTO atendimento (tipo_atendimento_id, usuario_id, publico_id, forma_atendimento) VALUES (:tipo_id, :usuario_id, :publico_id, :forma);";
             $stmt = $this->pdo->prepare($sqlAtendimento);
-            $stmt->bindValue(':forma_id', $idFormaAtend);
-//            $stmt->bindValue(':forma_atendimento, $atendimento->formaAtendimento);
             $stmt->bindValue(':tipo_id', $idTipoAtend);
             $stmt->bindValue(':usuario_id', $idUsuario);
             $stmt->bindValue(':publico_id', $idPublico);
+            $stmt->bindValue(':forma', $atendimento->formaAtendimento);
             $stmt->execute();
 
-            if ($this->pdo->commit()) {
-                echo "Success on save the data";
-            } else {
-                echo "Falha";
-            }
+            $this->pdo->commit();
         } catch (PDOException $e) {
             $this->pdo->rollBack();
             throw $e;
@@ -67,15 +61,13 @@ class AtendimentoRepository implements IAtendimentoRepository
         $sql = "SELECT
                     a.id,
                     a.data_de_registro,
-                    fa.forma,
+                    a.forma_atendimento,
                     ta.tipo,
                     ta.descricao,
                     u.nome,
                     p.perfil_cliente
                 FROM
                     atendimento AS a
-                        INNER JOIN
-                    forma_atendimento AS fa ON a.forma_atendimento_id = fa.id
                         INNER JOIN
                     tipo_atendimento AS ta ON a.tipo_atendimento_id = ta.id
                         INNER JOIN
@@ -101,7 +93,11 @@ class AtendimentoRepository implements IAtendimentoRepository
 
     public function delete(int $id): bool
     {
-        // TODO: Implement delete() method.
+        $sql = "DELETE FROM atendimento WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(":id", $id);
+
+        return $stmt->execute();
     }
 
     private function hydrateAtendimentos(array $data): Atendimento

@@ -25,7 +25,7 @@ CREATE TABLE informacoes_pessoais (
     nome VARCHAR(255) NOT NULL,
     contato varchar(20) NOT NULL,
     documento VARCHAR(30) NOT NULL, -- CPF ou CNPJ
-    FOREIGN KEY (publico_id) REFERENCES publico(id)
+    FOREIGN KEY (publico_id) REFERENCES publico(id) ON DELETE CASCADE
 );
 
 -- Tabela de Tipos de Atendimento
