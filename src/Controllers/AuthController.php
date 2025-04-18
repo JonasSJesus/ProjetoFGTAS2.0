@@ -5,6 +5,7 @@ namespace Fgtas\Controllers;
 use Fgtas\Services\AuthService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Respect\Validation\Validator as v;
 use Slim\Views\Twig;
 
 class AuthController
@@ -32,17 +33,22 @@ class AuthController
     {
         // email: admin | senha: admin
         $data = $request->getParsedBody();
-        $email = filter_var($data['email']);
-        $password = filter_var($data['senha']);
+        $validation = v::key('email', v::notEmpty()->email())
+                       ->key('senha', v::notEmpty()->min(5))
+                       ->validate($data);
 
-        if (empty($email) || empty($password)){
+        if (!$validation){
             // TODO: cadastrar FlashMessages
             return $response
                 ->withHeader('Location', '/login')
                 ->withStatus(302);
         }
 
+        $email = $data['email'];
+        $password = $data['senha'];
+
         if (!$this->authService->authenticate($email, $password)) {
+            // TODO: cadastrar FlashMessages
             return $response
                 ->withHeader('Location', '/login')
                 ->withStatus(302);

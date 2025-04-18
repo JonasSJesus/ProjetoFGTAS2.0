@@ -63,41 +63,8 @@ return function (App $app) {
 
         });
 
-
-
         $group->get('/delete-user/{id}', [UsuarioController::class, 'destroy'])->setName('user.delete');
 
     })->add(PermissionMiddleware::class)->add(AuthMiddleware::class);
-
-
-
-
-
-
-    /**
-     * ===============================================================
-     */
-
-
-    /**
-     * ===============================================================
-     */
-
-
-    /**
-     * ===============================================================
-     */
-
-
-    /**
-     * =====================Rotas de Teste============================
-     */
-    $app->get('/homeASD', function ($request, $response) {
-        $view = Twig::fromRequest($request);
-
-        return $view->render($response, 'formulario_de_testes.html.twig');
-    })->add(AuthMiddleware::class);
-
-
 
 };

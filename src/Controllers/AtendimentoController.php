@@ -2,13 +2,18 @@
 
 namespace Fgtas\Controllers;
 
+use Exception;
 use Fgtas\Services\AtendimentoService;
-use Respect\Validation\Validator as v;
+use Fgtas\Validations\AtendimentoValidator as Validator;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Respect\Validation\Exceptions\NestedValidationException;
 use Slim\Views\Twig;
 use Throwable;
 
+/**
+ * Responsavel por lidar com a comunicação entre o usuario e tudo que for relacionado aos Atendimentos no sistema
+ */
 class AtendimentoController
 {
     private AtendimentoService $atendimentoService;
@@ -17,6 +22,7 @@ class AtendimentoController
     {
         $this->atendimentoService = $atendimentoService;
     }
+
 
     public function formsAtendimento(Request $request, Response $response): Response
     {
@@ -27,6 +33,7 @@ class AtendimentoController
             'userName' => $userLoggedIn
         ]);
     }
+
 
     public function dashboard(Request $request, Response $response): Response
     {
@@ -47,40 +54,19 @@ class AtendimentoController
     public function store(Request $request, Response $response): Response
     {
         $dataFromRequest = $request->getParsedBody();
-
-        // Validacoes de dados | TODO: mudar isso para uma camada "Validator"
-        $dataValidation = v::key('identificacaoAtendente', v::notEmpty()->stringType())
-                        ->key('formaAtendimento', v::notEmpty()->stringType())
-                        ->key('perfilPublico', v::notEmpty())
-                        ->key('tipoAtendimento')
-                        ->key('descricao_tipo_atendimento', v::optional(v::stringType()));
-
-        if ($dataFromRequest['perfilPublico'] === 'empregador' || $dataFromRequest['perfilPublico'] === 'trabalhador') {
-
-            $publicoValidate = v::key('nomePublico', v::notEmpty())
-                            ->key('documentoPublico', v::notEmpty()->cpf())
-                            ->key('contatoPublico', v::notEmpty());
-
-            /** @var $publicoValidate v */
-            if (!$publicoValidate->isValid($dataFromRequest)) {
-                echo "O perfil do publico era {$dataFromRequest['perfilPublico']}, mas faltou os documentos"; // TODO Criar flash messages aqui!
-
-                return $response;
-            }
-        }
-
-        /** @var $dataValidation v */
-        if (!$dataValidation->isValid($dataFromRequest)) {
-            dump($dataFromRequest);
-            echo "Os testes deram falha"; // TODO criar flash messages aqui!
-
-            return $response;
+        
+        if (!Validator::validate($dataFromRequest)) {
+            // TODO: Implementar mensagens de erro em caso de verificacao invalida | Salvar as mensagens com Flash Messages
+            return $response
+                ->withStatus(302)
+                ->withHeader('Location', '/home');
         }
 
         try {
             $this->atendimentoService->createAtendimento($dataFromRequest);
-        } catch (Throwable $e) {
-            echo "Error: " . $e->getMessage();
+        } catch (Exception $e) {
+            //echo "Error: " . $e->getMessage();
+            dump($e->getMessage());
         }
 
         return $response
@@ -99,20 +85,13 @@ class AtendimentoController
     {
         $id = $args['id'];
 
-        /** @var $validateId v */
-        if (!v::numericVal()->validate($id)) {
-            return $response
-                ->withStatus(302)
-                ->withHeader('Location', '/usuario');
-        }
-
         try {
             $this->atendimentoService->delete($id);
             return $response
                 ->withStatus(302)
                 ->withHeader('Location', '/usuario');
         } catch (Throwable $e) {
-            echo "Error -> " . $e->getMessage();
+            echo "Error -> " . $e->getMessage(); // Implementar Flash Messages
             return $response;
         }
     }
