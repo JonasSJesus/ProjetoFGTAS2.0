@@ -91,13 +91,33 @@
         .readonly__input {
             background-color: #d1d5db;
         }
+
+        .navbar {
+            display: grid;
+            grid-template-columns: 150px 150px 150px;
+            justify-content: end;
+            color: black;
+            margin-bottom: 20px;
+        }
+
+        .navbar a {
+            color: #d1d5db;
+            background-color: #1f2937;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        a:hover {
+            background-color: #6b7280;
+        }
     </style>
 </head>
 <body>
     <header>
-        <nav>
-            <a href="/usuario">Pagina do Usuario </a> ||
-            <a href="/admin"> Pagina do Admin </a> ||
+        <nav class="navbar">
+            <a href="/usuario">Pagina do Usuario </a>
+            <a href="/admin"> Pagina do Admin </a>
             <a href="/logout"> Sair </a>
         </nav>
     </header>
@@ -193,7 +213,7 @@
     </main>
 
     <footer>
-        <p>Feito pelo Claude AI (Todos o diretos reservados)</p>
+        <p>Formulario de testes, feito pelo Claude AI, mudar em produção</p>
     </footer>
 
 <script>

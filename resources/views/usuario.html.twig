@@ -10,79 +10,77 @@
 
 <body>
 
-    <body>
-        <section class="centralizado mv0-5">
-            <h1 class="formulario__titulo">Solicitante</h1>
-            <table class="tabela w95 centralizado mc">
-                <tbody class="centralizado" >
-                <tr class="cabecalho">
-                    <th>Id</th>
-                    <th>Nome</th>
-                    <th>Tipo da Pessoa</th>
-                    <th>Tipo do Solicitante</th>
-                    <th>Forma de Atendimento</th>
-                    <th>Tipo de Informação</th>
-                    <th>Data do registro</th>
-                    <th>Ativo</th>
-                </tr>
-                    <td>1</td>
-                    <td>Jonas</td>
-                    <td>Física</td>
-                    <td>Empregador</td>
-                    <td>Presencial</td>
-                    <td>Não possui</td>
-                    <td>01/01/2024 14:00:20</td>
-                    <td>Ativado</td>
+    <section class="centralizado mv0-5">
+        <h1 class="formulario__titulo">Solicitante</h1>
+        <table class="tabela w95 centralizado mc">
+            <tbody class="centralizado" >
+            <tr class="cabecalho">
+                <th>Id</th>
+                <th>Nome</th>
+                <th>Tipo da Pessoa</th>
+                <th>Tipo do Solicitante</th>
+                <th>Forma de Atendimento</th>
+                <th>Tipo de Informação</th>
+                <th>Data do registro</th>
+                <th>Ativo</th>
+            </tr>
+            <td>1</td>
+            <td>Jonas</td>
+            <td>Física</td>
+            <td>Empregador</td>
+            <td>Presencial</td>
+            <td>Não possui</td>
+            <td>01/01/2024 14:00:20</td>
+            <td>Ativado</td>
+            <td>
+                <i class="fa-solid fa-pen icone"></i>
+                <a href="./editar_solicitante.php" class="tabela__link">Editar</a>
+            </td>
+            <td>
+                <i class="fa-solid fa-x icone"></i>
+                <a href="../src/controller/excluir_solicitante.php" class="tabela__link">Excluir</a>
+            </td>
+            </tbody>
+        </table>
+    </section>
+    <section class="centralizado mt1">
+        <h1 class="formulario__titulo">Atendimento</h1>
+        <table class="tabela w95 centralizado mc">
+            <tr class="cabecalho">
+                <th>Id</th>
+                <th>nome atendente</th>
+                <th>Tipo de Atendimento</th>
+                <th>Descrição do Tipo de Atendimento</th>
+                <th>Forma de Atendimento</th>
+                <th>Perfil do Atendido</th>
+                <th>Data Registro</th>
+            </tr>
+            {% for atendimento in atendimentos %}
+                <tr>
+                    <td>{{ atendimento.id }}</td>
+                    <td>{{ atendimento.usuario }}</td>
+                    <td>{{ atendimento.tipoAtendimento.tipo }}</td>
+                    <td>{{ atendimento.tipoAtendimento.descricao }}</td>
+                    <td>{{ atendimento.formaAtendimento }}</td>
+                    <td>{{ atendimento.publico.perfilCliente }}</td>
+                    <td>{{ atendimento.dataDeRegistro }}</td>
                     <td>
                         <i class="fa-solid fa-pen icone"></i>
-                        <a href="./editar_solicitante.php" class="tabela__link">Editar</a>
+                        <a href="./editar_atendimento.php" class="tabela__link">Editar</a>
                     </td>
                     <td>
                         <i class="fa-solid fa-x icone"></i>
-                        <a href="../src/controller/excluir_solicitante.php" class="tabela__link">Excluir</a>
+                        <a href="{{ url_for('atendimento.delete', { id: atendimento.getId() }) }}" class="tabela__link">Excluir</a>
                     </td>
-                </tbody>
-            </table>
-        </section>
-        <section class="centralizado mt1">
-            <h1 class="formulario__titulo">Atendimento</h1>
-            <table class="tabela w95 centralizado mc">
-                <tr class="cabecalho">
-                    <th>Id</th>
-                    <th>nome atendente</th>
-                    <th>Tipo de Atendimento</th>
-                    <th>Descrição do Tipo de Atendimento</th>
-                    <th>Forma de Atendimento</th>
-                    <th>Perfil do Atendido</th>
-                    <th>Data Registro</th>
                 </tr>
-                {% for atendimento in atendimentos %}
-                    <tr>
-                        <td>{{ atendimento.id }}</td>
-                        <td>{{ atendimento.usuario }}</td>
-                        <td>{{ atendimento.tipoAtendimento.tipo }}</td>
-                        <td>{{ atendimento.tipoAtendimento.descricao }}</td>
-                        <td>{{ atendimento.formaAtendimento }}</td>
-                        <td>{{ atendimento.publico.perfilCliente }}</td>
-                        <td>{{ atendimento.dataDeRegistro }}</td>
-                        <td>
-                            <i class="fa-solid fa-pen icone"></i>
-                            <a href="./editar_atendimento.php" class="tabela__link">Editar</a>
-                        </td>
-                        <td>
-                            <i class="fa-solid fa-x icone"></i>
-                            <a href="{{ url_for('atendimento.delete', { id: atendimento.getId() }) }}" class="tabela__link">Excluir</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
-        </section>
-        <div class="centralizado mt1">
-            <a href="/home" class="formulario__botao__padrao formulario__botao__terceario">Voltar</a>
-            <a href="/relatorio" class="formulario__botao__padrao formulario__botao">Gerar Relatório</a>
-        </div>
-        <script src="https://kit.fontawesome.com/df85906e6a.js" crossorigin="anonymous"></script>
-    </body>
+            {% endfor %}
+        </table>
+    </section>
+    <div class="centralizado mt1">
+        <a href="/home" class="formulario__botao__padrao formulario__botao__terceario">Voltar</a>
+        <a href="/relatorio" class="formulario__botao__padrao formulario__botao">Gerar Relatório</a>
+    </div>
+<script src="https://kit.fontawesome.com/df85906e6a.js" crossorigin="anonymous"></script>
 </body>
 
 </html>
