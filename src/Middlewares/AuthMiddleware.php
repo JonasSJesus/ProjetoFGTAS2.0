@@ -21,11 +21,10 @@ class AuthMiddleware implements MiddlewareInterface
     }
 
 
-    // implementar métodos para checar se $_SESSION esta definido
+    // checa se $_SESSION esta definido
     public function process(Request $request, RequestHandler $handler): Response
     {
         $session = $this->session;
-        session_regenerate_id(true); // TODO trocar por um middleware dedicado
 
         if (!$session->exists('user') && $session->user['is_logged'] !== true) {
             $response = $this->responseFactory->createResponse();
@@ -35,6 +34,7 @@ class AuthMiddleware implements MiddlewareInterface
                     ->withStatus(302);
         }
 
+        session_regenerate_id(true); // TODO trocar por um middleware dedicado? Resolveria o possivel problema de perda de sessao em cenarios com alta demanda
         return $handler->handle($request);
     }
 }

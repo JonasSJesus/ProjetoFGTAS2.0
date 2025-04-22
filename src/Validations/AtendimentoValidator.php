@@ -3,7 +3,7 @@
 namespace Fgtas\Validations;
 
 use Respect\Validation\Exceptions\NestedValidationException;
-use Respect\Validation\Validator as v;
+use Respect\Validation\Validator;
 
 class AtendimentoValidator
 {
@@ -15,21 +15,21 @@ class AtendimentoValidator
      */
     public static function validate(array $data): bool
     {
-        $dataValidation = v::key('identificacaoAtendente', v::notEmpty()->stringType())
-                           ->key('formaAtendimento', v::notEmpty()->stringType())
-                           ->key('perfilPublico', v::notEmpty())
+        $dataValidation = Validator::key('identificacaoAtendente', Validator::notEmpty()->stringType())
+                           ->key('formaAtendimento', Validator::notEmpty()->stringType())
+                           ->key('perfilPublico', Validator::notEmpty())
                            ->key('tipoAtendimento')
-                           ->key('descricao_tipo_atendimento', v::optional(v::stringType()));
+                           ->key('descricao_tipo_atendimento', Validator::optional(Validator::stringType()));
 
         if (in_array($data['perfilPublico'], ['empregador', 'trabalhador'])) {
-            $dataValidation->key('nomePublico', v::notEmpty())
-                           ->key('contatoPublico', v::notEmpty());
+            $dataValidation->key('nomePublico', Validator::notEmpty())
+                           ->key('contatoPublico', Validator::notEmpty());
 
-            $documentoValidation = $data['perfilPublico'] === 'empregador' ? v::notEmpty()->cnpj() : v::notEmpty()->cpf();
+            $documentoValidation = $data['perfilPublico'] === 'empregador' ? Validator::notEmpty()->cnpj() : Validator::notEmpty()->cpf();
             $dataValidation->key('documentoPublico', $documentoValidation);
         }
 
-        /** @var v $dataValidation */
-        return $dataValidation->isValid($data);
+        /** @var Validator $dataValidation */
+        return $dataValidation->isValid($data); // ToDo: retornar um array contendo os campos que nao passaram nos testes
     }
 }
