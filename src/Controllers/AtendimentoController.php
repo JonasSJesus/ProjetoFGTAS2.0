@@ -24,7 +24,7 @@ class AtendimentoController
     }
 
 
-    public function formsAtendimento(Request $request, Response $response): Response
+    public function formsAtendimentoPage(Request $request, Response $response): Response
     {
         $view = Twig::fromRequest($request);
         $userLoggedIn = $_SESSION['user'];
@@ -35,7 +35,18 @@ class AtendimentoController
     }
 
 
-    public function dashboard(Request $request, Response $response): Response
+    public function updateAtendimentoPage(Request $request, Response $response): Response
+    {
+        $view = Twig::fromRequest($request);
+        $userLoggedIn = $_SESSION['user'];
+
+        return $view->render($response, 'editar_atendimento.html.twig', [
+            'userName' => $userLoggedIn
+        ]);
+    }
+
+
+    public function dashboardPage(Request $request, Response $response): Response
     {
         $view = Twig::fromRequest($request);
         $atendimentos = $this->atendimentoService->all();
@@ -43,6 +54,24 @@ class AtendimentoController
         return $view->render($response, 'usuario.html.twig', [
             'atendimentos' => $atendimentos
         ]);
+    }
+
+
+    public function reportPage(Request $request, Response $response): Response
+    {
+        $view = Twig::fromRequest($request);
+        $atendimentos = $this->atendimentoService->all();
+
+        return $view->render($response, 'relatorio.html.twig', [
+            'atendimentos' => $atendimentos
+        ]);
+    }
+
+    public function generateReport(Request $request, Response $response): Response
+    {
+        echo "123";
+
+        return $response;
     }
 
 

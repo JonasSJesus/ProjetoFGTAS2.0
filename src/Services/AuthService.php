@@ -25,7 +25,7 @@ class AuthService
      * @param string $password
      * @return bool
      */
-    public function authenticate(string $email, string $password) : bool
+    public function authenticate(string $email, string $password): bool
     {
         $user = $this->repository->findByEmail($email);
         $dbPassword = password_hash(' ', PASSWORD_ARGON2ID);

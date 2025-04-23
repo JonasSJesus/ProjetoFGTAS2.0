@@ -3,6 +3,7 @@
 namespace Fgtas\Controllers;
 
 use Exception;
+use Fgtas\Database\Connection;
 use Fgtas\Services\UsuarioService;
 use Slim\Views\Twig;
 use Respect\Validation\Validator as v;
@@ -32,7 +33,7 @@ class UsuarioController
     {
         $view = Twig::fromRequest($request);
 
-        return $view->render($response, 'cadastrar_usuario.php');
+        return $view->render($response, 'cadastrar_usuario.html.twig');
     }
 
     /**
@@ -63,14 +64,6 @@ class UsuarioController
         return $view->render($response, 'admin.html.twig', [
             'users' => $users
         ]);
-    }
-
-    public function usuarioPage(Request $request, Response $response): Response
-    {
-        $view = Twig::fromRequest($request);
-        $atendimentos = $this;
-
-        return $view->render($response, 'usuario.html.twig');
     }
 
 
@@ -131,7 +124,7 @@ class UsuarioController
         $this->usuarioService->update($data, $id);
 
         return $response
-            ->withHeader('Location', '/usuario')
+            ->withHeader('Location', '/admin')
             ->withStatus(302);
     }
 

@@ -2,51 +2,71 @@
 
 namespace Fgtas\Repositories\Atendimentos;
 
+use Doctrine\DBAL\Connection as DBALConnection;
+use Doctrine\DBAL\Exception;
+use Fgtas\Database\Connection;
 use Fgtas\Entities\Atendimento;
 use Fgtas\Repositories\Interfaces\IAtendimentoRepository;
 use Fgtas\Repositories\Interfaces\IFormaAtendimentoRepository;
 use Fgtas\Repositories\Interfaces\IPublicoRepository;
 use Fgtas\Repositories\Interfaces\ITipoAtendimentoRepository;
-use PDO;
-use PDOException;
 
 class AtendimentoRepository implements IAtendimentoRepository
 {
-    private PDO $pdo;
+    private DBALConnection $conn;
     private IFormaAtendimentoRepository $formaRepo;
     private IPublicoRepository $publicoRepository;
     private ITipoAtendimentoRepository $tipoRepository;
 
     public function __construct(
-        PDO $pdo,
+        Connection $conn,
         IFormaAtendimentoRepository $formaRepository,
         ITipoAtendimentoRepository $tipoRepository,
         IPublicoRepository $publicoRepository
     ) {
-        $this->pdo = $pdo;
+        $this->conn = $conn->getConnection();
         $this->formaRepo = $formaRepository;
         $this->tipoRepository = $tipoRepository;
         $this->publicoRepository = $publicoRepository;
     }
 
+
+    /**
+     * @param Atendimento $atendimento
+     * @param int $idUsuario
+     * @return bool
+     * @throws Exception
+     */
     public function add(Atendimento $atendimento, int $idUsuario): bool
     {
-        $this->pdo->beginTransaction();
+        $queryBuilder = $this->conn->createQueryBuilder();
+
+        $this->conn->beginTransaction();
         try {
-            $idPublico = $this->publicoRepository->create($atendimento->publico);
-            $idTipoAtend = $this->tipoRepository->create($atendimento->tipoAtendimento);
+            $idPublico = $this->publicoRepository->add($atendimento->publico);
+            $idTipoAtend = $this->tipoRepository->add($atendimento->tipoAtendimento);
 
-            $sqlAtendimento = "INSERT INTO atendimento (tipo_atendimento_id, usuario_id, publico_id, forma_atendimento) VALUES (:tipo_id, :usuario_id, :publico_id, :forma);";
-            $stmt = $this->pdo->prepare($sqlAtendimento);
-            $stmt->bindValue(':tipo_id', $idTipoAtend);
-            $stmt->bindValue(':usuario_id', $idUsuario);
-            $stmt->bindValue(':publico_id', $idPublico);
-            $stmt->bindValue(':forma', $atendimento->formaAtendimento);
-            $stmt->execute();
+            // Operacao para salvar os atendimentos na tabela 'atendimento'
+            // Talvez mudar para um metodo especifico?
+            $queryBuilder
+                ->insert('atendimento')
+                ->values([
+                    'tipo_atendimento_id' => ':tipo_id',
+                    'usuario_id' => ':usuario_id',
+                    'publico_id' => ':publico_id',
+                    'forma_atendimento' => ':forma'
+                ])
+                ->setParameters([
+                    'tipo_id' => $idTipoAtend,
+                    'usuario_id' => $idUsuario,
+                    'publico_id' => $idPublico,
+                    'forma' => $atendimento->formaAtendimento
+                ]);
+            $queryBuilder->executeStatement();
 
-            $this->pdo->commit();
-        } catch (PDOException $e) {
-            $this->pdo->rollBack();
+            $this->conn->commit();
+        } catch (Exception $e) {
+            $this->conn->rollBack();
             throw $e;
         }
 
@@ -55,29 +75,31 @@ class AtendimentoRepository implements IAtendimentoRepository
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function findAll(): ?array
     {
-        $sql = "SELECT
-                    a.id,
-                    a.data_de_registro,
-                    a.forma_atendimento,
-                    ta.tipo,
-                    ta.descricao,
-                    u.nome,
-                    p.perfil_cliente
-                FROM
-                    atendimento AS a
-                        INNER JOIN
-                    tipo_atendimento AS ta ON a.tipo_atendimento_id = ta.id
-                        INNER JOIN
-                    usuario u ON a.usuario_id = u.id
-                        INNER JOIN
-                    publico AS p ON a.publico_id = p.id;";
-        $stmt = $this->pdo->query($sql);
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $queryBuilder = $this->conn->createQueryBuilder();
 
-//        return $data;
+        $queryBuilder
+            ->select(
+                'a.id',
+                'a.data_de_registro',
+                'a.forma_atendimento',
+                'ta.tipo',
+                'ta.descricao',
+                'u.nome',
+                'p.perfil_cliente'
+            )
+            ->from('atendimento', 'a')
+            ->innerJoin('a', 'tipo_atendimento', 'ta', 'a.tipo_atendimento_id = ta.id')
+            ->innerJoin('a', 'usuario', 'u', 'a.usuario_id = u.id')
+            ->innerJoin('a', 'publico', 'p', 'a.publico_id = p.id')
+            ->orderBy('id', 'DESC');
+        $resultSet = $queryBuilder->executeQuery();
+
+        $data = $resultSet->fetchAllAssociative();
+
         return array_map(Atendimento::fromArray(...), $data);
     }
 
@@ -93,11 +115,14 @@ class AtendimentoRepository implements IAtendimentoRepository
 
     public function delete(int $id): bool
     {
-        $sql = "DELETE FROM atendimento WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(":id", $id);
+        $queryBuilder = $this->conn->createQueryBuilder();
 
-        return $stmt->execute();
+        $queryBuilder
+            ->delete('atendimento')
+            ->where('id = :id')
+            ->setParameter('id', $id);
+
+        return $queryBuilder->executeStatement();
     }
 
     private function hydrateAtendimentos(array $data): Atendimento

@@ -1,6 +1,7 @@
 <?php
 
 use DI\ContainerBuilder;
+use Fgtas\Database\Connection;
 use Fgtas\Repositories\Atendimentos\AtendimentoRepository;
 use Fgtas\Repositories\FormaAtendimentoRepository;
 use Fgtas\Repositories\Interfaces\IAtendimentoRepository;
@@ -10,12 +11,14 @@ use Fgtas\Repositories\Interfaces\ITipoAtendimentoRepository;
 use Fgtas\Repositories\Interfaces\IUsuarioRepository;
 use Fgtas\Repositories\PublicoRepository;
 use Fgtas\Repositories\TipoAtendimentoRepository;
-use Fgtas\Repositories\UsuarioRepository;
+use Fgtas\Repositories\Usuario\UsuarioRepository;
 use function DI\autowire;
 
 return function (ContainerBuilder $container) {
     $container->addDefinitions([
         // Mapeando banco de dados
+        Connection::class => autowire(Connection::class),
+
         PDO::class => function (ContainerBuilder $c) {
             $pdo = new PDO(
                 "mysql:host={$_ENV['DB_HOST']};dbname={$_ENV['DB_NAME']}",

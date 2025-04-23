@@ -2,29 +2,39 @@
 
 namespace Fgtas\Repositories;
 
+use Doctrine\DBAL\Connection as DBALConnection;
+use Doctrine\DBAL\Exception;
+use Fgtas\Database\Connection;
 use Fgtas\Entities\TipoAtendimento;
 use Fgtas\Repositories\Interfaces\ITipoAtendimentoRepository;
-use PDO;
 
 class TipoAtendimentoRepository implements ITipoAtendimentoRepository
 {
-    private PDO $pdo;
+    private DBALConnection $conn;
 
-    public function __construct(PDO $pdo)
+    public function __construct(Connection $conn)
     {
-        $this->pdo = $pdo;
+        $this->conn = $conn->getConnection();
     }
 
-    public function create(TipoAtendimento $tipoAtend): int
+    public function add(TipoAtendimento $tipoAtend): int
     {
-        $sql = "INSERT INTO tipo_atendimento (tipo, descricao) VALUES (:tipo, :descricao)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':tipo', $tipoAtend->tipo);
-        $stmt->bindValue(':descricao', $tipoAtend->descricao);
-        $stmt->execute();
+        $queryBuilder = $this->conn->createQueryBuilder();
 
-        $id = $this->pdo->lastInsertId();
-        $tipoAtend->setId(intval($id));
+        $queryBuilder
+            ->insert('tipo_atendimento')
+            ->values([
+                'tipo' => ':tipo',
+                'descricao' => ':descricao'
+            ])->setParameters([
+                'tipo' => $tipoAtend->tipo,
+                'descricao' => $tipoAtend->descricao
+            ]);
+            
+        $queryBuilder->executeStatement();
+
+        $id = (int) $this->conn->lastInsertId();
+        //$tipoAtend->setId(intval($id));
 
         return $id;
     }
@@ -34,21 +44,34 @@ class TipoAtendimentoRepository implements ITipoAtendimentoRepository
      */
     public function findAll(): ?array
     {
-        $sql = "SELECT * FROM tipo_atendimento";
-        $stmt = $this->pdo->query($sql);
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $queryBuilder = $this->conn->createQueryBuilder();
+
+        $resultSet = $queryBuilder
+            ->select('*')
+            ->from('tipo_atendimento')
+            ->executeQuery();
+        $data = $resultSet->fetchAllAssociative();
 
         return array_map(TipoAtendimento::fromArray(...), $data);
     }
 
+    /**
+     * @param int $id
+     * @return TipoAtendimento|null
+     * @throws Exception
+     */
     public function findById(int $id): ?TipoAtendimento
     {
-        $sql = "SELECT * FROM tipo_atendimento WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':id', $id);
-        $stmt->execute();
+        $queryBuilder = $this->conn->createQueryBuilder();
 
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $resultSet = $queryBuilder
+            ->select('*')
+            ->from('tipo_atendimento')
+            ->where('id = :id')
+            ->setParameter('id', $id)
+            ->executeQuery();
+
+        $data = $resultSet->fetchAssociative();
 
         if (empty($data)) {
             return null;
@@ -59,20 +82,28 @@ class TipoAtendimentoRepository implements ITipoAtendimentoRepository
 
     public function update(TipoAtendimento $tipoAtend, int $id): bool
     {
-        $sql = "UPDATE tipo_atendimento SET tipo = :tipo WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':tipo', $tipoAtend->tipo);
-        $stmt->bindValue(':id', $id);
+        $queryBuilder = $this->conn->createQueryBuilder();
 
-        return $stmt->execute();
+        $queryBuilder
+            ->update('tipo_atendimento')
+            ->set('tipo', ':tipo')
+            ->where('id = :id')
+            ->setParameters([
+                'tipo' => $tipoAtend->tipo,
+                'id' => $id
+            ]);
+
+        return $queryBuilder->executeStatement();
     }
 
     public function delete(int $id): bool
     {
-        $sql = "DELETE FROM tipo_atendimento WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':id', $id);
+        $queryBuilder = $this->conn->createQueryBuilder();
+        $queryBuilder
+            ->delete('tipo_atendimento')
+            ->where('id = :id')
+            ->setParameter('id', $id);
 
-        return $stmt->execute();
+        return $queryBuilder->executeStatement();
     }
 }

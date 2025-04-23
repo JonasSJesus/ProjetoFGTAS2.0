@@ -7,7 +7,7 @@ use Fgtas\Entities\TipoAtendimento;
 
 interface ITipoAtendimentoRepository
 {
-    public function create(TipoAtendimento $tipoAtend): int;
+    public function add(TipoAtendimento $tipoAtend): int;
 
     /** @return null|TipoAtendimento[] */
     public function findAll(): ?array;

@@ -7,13 +7,12 @@ use Fgtas\Middlewares\AuthMiddleware;
 use Fgtas\Middlewares\PermissionMiddleware;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
-use Slim\Views\Twig;
 
 return function (App $app) {
     // Redireciona a rota raiz para home para toda a aplicação
     $app->redirect('/', '/home', 301);
 
-    // Rotas publicas ===============================
+    // Rotas publicas =========================================================
     $app->group('', function (Group $group){
 
         $group->group('/login', function ($g){
@@ -27,7 +26,7 @@ return function (App $app) {
 
 
     /**
-     * Rotas protegidas ==============================
+     * Rotas protegidas ========================================================
      */
     $app->group('', function (Group $group) {
 
@@ -37,18 +36,28 @@ return function (App $app) {
         });
 
         $group->group('/home', function ($g) {
-            $g->get('', [AtendimentoController::class, 'formsAtendimento']);
+            $g->get('', [AtendimentoController::class, 'formsAtendimentoPage']);
             $g->post('', [AtendimentoController::class, 'store']);
         });
 
-        $group->get('/usuario', [AtendimentoController::class, 'dashboard']);
+        $group->group('/update-atendimento/{id}', function ($g) {
+            $g->get('', [AtendimentoController::class, 'updateAtendimentoPage'])->setName('atendimento.update');
+            $g->post('', [AtendimentoController::class, 'update']);
+        });
 
-        $group->get('/excluir-atendimento/{id}', [AtendimentoController::class, 'destroy'])->setName('atendimento.delete');
+        $group->group('/relatorio', function ($g) {
+            $g->get('', [AtendimentoController::class, 'reportPage']);
+            $g->post('', [AtendimentoController::class, 'generateReport']);
+        });
+
+//        $group->get('/relatorio', [AtendimentoController::class, 'relatorioPage']);
+        $group->get('/dashboard', [AtendimentoController::class, 'dashboardPage'])->setName('dashboard.user');
+        $group->get('/delete-atendimento/{id}', [AtendimentoController::class, 'destroy'])->setName('atendimento.delete');
 
     })->add(AuthMiddleware::class);
 
 
-    // Rotas de acesso exclusivo de Usuarios Administradores ==============
+    // Rotas de acesso exclusivo de Usuarios Administradores ==================
 
     $app->group('', function (Group $group) {
 
@@ -58,7 +67,7 @@ return function (App $app) {
         });
 
         $group->group('/admin', function ($g) {
-            $g->get('', [UsuarioController::class, 'adminPage']);
+            $g->get('', [UsuarioController::class, 'adminPage'])->setName('dashboard.admin');
             $g->post('', [UsuarioController::class, '']);
 
         });

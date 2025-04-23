@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="ptbr">
 
 <head>
     <meta charset="UTF-8">
@@ -66,7 +66,7 @@
                     <td>{{ atendimento.dataDeRegistro }}</td>
                     <td>
                         <i class="fa-solid fa-pen icone"></i>
-                        <a href="./editar_atendimento.php" class="tabela__link">Editar</a>
+                        <a href="{{ url_for('atendimento.update', { id: atendimento.getId() }) }}" class="tabela__link">Editar</a>
                     </td>
                     <td>
                         <i class="fa-solid fa-x icone"></i>

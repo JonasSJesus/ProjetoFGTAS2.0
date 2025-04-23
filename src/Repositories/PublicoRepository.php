@@ -2,62 +2,84 @@
 
 namespace Fgtas\Repositories;
 
+use Doctrine\DBAL\Connection as DBALConnection;
+use Doctrine\DBAL\Exception;
+use Fgtas\Database\Connection;
 use Fgtas\Entities\Publico;
 use Fgtas\Repositories\Interfaces\IPublicoRepository;
 use PDO;
 
 class PublicoRepository implements IPublicoRepository
 {
-    private PDO $pdo;
+    private DBALConnection $conn;
 
-    public function __construct(PDO $pdo)
+    public function __construct(Connection $conn)
     {
-        $this->pdo = $pdo;
+        $this->conn = $conn->getConnection();
     }
 
 
-    public function create(Publico $publico): int
+    /**
+     * @param Publico $publico
+     * @return int
+     * @throws Exception
+     */
+    public function add(Publico $publico): int
     {
-        $sql = "INSERT INTO publico (perfil_cliente) VALUES (:perfil_cliente)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':perfil_cliente', $publico->perfilCliente);
-        $stmt->execute();
+        $queryBuilder = $this->conn->createQueryBuilder();
+        $queryBuilder
+            ->insert('publico')
+            ->values([
+                'perfil_cliente' => ':perfil_cliente'
+            ])
+            ->setParameter('perfil_cliente', $publico->perfilCliente);
 
-        $id = $this->pdo->lastInsertId();
-        $publico->setId(intval($id));
+        $queryBuilder->executeStatement();
+
+        $id = $this->conn->lastInsertId();
+        //$publico->setId(intval($id));
 
         return $id;
     }
 
-    public function createWithExtraFields(Publico $publico)
-    {
-        $sql = "INSERT INTO publico (perfil_cliente, nome, documento, contato) VALUES (:perfil_cliente)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':perfil_cliente', $publico->perfilCliente);
-
-        return $stmt->execute();
-    }
+//    public function createWithExtraFields(Publico $publico)
+//    {
+//        $sql = "INSERT INTO publico (perfil_cliente, nome, documento, contato) VALUES (:perfil_cliente)";
+//        $stmt = $this->conn->prepare($sql);
+//        $stmt->bindValue(':perfil_cliente', $publico->perfilCliente);
+//
+//        return $stmt->executeQuery();
+//    }
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function findAll(): ?array
     {
-        $sql = "SELECT * FROM publico";
-        $stmt = $this->pdo->query($sql);
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $queryBuilder = $this->conn->createQueryBuilder();
+
+        $resultSet = $queryBuilder
+            ->select('*')
+            ->from('publico')
+            ->executeQuery();
+        $data = $resultSet->fetchAllAssociative();
 
         return array_map(Publico::fromArray(...), $data);
     }
 
     public function findById(int $id): ?Publico
     {
-        $sql = "SELECT * FROM publico WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':id', $id);
-        $stmt->execute();
+        $queryBuilder = $this->conn->createQueryBuilder();
 
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $resultSet = $queryBuilder
+            ->select('*')
+            ->from('publico')
+            ->where('id = :id')
+            ->setParameter('id', $id)
+            ->executeQuery();
+
+        $data = $resultSet->fetchAssociative();
 
         if (empty($data)) {
             return null;
@@ -68,20 +90,28 @@ class PublicoRepository implements IPublicoRepository
 
     public function update(Publico $publico, int $id): bool
     {
-        $sql = "UPDATE publico SET perfil_cliente = :perfil_cliente WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':perfil_cliente', $publico->perfilCliente);
-        $stmt->bindValue(':id', $id);
+        $queryBuilder = $this->conn->createQueryBuilder();
 
-        return $stmt->execute();
+        $queryBuilder
+            ->update('publico')
+            ->set('perfil_cliente', ':perfil_cliente')
+            ->where('id = :id')
+            ->setParameters([
+                'perfil_cliente' => $publico->perfilCliente,
+                'id' => $id
+            ]);
+
+        return $queryBuilder->executeStatement();
     }
 
     public function delete(int $id): bool
     {
-        $sql = "DELETE FROM publico WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':id', $id);
-
-        return $stmt->execute();
+        $queryBuilder = $this->conn->createQueryBuilder();
+        $queryBuilder
+            ->delete('publico')
+            ->where('id = :id')
+            ->setParameter('id', $id);
+        
+        return $queryBuilder->executeStatement();
     }
 }

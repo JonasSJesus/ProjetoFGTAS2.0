@@ -48,7 +48,6 @@
         }
         input[type="text"],
         select {
-            width: 100%;
             padding: 0.5rem;
             border: 1px solid #d1d5db;
             border-radius: 4px;
@@ -116,8 +115,8 @@
 <body>
     <header>
         <nav class="navbar">
-            <a href="/usuario">Pagina do Usuario </a>
-            <a href="/admin"> Pagina do Admin </a>
+            <a href="{{ url_for('dashboard.user') }}">Pagina do Usuario </a>
+            <a href="{{ url_for('dashboard.admin') }}"> Pagina do Admin </a>
             <a href="/logout"> Sair </a>
         </nav>
     </header>

@@ -11,7 +11,6 @@ return function (App $app) {
         'httponly' => true,
         'samesite' => '',
         'lifetime' => '20 min',
-
     ]));
 
     // TODO: implementar um middleware para regenerar o ID da sessão a cada X minutos

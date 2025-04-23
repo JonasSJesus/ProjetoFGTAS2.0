@@ -66,7 +66,13 @@ class Atendimento
         $tipoAtendimento = new TipoAtendimento($data['tipo'], $data['descricao']);
         $publico = new Publico($data['perfil_cliente']);
 
-        $atendimento = new Atendimento($data['forma_atendimento'], $tipoAtendimento, $publico, $data['data_de_registro'], $data['nome']);
+        $atendimento = new Atendimento(
+            $data['forma_atendimento'], 
+            $tipoAtendimento, 
+            $publico,
+            $data['data_de_registro'], 
+            $data['nome']
+        );
         $atendimento->setId($data['id']);
 
         return $atendimento;

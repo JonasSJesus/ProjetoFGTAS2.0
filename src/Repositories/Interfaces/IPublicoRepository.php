@@ -6,7 +6,7 @@ use Fgtas\Entities\Publico;
 
 interface IPublicoRepository
 {
-    public function create(Publico $publico): int;
+    public function add(Publico $publico): int;
 
     /** @return null|Publico[] */
     public function findAll(): ?array;
