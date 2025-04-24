@@ -8,12 +8,11 @@ class Atendimento
 {
     private int $id;
     public readonly ?string $dataDeRegistro;
-    public readonly TipoAtendimento $tipoAtendimento;
-//    public readonly int $idUsuario;
-    public readonly Publico $publico;
+    public readonly ?string $usuario;
     public readonly string $formaAtendimento;
     public readonly ?string $detalhesAtendimento;
-    public readonly ?string $usuario;
+    public readonly TipoAtendimento $tipoAtendimento;
+    public readonly Publico $publico;
 
 
     public function __construct(
@@ -29,6 +28,7 @@ class Atendimento
 //        $this->idUsuario = $idUsuario;
         $this->publico = $publico;
         $this->dataDeRegistro = $dataDeRegistro;
+//        $this->setDataRegistro($dataDeRegistro);
         $this->usuario = $usuario;
     }
 
@@ -42,7 +42,7 @@ class Atendimento
         $this->id = $id;
     }
 
-    public function setDataRegistro(string $data): void
+    public function setDataRegistro(string $data)
     {
 
     }
@@ -76,5 +76,18 @@ class Atendimento
         $atendimento->setId($data['id']);
 
         return $atendimento;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'forma_atendimento' => $this->formaAtendimento,
+            'data_registro' => $this->dataDeRegistro,
+            'usuario' => $this->usuario,
+            'tipo_atendimento' => $this->tipoAtendimento->tipo,
+            'descricao_tipo_atendimento' => $this->tipoAtendimento->descricao,
+            'perfil_publico' => $this->publico->perfilCliente
+        ];
     }
 }

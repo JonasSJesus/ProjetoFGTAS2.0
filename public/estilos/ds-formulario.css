@@ -99,7 +99,7 @@
 }
 
 .formulario__selecao {
-    background-color: var(--cor_secundaria);
+    background-color: var(--cor_principal);
     border: 0;
     color: var(--cor_tercearia);
     outline: 0;

@@ -16,18 +16,18 @@
             <a href="usuario.html.twig" class="menu__botao">Usuário</a>
         </nav>
     </header>
-    <form method="post" class="formulario centralizado">
+    <form method="post" class="formulario ">
         <h1 class="formulario__titulo mv0-5">Gerar relatório</h1>
 
         <fieldset class="formulario__campo w90">
-            <legend class="formulario__subtitulo">Tipo de exportação</legend>
-            <input class="formulario__opcao" value="pdf" type="radio" id="pdf" name="exp">
-            <label class="formulario__etiqueta" for="pdf">PDF</label>
-            <input class="formulario__opcao" value="csv" type="radio" id="csv" name="exp">
-            <label class="formulario__etiqueta" for="csv">CSV</label>
-        </fieldset>
-        <fieldset class="formulario__campo w90 mt2">
-            <legend class="formulario__subtitulo">Forma de atendimento</legend>
+            <legend class="formulario__subtitulo centralizado">Tipo de exportação</legend>
+            <div class="centralizado">
+                <input class="formulario__opcao" value="pdf" type="radio" id="pdf" name="exp">
+                <label class="formulario__etiqueta" for="pdf">PDF</label>
+                <input class="formulario__opcao" value="csv" type="radio" id="csv" name="exp">
+                <label class="formulario__etiqueta" for="csv">CSV</label>
+            </div>
+            <h4 style="color: #00ADB5">Forma de Atendimento:</h4>
             <select name="formaAtendimento" class="formulario__selecao w90">
                 <option value="default">Sem Filtro</option>
                 <option value="presencial">Presencial</option>
@@ -38,9 +38,7 @@
                 <option value="teams">Teams</option>
                 <option value="outro">Outro</option>
             </select>
-        </fieldset>
-        <fieldset class="formulario__campo w90 mt2">
-            <legend class="formulario__subtitulo">Tipo de solicitante</legend>
+            <h4 style="color: #00ADB5">Perfil Publico:</h4>
             <select name="publico" class="formulario__selecao w90">
                 <option value="default">Sem Filtro</option>
                 <option value="empregador">Empregador</option>
@@ -51,10 +49,7 @@
                 <option value="mercado_trabalho">Interessado de informações sobre o Mercado de Trabalho</option>
                 <option value="outro">Outro</option>
             </select>
-            
-        </fieldset>
-        <fieldset class="formulario__campo w90 mt2">
-            <legend class="formulario__subtitulo">Tipo de atendimento</legend>
+            <h4 style="color: #00ADB5">Tipo de Atendimento:</h4>
             <select class="formulario__selecao w90" name="tipoAtendimento">
                 <option value="default">Sem Filtro</option>
                 <option value="trabalho">Carteira de Trabalho, SD, Vagas</option>
@@ -66,8 +61,9 @@
                 <option value="outro">Outro</option>
             </select>
         </fieldset>
+
         <fieldset class="formulario__campo w90 mt2">
-            <legend class="formulario__subtitulo">Período</legend>
+            <legend class="formulario__subtitulo centralizado">Período</legend>
 
             <section>
                 <label class="formulario__etiqueta" for="dataInicial">Data inicial</label>

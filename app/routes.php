@@ -2,6 +2,7 @@
 
 use Fgtas\Controllers\AtendimentoController;
 use Fgtas\Controllers\AuthController;
+use Fgtas\Controllers\ReportController;
 use Fgtas\Controllers\UsuarioController;
 use Fgtas\Middlewares\AuthMiddleware;
 use Fgtas\Middlewares\PermissionMiddleware;
@@ -45,9 +46,9 @@ return function (App $app) {
             $g->post('', [AtendimentoController::class, 'update']);
         });
 
-        $group->group('/relatorio', function ($g) {
-            $g->get('', [AtendimentoController::class, 'reportPage']);
-            $g->post('', [AtendimentoController::class, 'generateReport']);
+        $group->group('/generate-report', function ($g) {
+            $g->get('', [ReportController::class, 'reportPage'])->setName('report.page');
+            $g->post('', [ReportController::class, 'generateReport']);
         });
 
 //        $group->get('/relatorio', [AtendimentoController::class, 'relatorioPage']);

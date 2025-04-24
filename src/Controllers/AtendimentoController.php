@@ -57,22 +57,6 @@ class AtendimentoController
     }
 
 
-    public function reportPage(Request $request, Response $response): Response
-    {
-        $view = Twig::fromRequest($request);
-        $atendimentos = $this->atendimentoService->all();
-
-        return $view->render($response, 'relatorio.html.twig', [
-            'atendimentos' => $atendimentos
-        ]);
-    }
-
-    public function generateReport(Request $request, Response $response): Response
-    {
-        echo "123";
-
-        return $response;
-    }
 
 
     /**

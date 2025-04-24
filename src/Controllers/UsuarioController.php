@@ -9,6 +9,9 @@ use Slim\Views\Twig;
 use Respect\Validation\Validator as v;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class UsuarioController
 {
@@ -25,9 +28,9 @@ class UsuarioController
      * @param Request $request
      * @param Response $response
      * @return Response
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function registerPage(Request $request, Response $response): Response
     {
@@ -42,9 +45,9 @@ class UsuarioController
      * @param Request $request
      * @param Response $response
      * @return Response
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function updatePage(Request $request, Response $response, array $args): Response
     {

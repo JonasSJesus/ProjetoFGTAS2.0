@@ -73,6 +73,7 @@ class AtendimentoRepository implements IAtendimentoRepository
         return true;
     }
 
+
     /**
      * @inheritDoc
      * @throws Exception
