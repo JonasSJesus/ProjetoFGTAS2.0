@@ -1,6 +1,6 @@
 # Cadastro de atendimentos
 
-- Versão completa e totalmente funcional, desenvolvida no primeiro semestre de 2025 como A3 da matéria de Usabilidade, Desenvolvimento WEB e Jogos. Sistema feito para a Fundação Gaúcha de Trabalho e Assistência Social (FGTAS)
+- Sistema desenvolvido no primeiro semestre de 2025 como A3 da matéria de Usabilidade, Desenvolvimento WEB e Jogos. Segunda versão, feita para a Fundação Gaúcha de Trabalho e Assistência Social (FGTAS).
 
 ## Descrição
 
