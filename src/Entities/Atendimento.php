@@ -7,7 +7,7 @@ use DateTime;
 class Atendimento
 {
     private int $id;
-    public readonly ?string $dataDeRegistro;
+    private ?string $dataDeRegistro;
     public readonly ?string $usuario;
     public readonly string $formaAtendimento;
     public readonly ?string $detalhesAtendimento;
@@ -27,8 +27,8 @@ class Atendimento
         $this->tipoAtendimento = $tipoAtendimento;
 //        $this->idUsuario = $idUsuario;
         $this->publico = $publico;
-        $this->dataDeRegistro = $dataDeRegistro;
-//        $this->setDataRegistro($dataDeRegistro);
+//        $this->dataDeRegistro = $dataDeRegistro;
+        $this->setDataRegistro($dataDeRegistro);
         $this->usuario = $usuario;
     }
 
@@ -42,9 +42,14 @@ class Atendimento
         $this->id = $id;
     }
 
-    public function setDataRegistro(string $data)
+    public function setDataRegistro(?string $data = null): void
     {
+        if (!empty($data)) {
+            $date = strtotime($data);
+            $dateFormated = date('d/m/Y', $date);
 
+            $this->dataDeRegistro = $dateFormated;
+        }
     }
 
     public static function createAtendimentoInstance(
@@ -67,10 +72,10 @@ class Atendimento
         $publico = new Publico($data['perfil_cliente']);
 
         $atendimento = new Atendimento(
-            $data['forma_atendimento'], 
-            $tipoAtendimento, 
+            $data['forma_atendimento'],
+            $tipoAtendimento,
             $publico,
-            $data['data_de_registro'], 
+            $data['data_de_registro'],
             $data['nome']
         );
         $atendimento->setId($data['id']);

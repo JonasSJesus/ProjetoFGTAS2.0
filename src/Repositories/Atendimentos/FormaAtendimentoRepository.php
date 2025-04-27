@@ -1,9 +1,9 @@
 <?php
 
-namespace Fgtas\Repositories;
+namespace Fgtas\Repositories\Atendimentos;
 
 use Fgtas\Entities\FormaAtendimento;
-use Fgtas\Repositories\Interfaces\IFormaAtendimentoRepository;
+use Fgtas\Repositories\Interfaces;
 use PDO;
 
 class FormaAtendimentoRepository implements Interfaces\IFormaAtendimentoRepository

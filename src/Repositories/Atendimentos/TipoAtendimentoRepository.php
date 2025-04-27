@@ -1,6 +1,6 @@
 <?php
 
-namespace Fgtas\Repositories;
+namespace Fgtas\Repositories\Atendimentos;
 
 use Doctrine\DBAL\Connection as DBALConnection;
 use Doctrine\DBAL\Exception;

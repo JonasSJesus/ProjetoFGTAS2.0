@@ -3,7 +3,7 @@ CREATE DATABASE atendimentos;
 USE atendimentos;
 
 -- Tabela de Usuários
-CREATE TABLE usuario (
+CREATE TABLE IF NOT EXISTS usuario (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     cargo ENUM('atendente', 'admin') NOT NULL DEFAULT 'atendente',
@@ -13,30 +13,36 @@ CREATE TABLE usuario (
 );
 
 -- Tabela de Público
-CREATE TABLE publico (
+CREATE TABLE IF NOT EXISTS publico (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    perfil_cliente VARCHAR(100) NOT NULL -- (empregador, trabalhador, outras ag, ads, fgtas, interesados mercado trabalho, outra (personalizado))
+);
+
+-- Tabela de Forma de Atendimento
+CREATE TABLE IF NOT EXISTS forma_atendimento (
     id INT AUTO_INCREMENT PRIMARY KEY,
     perfil_cliente VARCHAR(100) NOT NULL -- (empregador, trabalhador, outras ag, ads, fgtas, interesados mercado trabalho, outra (personalizado))
 );
 
 -- Tabela para campos especificos do Publico. Usada no caso de Publico ser empregador, trabalhador ou outra (personalizado)
-CREATE TABLE informacoes_pessoais (
+CREATE TABLE IF NOT EXISTS informacoes_pessoais (
     id INT AUTO_INCREMENT PRIMARY KEY,
     publico_id INT UNIQUE,
     nome VARCHAR(255) NOT NULL,
     contato varchar(20) NOT NULL,
     documento VARCHAR(30) NOT NULL, -- CPF ou CNPJ
-    FOREIGN KEY (publico_id) REFERENCES publico(id) ON DELETE CASCADE
+    FOREIGN KEY (publico_id) REFERENCES publico(id)
 );
 
 -- Tabela de Tipos de Atendimento
-CREATE TABLE tipo_atendimento (
+CREATE TABLE IF NOT EXISTS tipo_atendimento (
     id INT AUTO_INCREMENT PRIMARY KEY,
     tipo VARCHAR(255) NOT NULL, -- (VCH, "C,SD,V", orientações sobre cursos ou empreendedorismo)
     descricao TEXT -- Dependendo do tipo, pode ter ou não algo aqui
 );
 
 -- Tabela de Atendimentos
-CREATE TABLE atendimento (
+CREATE TABLE IF NOT EXISTS atendimento (
     id INT AUTO_INCREMENT PRIMARY KEY,
     data_de_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
     tipo_atendimento_id INT NOT NULL,
@@ -48,3 +54,5 @@ CREATE TABLE atendimento (
     FOREIGN KEY (usuario_id) REFERENCES usuario(id),
     FOREIGN KEY (publico_id) REFERENCES publico(id)
 );
+
+-- TODO?: Inserir possiveis dados em uma tabela indice

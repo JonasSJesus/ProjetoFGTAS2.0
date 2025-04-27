@@ -35,35 +35,27 @@
   <thead>
   <tr>
     <th>Id</th>
-    <th>Documento Publico</th>
     <th>Forma de Atendimento</th>
-    <th>Nome</th>
-    <th>E-Mail</th>
-    <th>Telefone</th>
-    <th>Tipo Atendimento</th>
-    <th>Descrição</th>
-    <th>Ativo</th>
-    <th>Informações</th>
     <th>Data de Registro</th>
+    <th>Nome do Atendente</th>
+    <th>Tipo Atendimento</th>
+    <th>Descrição do Tipo de Atendimento</th>
+    <th>Perfil do Atendido</th>
   </tr>
   </thead>
   <tbody>
 
-
+{% for atendimento in atendimentos %}
   <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+    <td>{{ atendimento.toArray['id'] }}</td>
+    <td>{{ atendimento.toArray['forma_atendimento'] }}</td>
+    <td>{{ atendimento.toArray['data_registro'] }}</td>
+    <td>{{ atendimento.toArray['usuario'] }}</td>
+    <td>{{ atendimento.toArray['tipo_atendimento'] }}</td>
+    <td>{{ atendimento.toArray['descricao_tipo_atendimento'] }}</td>
+    <td>{{ atendimento.toArray['perfil_publico'] }}</td>
   </tr>
-
+{% endfor %}
 
   </tbody>
 </table>

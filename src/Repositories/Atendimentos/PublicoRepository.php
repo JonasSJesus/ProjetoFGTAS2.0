@@ -1,13 +1,12 @@
 <?php
 
-namespace Fgtas\Repositories;
+namespace Fgtas\Repositories\Atendimentos;
 
 use Doctrine\DBAL\Connection as DBALConnection;
 use Doctrine\DBAL\Exception;
 use Fgtas\Database\Connection;
 use Fgtas\Entities\Publico;
 use Fgtas\Repositories\Interfaces\IPublicoRepository;
-use PDO;
 
 class PublicoRepository implements IPublicoRepository
 {
@@ -27,12 +26,15 @@ class PublicoRepository implements IPublicoRepository
     public function add(Publico $publico): int
     {
         $queryBuilder = $this->conn->createQueryBuilder();
+
         $queryBuilder
             ->insert('publico')
             ->values([
                 'perfil_cliente' => ':perfil_cliente'
             ])
             ->setParameter('perfil_cliente', $publico->perfilCliente);
+        $lastId = $this->conn->lastInsertId();
+
 
         $queryBuilder->executeStatement();
 
@@ -42,14 +44,20 @@ class PublicoRepository implements IPublicoRepository
         return $id;
     }
 
-//    public function createWithExtraFields(Publico $publico)
-//    {
-//        $sql = "INSERT INTO publico (perfil_cliente, nome, documento, contato) VALUES (:perfil_cliente)";
-//        $stmt = $this->conn->prepare($sql);
-//        $stmt->bindValue(':perfil_cliente', $publico->perfilCliente);
-//
-//        return $stmt->executeQuery();
-//    }
+    public function addExtraFields(Publico $publico, int $publicoId)
+    {
+        $queryBuilder = $this->conn->createQueryBuilder();
+        if ($publico->haveExtraFields()) {
+            $queryBuilder
+                ->insert('informacoes_pessoais')
+                ->values([
+                    'publico_id' => $publicoId,
+                    'nome' => $publico->getExtraFields()->nome,
+                    'contato' => $publico->getExtraFields()->contato,
+                    'documento' => $publico->getExtraFields()->documento
+                ]);
+        }
+    }
 
     /**
      * @inheritDoc

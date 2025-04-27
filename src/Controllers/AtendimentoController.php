@@ -58,7 +58,6 @@ class AtendimentoController
 
 
 
-
     /**
      * @param Request $request
      * @param Response $response
@@ -84,7 +83,7 @@ class AtendimentoController
 
         return $response
             ->withStatus(302)
-            ->withHeader('Location', '/usuario');
+            ->withHeader('Location', '/home');
     }
 
 

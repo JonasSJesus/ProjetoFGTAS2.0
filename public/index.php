@@ -30,24 +30,20 @@ $container = $containerBuilder->build();
 
 
 // Instantiate the app
-AppFactory::setContainer($container);
-$app = AppFactory::create();
+$app = AppFactory::createFromContainer($container);
 
 // Iniciando Twig
 $twig = Twig::create(ROOT_APP . '/resources/views', ['cache' => false]);
 $app->add(TwigMiddleware::create($app, $twig));
 
-// Add Body Parsing Middleware
-//$app->addBodyParsingMiddleware();
-
-// Register middleware
+// Registrando middleware
 $middleware = require __DIR__ . '/../app/middleware.php';
-$middleware($app);
+$middleware($app, $container);
 
 // Error handler Middleware
-$errorMiddleware = $app->addErrorMiddleware(true, false, false);
+//$errorMiddleware = $app->addErrorMiddleware(true, false, false);
 
-// Register routes
+// Registrando rotas
 $routes = require __DIR__ . '/../app/routes.php';
 $routes($app);
 

@@ -20,12 +20,12 @@ class AtendimentoRepository implements IAtendimentoRepository
 
     public function __construct(
         Connection $conn,
-        IFormaAtendimentoRepository $formaRepository,
+//        IFormaAtendimentoRepository $formaRepository,
         ITipoAtendimentoRepository $tipoRepository,
         IPublicoRepository $publicoRepository
     ) {
         $this->conn = $conn->getConnection();
-        $this->formaRepo = $formaRepository;
+//        $this->formaRepo = $formaRepository;
         $this->tipoRepository = $tipoRepository;
         $this->publicoRepository = $publicoRepository;
     }
@@ -43,6 +43,7 @@ class AtendimentoRepository implements IAtendimentoRepository
 
         $this->conn->beginTransaction();
         try {
+            // TODO: Em vez de salvar os itens, isso poderia apenas buscar o ID de itens salvos previamente no banco de dados talvez?
             $idPublico = $this->publicoRepository->add($atendimento->publico);
             $idTipoAtend = $this->tipoRepository->add($atendimento->tipoAtendimento);
 
@@ -72,6 +73,27 @@ class AtendimentoRepository implements IAtendimentoRepository
 
         return true;
     }
+
+//    private function addAtendimento(int $idTipoAtend, int $idUsuario, int $idPublico, Atendimento $atendimento): bool
+//    {
+//        $queryBuilder = $this->conn->createQueryBuilder();
+//
+//        $queryBuilder
+//            ->insert('atendimento')
+//            ->values([
+//                'tipo_atendimento_id' => ':tipo_id',
+//                'usuario_id' => ':usuario_id',
+//                'publico_id' => ':publico_id',
+//                'forma_atendimento' => ':forma'
+//            ])
+//            ->setParameters([
+//                'tipo_id' => $idTipoAtend,
+//                'usuario_id' => $idUsuario,
+//                'publico_id' => $idPublico,
+//                'forma' => $atendimento->formaAtendimento
+//            ]);
+//        return $queryBuilder->executeStatement();
+//    }
 
 
     /**

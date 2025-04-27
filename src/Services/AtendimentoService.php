@@ -30,8 +30,8 @@ class AtendimentoService
         }
 
         $atendimento = new Atendimento($data['formaAtendimento'], $tipoAtendimento, $publicoPerfil);
-
-        $this->atendimentoRepository->add($atendimento, $_SESSION['user']['id']);
+        dd($atendimento);
+//        $this->atendimentoRepository->add($atendimento, $_SESSION['user']['id']);
     }
 
 
