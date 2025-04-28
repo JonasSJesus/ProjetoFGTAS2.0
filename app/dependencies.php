@@ -7,14 +7,14 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Views\Twig;
-use SlimSession\Helper;
+use SlimSession\Helper as SessionHelper;
 
 return function (ContainerBuilder $container) {
     $container->addDefinitions([
         // Registre dependencias aqui
 
-        Helper::class => function (ContainerInterface $c) {
-            return new Helper();
+        SessionHelper::class => function (ContainerInterface $c) {
+            return new SessionHelper();
         },
 
         ResponseFactoryInterface::class => function (ContainerInterface $container) {

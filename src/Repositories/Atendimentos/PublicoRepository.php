@@ -3,7 +3,8 @@
 namespace Fgtas\Repositories\Atendimentos;
 
 use Doctrine\DBAL\Connection as DBALConnection;
-use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Exception as DBALException;
+use Exception;
 use Fgtas\Database\Connection;
 use Fgtas\Entities\Publico;
 use Fgtas\Repositories\Interfaces\IPublicoRepository;
@@ -33,45 +34,66 @@ class PublicoRepository implements IPublicoRepository
                 'perfil_cliente' => ':perfil_cliente'
             ])
             ->setParameter('perfil_cliente', $publico->perfilCliente);
-        $lastId = $this->conn->lastInsertId();
-
 
         $queryBuilder->executeStatement();
 
         $id = $this->conn->lastInsertId();
         //$publico->setId(intval($id));
 
+        if ($publico->haveExtraFields()) {
+            $this->insertExtraFields($publico, $id);
+        }
+
         return $id;
     }
 
-    public function addExtraFields(Publico $publico, int $publicoId)
+    /**
+     * @throws Exception|DBALException
+     */
+    private function insertExtraFields(Publico $publico, int $publicoId): void
     {
         $queryBuilder = $this->conn->createQueryBuilder();
-        if ($publico->haveExtraFields()) {
-            $queryBuilder
-                ->insert('informacoes_pessoais')
-                ->values([
-                    'publico_id' => $publicoId,
-                    'nome' => $publico->getExtraFields()->nome,
-                    'contato' => $publico->getExtraFields()->contato,
-                    'documento' => $publico->getExtraFields()->documento
-                ]);
+
+        if (!$publico->haveExtraFields()) {
+            return;
         }
+
+        $queryBuilder
+            ->insert('informacoes_pessoais')
+            ->values([
+                'publico_id' => ':publico_id',
+                'nome' => ':nome',
+                'contato' => ':contato',
+                'documento' => ':documento'
+            ])
+            ->setParameters([
+                'publico_id' => $publicoId,
+                'nome' => $publico->getExtraFields()->nome,
+                'contato' => $publico->getExtraFields()->contato,
+                'documento' => $publico->getExtraFields()->documento
+            ]);
+
+
+        $queryBuilder->executeStatement();
     }
 
     /**
      * @inheritDoc
-     * @throws Exception
+     * @throws \Exception
      */
     public function findAll(): ?array
     {
         $queryBuilder = $this->conn->createQueryBuilder();
 
-        $resultSet = $queryBuilder
-            ->select('*')
-            ->from('publico')
-            ->executeQuery();
-        $data = $resultSet->fetchAllAssociative();
+        try {
+            $resultSet = $queryBuilder
+                ->select('*')
+                ->from('publico')
+                ->executeQuery();
+            $data = $resultSet->fetchAllAssociative();
+        } catch (DBALException $e) {
+            throw new Exception($e->getMessage());
+        }
 
         return array_map(Publico::fromArray(...), $data);
     }

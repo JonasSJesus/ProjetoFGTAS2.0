@@ -26,9 +26,4 @@ class CamposPublico
     {
         $this->id = $id;
     }
-
-    public function showAll(): string // Remover metodo em producao
-    {
-        return "{nome: $this->nome, contato: $this->contato, documento: $this->documento}";
-    }
 }

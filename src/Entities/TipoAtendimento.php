@@ -35,9 +35,9 @@ class TipoAtendimento
             "informações sobre mercado de trabalho"
         ];
 
-//        if (!in_array($tipo, $tipoPermitidos)) {
-//            throw new Exception("Tipo de Atendimento não permitido!");
-//        }
+        if (!in_array($tipo, $tipoPermitidos)) {
+            throw new Exception("Tipo de Atendimento não permitido!");
+        }
 
         $this->tipo = $tipo;
     }

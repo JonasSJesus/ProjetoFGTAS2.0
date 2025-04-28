@@ -31,18 +31,17 @@ class Publico
     }
 
 
-    public function getExtraFields(): CamposPublico
+    public function getExtraFields(): ?CamposPublico
     {
         if (!$this->haveExtraFields()) {
-            throw new Exception("Campos extras não disponíveis para este perfil.");
+            return null;
         }
         return $this->informacoesPessoais;
     }
 
     public function setExtraFields(string $nome, string $documento, string $contato): void
     {
-        $extraFields = new CamposPublico($nome, $documento, $contato);
-        $this->informacoesPessoais = $extraFields;
+        $this->informacoesPessoais = new CamposPublico($nome, $documento, $contato);
     }
 
     public static function fromArray(array $data): Publico
@@ -50,7 +49,7 @@ class Publico
         $publico = new Publico($data['perfil_cliente']);
         $publico->setId($data['id']);
 
-        if ($publico->perfilCliente == 'Empregador' || $publico->perfilCliente == 'Trabalhador') {
+        if ($publico->perfilCliente == 'empregador' || $publico->perfilCliente == 'trabalhador') {
             $publico->setExtraFields($data['nome'], $data['documento'], $data['contato']);
         }
 

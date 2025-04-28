@@ -2,36 +2,72 @@
 
 namespace Fgtas\Services;
 
+use DI\Container;
+use Doctrine\DBAL\Connection as DBALConnection;
+use Doctrine\DBAL\Exception;
+use Fgtas\Database\Connection;
 use Fgtas\Entities\Atendimento;
-use Fgtas\Entities\Publico;
-use Fgtas\Entities\TipoAtendimento;
+use Fgtas\Repositories\Atendimentos\AtendimentoRepository;
 use Fgtas\Repositories\Interfaces\IAtendimentoRepository;
+use Fgtas\Repositories\Interfaces\IFormaAtendimentoRepository;
+use Fgtas\Repositories\Interfaces\IPublicoRepository;
+use Fgtas\Repositories\Interfaces\ITipoAtendimentoRepository;
 
 class AtendimentoService
 {
     private IAtendimentoRepository $atendimentoRepository;
+    private ITipoAtendimentoRepository $tipoRepository;
+    private IPublicoRepository $publicoRepository;
+    private IFormaAtendimentoRepository $formaRepository;
+    private DBALConnection $conn;
 
-    public function __construct(IAtendimentoRepository $atendimentoRepository)
+    public function __construct(
+        IAtendimentoRepository $atendimentoRepository,
+        ITipoAtendimentoRepository $tipoRepository,
+        IPublicoRepository $publicoRepository,
+        IFormaAtendimentoRepository $formaRepository,
+        Connection $conn
+    )
     {
         $this->atendimentoRepository = $atendimentoRepository;
+        $this->tipoRepository = $tipoRepository;
+        $this->publicoRepository = $publicoRepository;
+        $this->formaRepository = $formaRepository;
+        $this->conn = $conn->getConnection();
     }
 
-    public function createAtendimento(array $data): void
+
+    public function createAtendimento(array $data, int $userId): void
     {
-        $tipoAtendimento = new TipoAtendimento($data['tipoAtendimento'], $data['descricao_tipo_atendimento']);
-        $publicoPerfil = new Publico($data['perfilPublico']);
+        $atendimento = Atendimento::make(
+            $data['tipoAtendimento'],
+            $data['descricao_tipo_atendimento'],
+            $data['formaAtendimento'],
+            $data['perfilPublico'],
+            );
 
         if (in_array($data['perfilPublico'], ['empregador', 'trabalhador'])){
-            $publicoPerfil->setExtraFields(
+            $atendimento->publico->setExtraFields(
                 $data['nomePublico'],
                 $data['documentoPublico'],
                 $data['contatoPublico']
             );
         }
 
-        $atendimento = new Atendimento($data['formaAtendimento'], $tipoAtendimento, $publicoPerfil);
-        dd($atendimento);
-//        $this->atendimentoRepository->add($atendimento, $_SESSION['user']['id']);
+        $this->conn->beginTransaction();
+        try {
+            // TODO: Em vez de salvar os itens, isso poderia apenas buscar o ID de itens salvos previamente no banco de dados talvez?
+            $idPublico = $this->publicoRepository->add($atendimento->publico);
+            $idTipoAtend = $this->tipoRepository->add($atendimento->tipoAtendimento);
+            $idFormaAtend = $this->formaRepository->add($atendimento->formaAtendimento);
+
+            $this->atendimentoRepository->add($idTipoAtend, $userId, $idPublico, $idFormaAtend);
+
+            $this->conn->commit();
+        } catch (Exception $e) {
+            $this->conn->rollBack();
+            throw $e;
+        }
     }
 
 
@@ -39,7 +75,6 @@ class AtendimentoService
     public function all(): array
     {
         $data = $this->atendimentoRepository->findAll();
-
 
         return $data;
     }

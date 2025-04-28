@@ -8,6 +8,8 @@ interface IPublicoRepository
 {
     public function add(Publico $publico): int;
 
+//    private function insertExtraFields(Publico $publico, int $publicoId): void;
+
     /** @return null|Publico[] */
     public function findAll(): ?array;
 

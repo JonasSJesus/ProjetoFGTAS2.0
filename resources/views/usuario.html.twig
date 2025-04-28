@@ -54,6 +54,9 @@
                 <th>Forma de Atendimento</th>
                 <th>Perfil do Atendido</th>
                 <th>Data Registro</th>
+                <th>Nome</th>
+                <th>Contato</th>
+                <th>Documento</th>
             </tr>
             {% for atendimento in atendimentos %}
                 <tr>
@@ -61,9 +64,12 @@
                     <td>{{ atendimento.usuario }}</td>
                     <td>{{ atendimento.tipoAtendimento.tipo }}</td>
                     <td>{{ atendimento.tipoAtendimento.descricao }}</td>
-                    <td>{{ atendimento.formaAtendimento }}</td>
+                    <td>{{ atendimento.formaAtendimento.forma }}</td>
                     <td>{{ atendimento.publico.perfilCliente }}</td>
                     <td>{{ atendimento.dataDeRegistro }}</td>
+                    <td>{{ atendimento.publico.getExtraFields().nome }}</td>
+                    <td>{{ atendimento.publico.getExtraFields().contato }}</td>
+                    <td>{{ atendimento.publico.getExtraFields().documento }}</td>
                     <td>
                         <i class="fa-solid fa-pen icone"></i>
                         <a href="{{ url_for('atendimento.update', { id: atendimento.getId() }) }}" class="tabela__link">Editar</a>

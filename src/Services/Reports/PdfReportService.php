@@ -14,10 +14,10 @@ class PdfReportService
     private Twig $twig;
     private Dompdf $dompdf;
 
-    public function __construct(Container $container)
+    public function __construct(Twig $twig, Dompdf $dompdf)
     {
-        $this->twig = $container->get(Twig::class);
-        $this->dompdf = $container->get(Dompdf::class);
+        $this->twig = $twig;
+        $this->dompdf = $dompdf;
     }
 
     public function generate(array $atendimento, array $filters): void

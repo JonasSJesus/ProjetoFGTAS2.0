@@ -75,7 +75,7 @@ class AtendimentoController
         }
 
         try {
-            $this->atendimentoService->createAtendimento($dataFromRequest);
+            $this->atendimentoService->createAtendimento($dataFromRequest, $_SESSION['user']['id']);
         } catch (Exception $e) {
             //echo "Error: " . $e->getMessage();
             dump($e->getMessage());

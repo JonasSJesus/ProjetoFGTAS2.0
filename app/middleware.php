@@ -18,7 +18,7 @@ return function (App $app, Container $container) {
 
     $app->add(TwigMiddleware::create($app, $container->get(Twig::class)));
 
-    $app->addErrorMiddleware(false, false, false);
+    $app->addErrorMiddleware(true, false, false);
 
 
 

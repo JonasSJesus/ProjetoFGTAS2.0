@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS publico (
 -- Tabela de Forma de Atendimento
 CREATE TABLE IF NOT EXISTS forma_atendimento (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    perfil_cliente VARCHAR(100) NOT NULL -- (empregador, trabalhador, outras ag, ads, fgtas, interesados mercado trabalho, outra (personalizado))
+    forma VARCHAR(100) NOT NULL -- (Presencial, Whatsapp, Ligação telefônica, E-mail, Redes Sociais, Teams, outra (personalizado))
 );
 
 -- Tabela para campos especificos do Publico. Usada no caso de Publico ser empregador, trabalhador ou outra (personalizado)
@@ -29,8 +29,8 @@ CREATE TABLE IF NOT EXISTS informacoes_pessoais (
     id INT AUTO_INCREMENT PRIMARY KEY,
     publico_id INT UNIQUE,
     nome VARCHAR(255) NOT NULL,
-    contato varchar(20) NOT NULL,
-    documento VARCHAR(30) NOT NULL, -- CPF ou CNPJ
+    contato VARCHAR(200) NOT NULL,
+    documento VARCHAR(40) NOT NULL, -- CPF ou CNPJ
     FOREIGN KEY (publico_id) REFERENCES publico(id)
 );
 
@@ -38,7 +38,8 @@ CREATE TABLE IF NOT EXISTS informacoes_pessoais (
 CREATE TABLE IF NOT EXISTS tipo_atendimento (
     id INT AUTO_INCREMENT PRIMARY KEY,
     tipo VARCHAR(255) NOT NULL, -- (VCH, "C,SD,V", orientações sobre cursos ou empreendedorismo)
-    descricao TEXT -- Dependendo do tipo, pode ter ou não algo aqui
+    descricao TEXT, -- Dependendo do tipo, pode ter ou não algo aqui
+    informacoes JSON
 );
 
 -- Tabela de Atendimentos
@@ -48,11 +49,28 @@ CREATE TABLE IF NOT EXISTS atendimento (
     tipo_atendimento_id INT NOT NULL,
     usuario_id INT NOT NULL,
     publico_id INT NOT NULL,
-    forma_atendimento TEXT, -- Campo para armazenar a forma de atendimento (presencial, whats, ligacao, email, redes soc, team ou outra)
-    detalhes_atendimento TEXT, -- Campo para armazenar os detalhes específicos do atendimento (JSON ou texto)
+    forma_atendimento_id INT NOT NULL,
+    detalhes_atendimento TEXT, -- Campo para armazenar outros detalhes do atendimento (JSON ou texto)
     FOREIGN KEY (tipo_atendimento_id) REFERENCES tipo_atendimento(id),
+    FOREIGN KEY (forma_atendimento_id) REFERENCES forma_atendimento(id),
     FOREIGN KEY (usuario_id) REFERENCES usuario(id),
     FOREIGN KEY (publico_id) REFERENCES publico(id)
 );
 
--- TODO?: Inserir possiveis dados em uma tabela indice
+-- TODO?: Inserir possiveis dados em uma tabela LookUp -------
+
+INSERT publico (perfil_cliente) VALUES ('Empregador'),
+                                       ('Trabalhador'),
+                                       ('Outras Agências'),
+                                       ('ADS'),
+                                       ('Setores da FGTAS'),
+                                       ('Interessado em informações sobre o Mercado de Trabalho');
+
+
+INSERT forma_atendimento (forma) VALUES ('Presencial'),
+                                        ('Whatsapp'),
+                                        ('Ligação Telefônica'),
+                                        ('E-mail'),
+                                        ('Redes Sociais'),
+                                        ('Teams');
+

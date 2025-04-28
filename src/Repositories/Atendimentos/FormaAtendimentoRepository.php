@@ -2,29 +2,37 @@
 
 namespace Fgtas\Repositories\Atendimentos;
 
+use Doctrine\DBAL\Connection as DBALConnection;
+use Fgtas\Database\Connection;
 use Fgtas\Entities\FormaAtendimento;
-use Fgtas\Repositories\Interfaces;
-use PDO;
+use Fgtas\Repositories\Interfaces\IFormaAtendimentoRepository;
 
-class FormaAtendimentoRepository implements Interfaces\IFormaAtendimentoRepository
+class FormaAtendimentoRepository implements IFormaAtendimentoRepository
 {
-    private PDO $pdo;
-    public function __construct(PDO $pdo)
+    private DBALConnection $conn;
+
+    public function __construct(Connection $conn)
     {
-        $this->pdo = $pdo;
+        $this->conn = $conn->getConnection();
     }
 
-    public function create(FormaAtendimento $formAtend): int
+    public function add(FormaAtendimento $formaAtend): int
     {
-        $sql = "INSERT INTO forma_atendimento (forma) VALUES (:forma)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':forma', $formAtend->forma);
-        $stmt->execute();
+        $queryBuilder = $this->conn->createQueryBuilder();
 
-        $id = $this->pdo->lastInsertId();
-//        $formAtend->setId(intval($id));
+        $queryBuilder
+            ->insert('forma_atendimento')
+            ->values([
+                'forma' => ':forma']
+            )->setParameter('forma', $formaAtend->forma);
+
+        $queryBuilder->executeStatement();
+
+        $id = (int) $this->conn->lastInsertId();
+        //$tipoAtend->setId(intval($id));
 
         return $id;
+
     }
 
     /**

@@ -9,7 +9,8 @@ class Connection
 {
     private ?DBALConnection $conn = null;
 
-    public function getConnection()
+
+    public function getConnection(): DBALConnection
     {
         if ($this->conn === null) {
             $connectionParams = [

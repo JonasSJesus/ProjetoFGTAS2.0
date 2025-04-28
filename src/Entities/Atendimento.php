@@ -2,32 +2,27 @@
 
 namespace Fgtas\Entities;
 
-use DateTime;
-
 class Atendimento
 {
     private int $id;
-    private ?string $dataDeRegistro;
+    public readonly ?string $dataDeRegistro;
     public readonly ?string $usuario;
-    public readonly string $formaAtendimento;
     public readonly ?string $detalhesAtendimento;
+    public readonly FormaAtendimento $formaAtendimento;
     public readonly TipoAtendimento $tipoAtendimento;
     public readonly Publico $publico;
 
 
     public function __construct(
-        string $formaAtendimento,
+        FormaAtendimento $formaAtendimento,
         TipoAtendimento $tipoAtendimento,
-//        int $idUsuario,
         Publico $publico,
-        string $dataDeRegistro = null,
-        string $usuario = null
+        ?string $dataDeRegistro = null,
+        ?string $usuario = null
     ) {
         $this->formaAtendimento = $formaAtendimento;
         $this->tipoAtendimento = $tipoAtendimento;
-//        $this->idUsuario = $idUsuario;
         $this->publico = $publico;
-//        $this->dataDeRegistro = $dataDeRegistro;
         $this->setDataRegistro($dataDeRegistro);
         $this->usuario = $usuario;
     }
@@ -52,47 +47,45 @@ class Atendimento
         }
     }
 
-    public static function createAtendimentoInstance(
+    public static function make(
         string $tipoAtendimento,
-        string $descricaoAtendimento,
+        ?string $descricaoAtendimento,
         string $formaAtendimento,
         string $perfilPublico,
-        string $dataDeRegistro,
-        string $nomeUsuario
-    ) {
+        ?string $dataDeRegistro = null,
+        ?string $nomeUsuario = null
+    ): Atendimento
+    {
         $tipo = new TipoAtendimento($tipoAtendimento, $descricaoAtendimento);
+        $forma = new FormaAtendimento($formaAtendimento);
         $publico = new Publico($perfilPublico);
 
-        return new Atendimento($formaAtendimento, $tipo , $publico, $dataDeRegistro, $nomeUsuario);
+        return new Atendimento($forma, $tipo , $publico, $dataDeRegistro, $nomeUsuario);
     }
 
     public static function fromArray(array $data): Atendimento
     {
         $tipoAtendimento = new TipoAtendimento($data['tipo'], $data['descricao']);
+        $formaAtendimento = new FormaAtendimento($data['forma']);
         $publico = new Publico($data['perfil_cliente']);
 
+        if (in_array($data['perfil_cliente'], ['empregador', 'trabalhador'])){
+            $publico->setExtraFields(
+                $data['nome_publico'],
+                $data['contato'],
+                $data['documento']
+            );
+        }
+
         $atendimento = new Atendimento(
-            $data['forma_atendimento'],
+            $formaAtendimento,
             $tipoAtendimento,
             $publico,
             $data['data_de_registro'],
-            $data['nome']
+            $data['nome_atendente']
         );
         $atendimento->setId($data['id']);
 
         return $atendimento;
-    }
-
-    public function toArray(): array
-    {
-        return [
-            'id' => $this->getId(),
-            'forma_atendimento' => $this->formaAtendimento,
-            'data_registro' => $this->dataDeRegistro,
-            'usuario' => $this->usuario,
-            'tipo_atendimento' => $this->tipoAtendimento->tipo,
-            'descricao_tipo_atendimento' => $this->tipoAtendimento->descricao,
-            'perfil_publico' => $this->publico->perfilCliente
-        ];
     }
 }

@@ -7,93 +7,38 @@ use Doctrine\DBAL\Exception;
 use Fgtas\Database\Connection;
 use Fgtas\Entities\Atendimento;
 use Fgtas\Repositories\Interfaces\IAtendimentoRepository;
-use Fgtas\Repositories\Interfaces\IFormaAtendimentoRepository;
-use Fgtas\Repositories\Interfaces\IPublicoRepository;
-use Fgtas\Repositories\Interfaces\ITipoAtendimentoRepository;
 
 class AtendimentoRepository implements IAtendimentoRepository
 {
     private DBALConnection $conn;
-    private IFormaAtendimentoRepository $formaRepo;
-    private IPublicoRepository $publicoRepository;
-    private ITipoAtendimentoRepository $tipoRepository;
 
-    public function __construct(
-        Connection $conn,
-//        IFormaAtendimentoRepository $formaRepository,
-        ITipoAtendimentoRepository $tipoRepository,
-        IPublicoRepository $publicoRepository
-    ) {
+    public function __construct(Connection $conn)
+    {
         $this->conn = $conn->getConnection();
-//        $this->formaRepo = $formaRepository;
-        $this->tipoRepository = $tipoRepository;
-        $this->publicoRepository = $publicoRepository;
     }
 
 
-    /**
-     * @param Atendimento $atendimento
-     * @param int $idUsuario
-     * @return bool
-     * @throws Exception
-     */
-    public function add(Atendimento $atendimento, int $idUsuario): bool
+
+    public function add(int $idTipoAtend, int $idUsuario, int $idPublico, int $idForma): bool
     {
         $queryBuilder = $this->conn->createQueryBuilder();
 
-        $this->conn->beginTransaction();
-        try {
-            // TODO: Em vez de salvar os itens, isso poderia apenas buscar o ID de itens salvos previamente no banco de dados talvez?
-            $idPublico = $this->publicoRepository->add($atendimento->publico);
-            $idTipoAtend = $this->tipoRepository->add($atendimento->tipoAtendimento);
-
-            // Operacao para salvar os atendimentos na tabela 'atendimento'
-            // Talvez mudar para um metodo especifico?
-            $queryBuilder
-                ->insert('atendimento')
-                ->values([
-                    'tipo_atendimento_id' => ':tipo_id',
-                    'usuario_id' => ':usuario_id',
-                    'publico_id' => ':publico_id',
-                    'forma_atendimento' => ':forma'
-                ])
-                ->setParameters([
-                    'tipo_id' => $idTipoAtend,
-                    'usuario_id' => $idUsuario,
-                    'publico_id' => $idPublico,
-                    'forma' => $atendimento->formaAtendimento
-                ]);
-            $queryBuilder->executeStatement();
-
-            $this->conn->commit();
-        } catch (Exception $e) {
-            $this->conn->rollBack();
-            throw $e;
-        }
-
-        return true;
+        $queryBuilder
+            ->insert('atendimento')
+            ->values([
+                'tipo_atendimento_id' => ':tipo_id',
+                'usuario_id' => ':usuario_id',
+                'publico_id' => ':publico_id',
+                'forma_atendimento_id' => ':forma'
+            ])
+            ->setParameters([
+                'tipo_id' => $idTipoAtend,
+                'usuario_id' => $idUsuario,
+                'publico_id' => $idPublico,
+                'forma' => $idForma
+            ]);
+        return $queryBuilder->executeStatement();
     }
-
-//    private function addAtendimento(int $idTipoAtend, int $idUsuario, int $idPublico, Atendimento $atendimento): bool
-//    {
-//        $queryBuilder = $this->conn->createQueryBuilder();
-//
-//        $queryBuilder
-//            ->insert('atendimento')
-//            ->values([
-//                'tipo_atendimento_id' => ':tipo_id',
-//                'usuario_id' => ':usuario_id',
-//                'publico_id' => ':publico_id',
-//                'forma_atendimento' => ':forma'
-//            ])
-//            ->setParameters([
-//                'tipo_id' => $idTipoAtend,
-//                'usuario_id' => $idUsuario,
-//                'publico_id' => $idPublico,
-//                'forma' => $atendimento->formaAtendimento
-//            ]);
-//        return $queryBuilder->executeStatement();
-//    }
 
 
     /**
@@ -108,16 +53,21 @@ class AtendimentoRepository implements IAtendimentoRepository
             ->select(
                 'a.id',
                 'a.data_de_registro',
-                'a.forma_atendimento',
+                'fa.forma',
                 'ta.tipo',
                 'ta.descricao',
-                'u.nome',
-                'p.perfil_cliente'
+                'u.nome AS nome_atendente',
+                'p.perfil_cliente',
+                'i.nome AS nome_publico',
+                'i.contato',
+                'i.documento',
             )
             ->from('atendimento', 'a')
+            ->innerJoin('a', 'forma_atendimento', 'fa', 'a.forma_atendimento_id = fa.id')
             ->innerJoin('a', 'tipo_atendimento', 'ta', 'a.tipo_atendimento_id = ta.id')
             ->innerJoin('a', 'usuario', 'u', 'a.usuario_id = u.id')
             ->innerJoin('a', 'publico', 'p', 'a.publico_id = p.id')
+            ->leftJoin('a', 'informacoes_pessoais', 'i', 'p.id = i.publico_id')
             ->orderBy('id', 'DESC');
         $resultSet = $queryBuilder->executeQuery();
 

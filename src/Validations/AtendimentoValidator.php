@@ -18,8 +18,8 @@ class AtendimentoValidator
         $dataValidation = Validator::key('identificacaoAtendente', Validator::notEmpty()->stringType())
                            ->key('formaAtendimento', Validator::notEmpty()->stringType())
                            ->key('perfilPublico', Validator::notEmpty())
-                           ->key('tipoAtendimento')
-                           ->key('descricao_tipo_atendimento', Validator::optional(Validator::stringType()));
+                           ->key('tipoAtendimento');
+//                           ->key('descricao_tipo_atendimento', Validator::optional(Validator::stringType())); // TODO: Tornar a validação opcional
 
         if (in_array($data['perfilPublico'], ['empregador', 'trabalhador'])) {
             $dataValidation->key('nomePublico', Validator::notEmpty())
