@@ -3,8 +3,8 @@
 namespace Fgtas\Controllers;
 
 use Exception;
-use Fgtas\Database\Connection;
 use Fgtas\Services\UsuarioService;
+use Fgtas\Validations\Validator;
 use Slim\Views\Twig;
 use Respect\Validation\Validator as v;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -16,10 +16,12 @@ use Twig\Error\SyntaxError;
 class UsuarioController
 {
     private UsuarioService $usuarioService;
+    private Validator $validator;
 
-    public function __construct(UsuarioService $usuarioService)
+    public function __construct(UsuarioService $usuarioService, Validator $validator)
     {
         $this->usuarioService = $usuarioService;
+        $this->validator = $validator;
     }
 
     /**
@@ -42,9 +44,6 @@ class UsuarioController
     /**
      * Renderia a página de Edição de usuários
      *
-     * @param Request $request
-     * @param Response $response
-     * @return Response
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -82,14 +81,15 @@ class UsuarioController
     public function store(Request $request, Response $response): Response
     {
         $data = $request->getParsedBody();
-        $dataValidation = v::key('nomeUsuario', v::notEmpty()->stringType())
-                        ->key('emailUsuario', v::notEmpty()->email())
-                        ->key('senhaUsuario', v::notEmpty());
 
-        if (!$dataValidation->validate($data)) {
-            echo "Dados invalidos"; // TODO implementar flash messages depois!
+        $this->validator->validate($data, [
+            'nomeUsuario' => v::notEmpty(),
+            'emailUsuario' => v::notEmpty()->email(),
+            'senhaUsuario' => v::notEmpty()
+        ]);
 
-            return $response;
+        if ($this->validator->failed()) {
+            dump($this->validator->getErrors()); // TODO implementar flash messages!
         }
 
         $this->usuarioService->registerUser($data);
@@ -103,28 +103,22 @@ class UsuarioController
     /**
      * Atualiza os dados de um usuario existente no banco de dados
      *
-     * @param Request $request
-     * @param Response $response
-     * @return Response
      * @throws Exception
      */
     public function update(Request $request, Response $response, array $args): Response
     {
         $data = $request->getParsedBody();
 
+        $this->validator->validate($data, [
+            'nomeUsuario' => v::notEmpty(),
+            'emailUsuario' => v::notEmpty()->email()
+        ]);
 
-        $dataValidation = v::key('nomeUsuario', v::notEmpty()->stringType())
-            ->key('emailUsuario', v::notEmpty()->email());
-
-        if (!$dataValidation->validate($data)) {
-            echo "Dados invalidos"; // TODO implementar flash messages depois!
-
-            return $response;
+        if ($this->validator->failed()) {
+            dump($this->validator->getErrors()); // TODO implementar flash messages!
         }
 
-        $id = $args['id'];
-        
-        $this->usuarioService->update($data, $id);
+        $this->usuarioService->update($data, $args['id']);
 
         return $response
             ->withHeader('Location', '/admin')

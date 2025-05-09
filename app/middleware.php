@@ -7,6 +7,8 @@ use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 
 return function (App $app, Container $container) {
+    $app->addRoutingMiddleware();
+
     // Middleware para gerenciar sessoes
     $app->add(new Session([
         'name' => 'user_session',
@@ -18,9 +20,9 @@ return function (App $app, Container $container) {
 
     $app->add(TwigMiddleware::create($app, $container->get(Twig::class)));
 
-    $app->addErrorMiddleware(true, false, false);
 
 
 
     // TODO: implementar um middleware para regenerar o ID da sessão a cada X minutos
+    $app->addErrorMiddleware(true, false, false);
 };

@@ -3,6 +3,7 @@
 namespace Fgtas\Controllers;
 
 use Fgtas\Services\AuthService;
+use Fgtas\Validations\Validator;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Respect\Validation\Validator as v;
@@ -11,19 +12,18 @@ use Slim\Views\Twig;
 class AuthController
 {
     private AuthService $authService;
+    private Validator $validator;
 
-    /**
-     * @param AuthService $authService
-     */
-    public function __construct(AuthService $authService)
+    public function __construct(AuthService $authService, Validator $validator)
     {
         $this->authService = $authService;
+        $this->validator = $validator;
     }
 
 
     public function loginPage(Request $request, Response $response, array $args): Response
     {
-        dump($_SESSION);
+//        dump($_SESSION);
         $view = Twig::fromRequest($request);
 
         return $view->render($response, 'login.php');
@@ -31,23 +31,24 @@ class AuthController
     
     public function login(Request $request, Response $response): Response
     {
-        // email: admin | senha: admin
+        // email: admin@email.com | senha: admin
         $data = $request->getParsedBody();
-        $validation = v::key('email', v::notEmpty()->email())
-                       ->key('senha', v::notEmpty()->min(5))
-                       ->validate($data);
 
-        if (!$validation){
+        $this->validator->validate($data, [
+            'email' => v::notEmpty()->email(),
+            'senha' => v::notEmpty()->min(5)
+        ]);
+
+        if ($this->validator->failed()) {
             // TODO: cadastrar FlashMessages
-            return $response
-                ->withHeader('Location', '/login')
-                ->withStatus(302);
+            dump($this->validator->getErrors());
+
+            return $response;
+//                ->withHeader('Location', '/login')
+//                ->withStatus(302);
         }
 
-        $email = $data['email'];
-        $password = $data['senha'];
-
-        if (!$this->authService->authenticate($email, $password)) {
+        if (!$this->authService->authenticate($data['email'], $data['senha'])) {
             // TODO: cadastrar FlashMessages
             return $response
                 ->withHeader('Location', '/login')

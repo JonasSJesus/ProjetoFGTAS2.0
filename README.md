@@ -1,45 +1,64 @@
-# Cadastro de atendimentos
+# 📋 Cadastro de Atendimentos — FGTAS
 
-- Sistema desenvolvido no primeiro semestre de 2025 como A3 da matéria de Usabilidade, Desenvolvimento WEB e Jogos. Segunda versão, feita para a Fundação Gaúcha de Trabalho e Assistência Social (FGTAS).
+Sistema web interno desenvolvido como A3 da disciplina *Usabilidade, Desenvolvimento Web e Jogos* (1º semestre de 2025). Este sistema foi criado sob demanda da **Fundação Gaúcha do Trabalho e Assistência Social (FGTAS)**.
 
-## Descrição
+---
 
-- Um sistema interno para gerenciar cadastro e gerenciamento de atendimentos e realizar relatórios.
+## 📌 Descrição
 
-## Funcionalidades do sistema
+Este sistema tem como objetivo facilitar o **registro e gerenciamento de atendimentos realizados pela instituição**, além de oferecer recursos para geração de relatórios e controle de usuários.
 
-- Geração de relatórios (em CSV ou PDF)
-- Sistema de Autenticação com sessões
-- Sistema de Autorização (Administradores e Atendentes)
-- CRUD de Usuários
-- Cadastro de Atendimentos - com operações CRUD
-  
-## Tecnologias utilizadas
+---
+
+## ✅ Funcionalidades
+
+- 🔐 Sistema de autenticação e controle de sessões
+- 👤 Controle de acesso por perfil: Administradores e Atendentes
+- 👥 CRUD completo de usuários
+- 📝 Cadastro e gerenciamento de atendimentos
+- 📄 Geração de relatórios nos formatos **CSV** e **PDF**
+
+---
+
+## 🛠 Tecnologias utilizadas
+
 <div>
-  <img height="100" width="100" loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/php/php-original.svg" alt="Símbolo do PHP"/>
-  <img height="100" width="100" loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" alt="Símbolo do HTML"/>
-  <img height="100" width="100" loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg" alt="Símbolo do CSS" />
-  <img height="100" width="100" loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="Símbolo do Javascript" />
+  <img height="70" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/php/php-original.svg" alt="PHP"/>
+  <img height="70" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" alt="HTML5"/>
+  <img height="70" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg" alt="CSS3"/>
+  <img height="70" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="JavaScript"/>
 </div>
 
+- Backend: PHP (com Slim Framework)
+- Frontend: HTML5, CSS3, JavaScript
+- Relatórios: PDF e CSV
+- Autenticação: Gerenciamento de sessões nativas do PHP
+- Banco de Dados: MySQL (via PDO e Doctrine DBAL)
 
-## Instalação
+---
 
-- Siga os passos abaixo para instalar e executar o projeto:
+## ⚙️ Requisitos
 
-```
-# Clone este repositório
+- PHP 8.1 ou superior
+- Composer
+- Servidor web (Apache, Nginx ou embutido do PHP)
+
+---
+
+## 🚀 Instalação e Execução
+
+```bash
+# Clone o repositório
 git clone https://github.com/JonasSJesus/ProjetoFGTAS2.0.git
 
-# Acesse a pasta do projeto
+# Acesse o diretório do projeto
 cd ProjetoFGTAS2.0
 
-# Instale as dependências
+# Instale as dependências (excluindo as de desenvolvimento)
 composer install --no-dev
 
-# Para executar o projeto com o servidor do PHP:
-php -S localhost:8080 -t public
+# Execute o servidor na pasta raiz
+composer start
 
-# Cole este link no navegador:
+# Acesse no navegador
 http://localhost:8080/home
-```

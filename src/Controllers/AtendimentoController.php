@@ -4,10 +4,11 @@ namespace Fgtas\Controllers;
 
 use Exception;
 use Fgtas\Services\AtendimentoService;
-use Fgtas\Validations\AtendimentoValidator as Validator;
+//use Fgtas\Validations\AtendimentoValidator as Validator;
+use Fgtas\Validations\Validator;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Respect\Validation\Exceptions\NestedValidationException;
+use Respect\Validation\Validator as v;
 use Slim\Views\Twig;
 use Throwable;
 
@@ -17,10 +18,12 @@ use Throwable;
 class AtendimentoController
 {
     private AtendimentoService $atendimentoService;
+    private Validator $validator;
 
-    public function __construct(AtendimentoService $atendimentoService)
+    public function __construct(AtendimentoService $atendimentoService, Validator $validator)
     {
         $this->atendimentoService = $atendimentoService;
+        $this->validator = $validator;
     }
 
 
@@ -66,19 +69,34 @@ class AtendimentoController
     public function store(Request $request, Response $response): Response
     {
         $dataFromRequest = $request->getParsedBody();
-        
-        if (!Validator::validate($dataFromRequest)) {
-            // TODO: Implementar mensagens de erro em caso de verificacao invalida | Salvar as mensagens com Flash Messages
-            return $response
-                ->withStatus(302)
-                ->withHeader('Location', '/home');
+
+        $rules = [
+            'identificacaoAtendente' => v::notEmpty(),
+            'formaAtendimento' => v::notEmpty(),
+            'perfilPublico' => v::notEmpty(),
+            'tipoAtendimento' => v::notEmpty(),
+        ];
+
+        if (in_array($dataFromRequest['perfilPublico'], ['empregador', 'trabalhador'])) {
+            $rules['nomePublico'] = v::notEmpty();
+            $rules['contatoPublico'] = v::notEmpty()->email();
+            $rules['documentoPublico'] = $dataFromRequest['perfilPublico'] === 'empregador' ? v::cnpj() : v::cpf();
+        }
+
+        $this->validator->validate($dataFromRequest, $rules);
+
+        if ($this->validator->failed()) {
+            dump($this->validator->getErrors()); // Todo: Flash Messages
+
+            return $response;
+//                ->withStatus(302)
+//                ->withHeader('Location', '/home');
         }
 
         try {
             $this->atendimentoService->createAtendimento($dataFromRequest, $_SESSION['user']['id']);
         } catch (Exception $e) {
-            //echo "Error: " . $e->getMessage();
-            dump($e->getMessage());
+            dump($e->getMessage()); // Todo: Flash Messages
         }
 
         return $response

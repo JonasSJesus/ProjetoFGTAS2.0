@@ -56,7 +56,7 @@ class AtendimentoService
 
         $this->conn->beginTransaction();
         try {
-            // TODO: Em vez de salvar os itens, isso poderia apenas buscar o ID de itens salvos previamente no banco de dados talvez?
+            // TODO: Em vez de salvar os itens, isso poderia apenas buscar o ID de itens salvos previamente no banco de dados lookup talvez?
             $idPublico = $this->publicoRepository->add($atendimento->publico);
             $idTipoAtend = $this->tipoRepository->add($atendimento->tipoAtendimento);
             $idFormaAtend = $this->formaRepository->add($atendimento->formaAtendimento);
@@ -74,9 +74,7 @@ class AtendimentoService
     /** @return Atendimento[] */
     public function all(): array
     {
-        $data = $this->atendimentoRepository->findAll();
-
-        return $data;
+        return $this->atendimentoRepository->findAll();
     }
 
 

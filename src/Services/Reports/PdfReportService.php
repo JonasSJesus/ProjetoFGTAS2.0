@@ -2,7 +2,6 @@
 
 namespace Fgtas\Services\Reports;
 
-use DI\Container;
 use Dompdf\Dompdf;
 use Slim\Views\Twig;
 use Twig\Error\LoaderError;

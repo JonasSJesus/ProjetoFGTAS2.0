@@ -41,6 +41,7 @@ class Publico
 
     public function setExtraFields(string $nome, string $documento, string $contato): void
     {
+        // TODO: Verificar se o usuario precisa de campos extras (se for empregador ou trabalhador)
         $this->informacoesPessoais = new CamposPublico($nome, $documento, $contato);
     }
 
