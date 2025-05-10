@@ -75,7 +75,7 @@ class ReportController
                     ->withHeader("Content-Type", "application/csv")
                     ->withHeader("Content-Disposition", "attachment; filename=$filename");
             default:
-                echo "Formato invalido"; // Flash Message.
+                echo "Formato invalido"; // TODO: Flash Message.
                 break;
         }
 

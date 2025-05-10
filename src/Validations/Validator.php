@@ -4,7 +4,7 @@ namespace Fgtas\Validations;
 
 use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Factory;
-use Respect\Validation\Validator as v;
+use Respect\Validation\Validator as RespectValidator;
 
 class Validator
 {
@@ -31,7 +31,7 @@ class Validator
                 })
         );
 
-        /** @var v $rule */
+        /** @var RespectValidator $rule */
         foreach ($rules as $field => $rule) {
             try {
                 $rule->setName($field)->check($data[$field] ?? null);

@@ -27,8 +27,8 @@ class PdfReportService
                 'atendimentos' => $atendimento
             ]);
         }catch (LoaderError|RuntimeError|SyntaxError $e) {
-            echo $e->getMessage(); // Flash Messages
-            return;
+            echo $e->getMessage(); // TODO: Flash Messages
+            throw $e;
         }
 
         $filename = uniqid('relatorio_') . "_" . date("H:i-d_m_Y") .".pdf";
