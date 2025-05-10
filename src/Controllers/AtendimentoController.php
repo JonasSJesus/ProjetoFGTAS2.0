@@ -120,7 +120,7 @@ class AtendimentoController
             return $response
                 ->withStatus(302)
                 ->withHeader('Location', '/usuario');
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             echo "Error -> " . $e->getMessage(); // Implementar Flash Messages
             return $response;
         }

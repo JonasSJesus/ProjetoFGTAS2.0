@@ -2,6 +2,7 @@
 
 namespace Fgtas\Controllers;
 
+use Fgtas\Exceptions\InvalidPasswordException;
 use Fgtas\Services\AuthService;
 use Fgtas\Validations\Validator;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -48,11 +49,12 @@ class AuthController
 //                ->withStatus(302);
         }
 
-        if (!$this->authService->authenticate($data['email'], $data['senha'])) {
-            // TODO: cadastrar FlashMessages
-            return $response
-                ->withHeader('Location', '/login')
-                ->withStatus(302);
+        try {
+            $this->authService->authenticate($data['email'], $data['senha']);
+        } catch (InvalidPasswordException $e) {
+            dump($e->getMessage()); // TODO: Flash Message
+
+            return $response;
         }
 
         return $response

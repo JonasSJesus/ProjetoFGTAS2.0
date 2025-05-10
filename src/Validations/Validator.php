@@ -2,7 +2,6 @@
 
 namespace Fgtas\Validations;
 
-use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Factory;
 use Respect\Validation\Validator as v;
@@ -14,7 +13,7 @@ class Validator
     /**
      * Valida um array com base nas regras de Respect\Validation\Validator
      * ```
-     * $validator->validate($dataFromForms, [
+     * $validator->validate($dataFromForm, [
      *     'nome' => v::notEmpty(),
      *     'email' => v::notEmpty()->email(),
      *     'senha' => v::notEmpty()->min(5)

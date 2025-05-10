@@ -3,6 +3,7 @@
 namespace Fgtas\Services;
 
 use Fgtas\Entities\Usuario;
+use Fgtas\Exceptions\InvalidPasswordException;
 use Fgtas\Repositories\Interfaces\IUsuarioRepository;
 use SlimSession\Helper;
 
@@ -25,7 +26,7 @@ class AuthService
      * @param string $password
      * @return bool
      */
-    public function authenticate(string $email, string $password): bool
+    public function authenticate(string $email, string $password): void
     {
         $user = $this->repository->findByEmail($email);
         $dbPassword = password_hash(' ', PASSWORD_ARGON2ID);
@@ -34,10 +35,8 @@ class AuthService
             $dbPassword = $user->getSenha();
         }
 
-        $correctPWD = password_verify($password, $dbPassword);
-
-        if (!$correctPWD){
-            return false;
+        if (!password_verify($password, $dbPassword)){
+            throw new InvalidPasswordException();
         }
 
         $this->createSession($user);
@@ -46,8 +45,6 @@ class AuthService
             $hashPWD = password_hash($password, PASSWORD_ARGON2ID);
             $this->repository->updatePWD($user->getId(), $hashPWD);
         }
-
-        return true;
     }
 
     private function createSession(Usuario $user): void
@@ -67,7 +64,7 @@ class AuthService
         $this->session::destroy();
     }
 
-    private function verifySession(): bool
+    private function verifySession(): bool // ?
     {
         return $this->session->exists('user');
     }

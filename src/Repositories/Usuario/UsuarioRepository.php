@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection as DBALConnection;
 use Doctrine\DBAL\Exception;
 use Fgtas\Database\Connection;
 use Fgtas\Entities\Usuario;
+use Fgtas\Exceptions\DatabaseException;
 use Fgtas\Repositories\Interfaces\IUsuarioRepository;
 
 class UsuarioRepository implements IUsuarioRepository
@@ -42,6 +43,7 @@ class UsuarioRepository implements IUsuarioRepository
      * Busca um usuario com base no id
      * @param int $id
      * @return Usuario|null
+     * @throws Exception
      */
     public function findById(int $id): ?Usuario
     {
@@ -66,19 +68,24 @@ class UsuarioRepository implements IUsuarioRepository
      * Busca um usuario com base no e-mail
      * @param string $email
      * @return Usuario|null
+     * @throws DatabaseException
      */
     public function findByEmail(string $email): ?Usuario
     {
         $queryBuilder = $this->conn->createQueryBuilder();
 
-        $queryBuilder
-            ->select('*')
-            ->from('usuario')
-            ->where('email = :email')
-            ->setParameter('email', $email);
+        try {
+            $queryBuilder
+                ->select('*')
+                ->from('usuario')
+                ->where('email = :email')
+                ->setParameter('email', $email);
 
-        $resultSet = $queryBuilder->executeQuery();
-        $data = $resultSet->fetchAssociative();
+            $resultSet = $queryBuilder->executeQuery();
+            $data = $resultSet->fetchAssociative();
+        } catch (Exception $e) {
+            throw new DatabaseException("Erro interno, contate um superior", 500);
+        }
 
         if (!$data) {
             return null;
@@ -117,6 +124,12 @@ class UsuarioRepository implements IUsuarioRepository
         return $queryBuilder->executeStatement();
     }
 
+    /**
+     * @param Usuario $user
+     * @param int $id
+     * @return bool
+     * @throws Exception
+     */
     public function update(Usuario $user, int $id): bool
     {
         $queryBuilder = $this->conn->createQueryBuilder();
@@ -139,6 +152,12 @@ class UsuarioRepository implements IUsuarioRepository
         return $queryBuilder->executeStatement();
     }
 
+    /**
+     * @param int $id
+     * @param string $password
+     * @return bool
+     * @throws Exception
+     */
     public function updatePWD(int $id, string $password): bool
     {
         $queryBuilder = $this->conn->createQueryBuilder();
@@ -155,7 +174,11 @@ class UsuarioRepository implements IUsuarioRepository
         return $queryBuilder->executeStatement();
     }
 
-
+    /**
+     * @param int $id
+     * @return bool
+     * @throws Exception
+     */
     public function delete(int $id): bool
     {
         $queryBuilder = $this->conn->createQueryBuilder();

@@ -3,6 +3,8 @@
 namespace Fgtas\Controllers;
 
 use Exception;
+use Fgtas\Exceptions\EmailAlreadyExistsException;
+use Fgtas\Exceptions\UserNotFoundException;
 use Fgtas\Services\UsuarioService;
 use Fgtas\Validations\Validator;
 use Slim\Views\Twig;
@@ -42,7 +44,7 @@ class UsuarioController
     }
 
     /**
-     * Renderia a página de Edição de usuários
+     * Renderiza a página de Edição de usuários
      *
      * @throws LoaderError
      * @throws RuntimeError
@@ -50,8 +52,14 @@ class UsuarioController
      */
     public function updatePage(Request $request, Response $response, array $args): Response
     {
-        $view = Twig::fromRequest($request);
-        $user = $this->usuarioService->getUser($args);
+        $view = Twig::fromRequest($request); // TODO: Injetar twig como dependencia
+        try {
+            $user = $this->usuarioService->getUser($args['id']);
+        } catch (UserNotFoundException $e) {
+            dump($e->getMessage()); // TODO: Flash Message ou 404 page?
+
+            return $response;
+        }
 
         return $view->render($response, 'editar_usuario.html.twig', [
             'user' => $user
@@ -92,7 +100,16 @@ class UsuarioController
             dump($this->validator->getErrors()); // TODO implementar flash messages!
         }
 
-        $this->usuarioService->registerUser($data);
+        try {
+            $this->usuarioService->registerUser($data);
+        } catch (EmailAlreadyExistsException $e) {
+            // Todo Flash Message do erro!!!!
+            dump($e->getMessage());
+
+            return $response;
+//                ->withHeader('Location', '/register')
+//                ->withStatus(302);
+        }
 
         return $response
                 ->withHeader('Location', '/register')
@@ -118,7 +135,15 @@ class UsuarioController
             dump($this->validator->getErrors()); // TODO implementar flash messages!
         }
 
-        $this->usuarioService->update($data, $args['id']);
+        try {
+            $this->usuarioService->update($data, $args['id']);
+        } catch (UserNotFoundException $e) {
+            dump($e->getMessage());
+
+            return $response
+                ->withHeader('Location', '/admin')
+                ->withStatus(302);
+        }
 
         return $response
             ->withHeader('Location', '/admin')
@@ -130,9 +155,17 @@ class UsuarioController
     {
         $id = $args['id'] ?? '';
 
-        if (!$this->usuarioService->delete($id)) {
-            $response->getBody()->write("Erro ao deletar usuario!"); // Flash message
-            return $response;
+        try {
+            if (!$this->usuarioService->delete($id)) {
+                $response->getBody()->write("Erro ao deletar usuario!"); // TODO: Flash message
+                return $response;
+            }
+        } catch (UserNotFoundException $e) {
+            dump($e->getMessage()); // TODO: Flash Message
+
+            return $response
+                ->withHeader('Location', '/admin')
+                ->withStatus(302);
         }
 
         return $response

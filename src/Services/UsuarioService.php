@@ -4,6 +4,8 @@ namespace Fgtas\Services;
 
 use Exception;
 use Fgtas\Entities\Usuario;
+use Fgtas\Exceptions\EmailAlreadyExistsException;
+use Fgtas\Exceptions\UserNotFoundException;
 use Fgtas\Repositories\Interfaces\IUsuarioRepository;
 
 class UsuarioService
@@ -23,14 +25,14 @@ class UsuarioService
      * Cria usuarios no banco
      * @param array $data
      * @return void
-     * @throws Exception
+     * @throws EmailAlreadyExistsException
      */
     public function registerUser(array $data): void
     {
         if ($this->repository->findByEmail($data['emailUsuario'])) {
-            echo "Email ja cadastrado!"; // TODO: Flash Messages
-            return;
+            throw new EmailAlreadyExistsException();
         }
+
         $passwordHashed = $this->hashPWD($data['senhaUsuario']);
 
         $user = new Usuario(
@@ -45,14 +47,20 @@ class UsuarioService
 
 
     /**
-     * Retorna um usuario com base no ID, ou todos os usuarios sem nenhum ID for passado
-     * @param array|null $args
+     * Retorna um usuario com base no ID, ou todos os usuarios se nenhum ID for passado
+     * @param int|null $id
      * @return array|Usuario
+     * @throws UserNotFoundException
      */
-    public function getUser(array $args = null): array|Usuario
+    public function getUser(int $id = null): array|Usuario
     {
-        if (isset($args)) {
-            return $this->repository->findById($args['id']);
+        if (isset($id)) {
+            $user = $this->repository->findById($id);
+            if (!$user) {
+                throw new UserNotFoundException();
+            } else {
+                return $user;
+            }
         }
         return $this->repository->findAll();
     }
@@ -63,10 +71,10 @@ class UsuarioService
      * @return void
      * @throws Exception
      */
-    public function update(array $data, int $id): bool
+    public function update(array $data, int $id): string
     {
         if (!$this->repository->findById($id)) {
-            return false; // Melhor tratado com Exception talvez?
+            throw new UserNotFoundException();
         }
 
 //        $passwordHashed = $this->hashPWD($data['password']);
@@ -78,18 +86,19 @@ class UsuarioService
 
         $this->repository->update($user, $id);
 
-        return true;
+        return "Usuário atualizado com sucesso";
     }
 
 
     /**
      * @param int $id
      * @return bool
+     * @throws UserNotFoundException
      */
     public function delete(int $id): bool
     {
         if (!$this->repository->findById($id)) {
-            return false; // Melhor se tratado com Exception? | Devolver erro 404 ou Flash Message.
+            throw new UserNotFoundException();
         }
 
         return $this->repository->delete($id);

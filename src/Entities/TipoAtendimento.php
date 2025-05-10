@@ -2,6 +2,7 @@
 
 namespace Fgtas\Entities;
 
+use DomainException;
 use Exception;
 
 class TipoAtendimento
@@ -22,7 +23,7 @@ class TipoAtendimento
     /**
      * @param string $tipo
      * @return void
-     * @throws Exception
+     * @throws DomainException
      */
     private function setTipo(string $tipo): void
     {
@@ -36,7 +37,7 @@ class TipoAtendimento
         ];
 
         if (!in_array($tipo, $tipoPermitidos)) {
-            throw new Exception("Tipo de Atendimento não permitido!");
+            throw new DomainException("Tipo de Atendimento não permitido!");
         }
 
         $this->tipo = $tipo;
