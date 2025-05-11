@@ -14,20 +14,21 @@ class AuthController
 {
     private AuthService $authService;
     private Validator $validator;
+    private Twig $twig;
 
-    public function __construct(AuthService $authService, Validator $validator)
+    public function __construct(AuthService $authService, Validator $validator, Twig $twig)
     {
         $this->authService = $authService;
         $this->validator = $validator;
+        $this->twig = $twig;
     }
 
 
     public function loginPage(Request $request, Response $response, array $args): Response
     {
-//        dump($_SESSION);
-        $view = Twig::fromRequest($request);
-
-        return $view->render($response, 'login.php');
+        return $this->twig->render(
+            $response, '/views/login.html.twig'
+        );
     }
     
     public function login(Request $request, Response $response): Response

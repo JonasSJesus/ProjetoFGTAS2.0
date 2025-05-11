@@ -8,6 +8,7 @@ use Fgtas\Services\Reports\CsvReportService;
 use Fgtas\Services\Reports\PdfReportService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Flash\Messages;
 use Slim\Views\Twig;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -20,12 +21,16 @@ class ReportController
     private AtendimentoService $atendimentoService;
     private PdfReportService $pdfReportService;
     private CsvReportService $csvReportService;
+    private Twig $twig;
+    private Messages $flash;
 
-    public function __construct(AtendimentoService $atendimentoService, PdfReportService $pdfReportService, CsvReportService $csvReportService)
+    public function __construct(AtendimentoService $atendimentoService, PdfReportService $pdfReportService, CsvReportService $csvReportService, Twig $twig, Messages $flash)
     {
         $this->atendimentoService = $atendimentoService;
         $this->pdfReportService = $pdfReportService;
         $this->csvReportService = $csvReportService;
+        $this->twig = $twig;
+        $this->flash = $flash;
     }
 
 
@@ -41,12 +46,8 @@ class ReportController
      */
     public function reportPage(Request $request, Response $response): Response
     {
-        $view = Twig::fromRequest($request);
-        $atendimentos = $this->atendimentoService->all();
-
-        return $view->render($response, 'relatorio.html.twig', [
-            'atendimentos' => $atendimentos
-        ]);
+        return $this->twig->render(
+            $response,'/views/relatorio.html.twig');
     }
 
 
@@ -63,9 +64,19 @@ class ReportController
         $requestData = $request->getParsedBody();
         $atendimento = $this->atendimentoService->all();
 
+
+        if (!array_key_exists('exp', $requestData)) {
+            $this->flash->addMessage('erro', 'Formato Inválido');
+
+            return $response
+                ->withStatus(302)
+                ->withHeader('Location', '/generate-report');
+        }
+
+
         switch ($requestData['exp']) {
             case 'pdf':
-                $this->pdfReportService->generate($atendimento, $requestData);
+                $this->pdfReportService->generate($atendimento, $requestData); // TODO: Guardar a mensagem de erro como Flash Message
 
                 return $response;
             case 'csv':
@@ -74,9 +85,6 @@ class ReportController
                 return $response
                     ->withHeader("Content-Type", "application/csv")
                     ->withHeader("Content-Disposition", "attachment; filename=$filename");
-            default:
-                echo "Formato invalido"; // TODO: Flash Message.
-                break;
         }
 
         return $response;

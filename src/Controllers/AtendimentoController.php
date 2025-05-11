@@ -4,13 +4,11 @@ namespace Fgtas\Controllers;
 
 use Exception;
 use Fgtas\Services\AtendimentoService;
-//use Fgtas\Validations\AtendimentoValidator as Validator;
 use Fgtas\Validations\Validator;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Respect\Validation\Validator as v;
 use Slim\Views\Twig;
-use Throwable;
 
 /**
  * Responsavel por lidar com a comunicação entre o usuario e tudo que for relacionado aos Atendimentos no sistema
@@ -19,20 +17,21 @@ class AtendimentoController
 {
     private AtendimentoService $atendimentoService;
     private Validator $validator;
+    private Twig $twig;
 
-    public function __construct(AtendimentoService $atendimentoService, Validator $validator)
+    public function __construct(AtendimentoService $atendimentoService, Validator $validator, Twig $twig)
     {
         $this->atendimentoService = $atendimentoService;
         $this->validator = $validator;
+        $this->twig = $twig;
     }
 
 
     public function formsAtendimentoPage(Request $request, Response $response): Response
     {
-        $view = Twig::fromRequest($request);
         $userLoggedIn = $_SESSION['user'];
 
-        return $view->render($response, 'formulario_de_testes.html.twig', [
+        return $this->twig->render($response, '/views/formulario_de_testes.html.twig', [
             'userName' => $userLoggedIn
         ]);
     }
@@ -40,10 +39,9 @@ class AtendimentoController
 
     public function updateAtendimentoPage(Request $request, Response $response): Response
     {
-        $view = Twig::fromRequest($request);
         $userLoggedIn = $_SESSION['user'];
 
-        return $view->render($response, 'editar_atendimento.html.twig', [
+        return $this->twig->render($response, '/views/editar_atendimento.html.twig', [
             'userName' => $userLoggedIn
         ]);
     }
@@ -51,10 +49,9 @@ class AtendimentoController
 
     public function dashboardPage(Request $request, Response $response): Response
     {
-        $view = Twig::fromRequest($request);
         $atendimentos = $this->atendimentoService->all();
 
-        return $view->render($response, 'usuario.html.twig', [
+        return $this->twig->render($response, '/views/usuario.html.twig', [
             'atendimentos' => $atendimentos
         ]);
     }

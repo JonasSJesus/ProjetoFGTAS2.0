@@ -16,6 +16,14 @@
             <a href="usuario.html.twig" class="menu__botao">Usuário</a>
         </nav>
     </header>
+
+    <ul class="centralizado" style="color: #d1d5db;">
+        {% for msg in flash('erro') %}
+        <li>{{ msg }}</li>
+        {% endfor %}
+    </ul>
+
+
     <form method="post" class="formulario ">
         <h1 class="formulario__titulo mv0-5">Gerar relatório</h1>
 

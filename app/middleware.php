@@ -2,6 +2,7 @@
 
 use DI\Container;
 use Slim\App;
+use Slim\Flash\Messages;
 use Slim\Middleware\Session;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
@@ -9,6 +10,17 @@ use Slim\Views\TwigMiddleware;
 return function (App $app, Container $container) {
     // Este middleware deve ser o primeiro!
     $app->addRoutingMiddleware();
+
+    // Middleware para guardar as flash messages no $_SESSION
+    // TODO: mover para uma classe propria || Refatorar a implementacao das flash messages, se tiver tempo. Talvez criar uma solucao propria?
+    $app->add( function ($request, $next) {
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            // Change flash message storage
+            $this->get(Messages::class)->__construct($_SESSION, 'flash');
+        }
+
+        return $next->handle($request);
+    });
 
     // Middleware para gerenciar sessoes
     $app->add(new Session([
@@ -18,6 +30,7 @@ return function (App $app, Container $container) {
         'samesite' => '',
         'lifetime' => '20 min',
     ]));
+
 
     // Twig view Middleware
     $app->add(TwigMiddleware::create($app, $container->get(Twig::class)));

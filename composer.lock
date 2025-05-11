@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "989c72a39dd1737058d5693a3cd6a948",
+    "content-hash": "25012b480142a2842578747d1d2fdba3",
     "packages": [
         {
             "name": "bryanjhv/slim-session",
@@ -428,6 +428,64 @@
                 "source": "https://github.com/php-fig/http-message-util/tree/1.1.5"
             },
             "time": "2020-11-24T22:02:12+00:00"
+        },
+        {
+            "name": "glazilla/slim-twig-flash",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://bitbucket.org/glazilla/slim-twig-flash.git",
+                "reference": "eb1092f32d5ca673e8cbc94f6ed63ba25bec3b97"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://bitbucket.org/glazilla/slim-twig-flash/get/eb1092f32d5ca673e8cbc94f6ed63ba25bec3b97.zip",
+                "reference": "eb1092f32d5ca673e8cbc94f6ed63ba25bec3b97",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4.0",
+                "slim/flash": "^0.4",
+                "twig/twig": "^3.4.3"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "1.*",
+                "phpunit/phpcov": "2.*",
+                "phpunit/phpunit": "4.8.0",
+                "satooshi/php-coveralls": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Glazilla\\Slim\\Views\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Sylvain M.",
+                    "email": "glazilla@gmail.com"
+                }
+            ],
+            "description": "A Twig extension to access Slim Flash messages in templates",
+            "homepage": "https://bitbucket.org/glazilla/slim-twig-flash",
+            "keywords": [
+                "extension",
+                "flash",
+                "framework",
+                "message",
+                "provider",
+                "slim",
+                "twig",
+                "view"
+            ],
+            "support": {
+                "source": "https://bitbucket.org/glazilla/slim-twig-flash/src/eb1092f32d5ca673e8cbc94f6ed63ba25bec3b97/?at=v1.0"
+            },
+            "time": "2022-11-10T11:59:19+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -2428,6 +2486,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
+        "php": ">=8.1",
         "ext-pdo": "*"
     },
     "platform-dev": {},

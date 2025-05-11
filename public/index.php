@@ -32,9 +32,12 @@ $container = $containerBuilder->build();
 // Instantiate the app
 $app = AppFactory::createFromContainer($container);
 
+
 // Iniciando Twig
 $twig = Twig::create(ROOT_APP . '/resources/views', ['cache' => false]);
 $app->add(TwigMiddleware::create($app, $twig));
+
+
 
 // Registrando middleware
 $middleware = require __DIR__ . '/../app/middleware.php';

@@ -16,7 +16,8 @@
         "respect/validation": "^2.4",
         "slim/flash": "^0.4.0",
         "dompdf/dompdf": "^3.1",
-        "doctrine/dbal": "^4.2"
+        "doctrine/dbal": "^4.2",
+        "glazilla/slim-twig-flash": "^1.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^7.2"

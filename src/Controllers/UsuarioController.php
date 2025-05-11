@@ -19,11 +19,13 @@ class UsuarioController
 {
     private UsuarioService $usuarioService;
     private Validator $validator;
+    private Twig $twig;
 
-    public function __construct(UsuarioService $usuarioService, Validator $validator)
+    public function __construct(UsuarioService $usuarioService, Validator $validator, Twig $twig)
     {
         $this->usuarioService = $usuarioService;
         $this->validator = $validator;
+        $this->twig = $twig;
     }
 
     /**
@@ -38,9 +40,8 @@ class UsuarioController
      */
     public function registerPage(Request $request, Response $response): Response
     {
-        $view = Twig::fromRequest($request);
-
-        return $view->render($response, 'cadastrar_usuario.html.twig');
+        return $this->twig->render($response, '/views/cadastrar_usuario.html.twig'
+        );
     }
 
     /**
@@ -52,7 +53,6 @@ class UsuarioController
      */
     public function updatePage(Request $request, Response $response, array $args): Response
     {
-        $view = Twig::fromRequest($request); // TODO: Injetar twig como dependencia
         try {
             $user = $this->usuarioService->getUser($args['id']);
         } catch (UserNotFoundException $e) {
@@ -61,17 +61,16 @@ class UsuarioController
             return $response;
         }
 
-        return $view->render($response, 'editar_usuario.html.twig', [
+        return $this->twig->render($response, '/views/editar_usuario.html.twig', [
             'user' => $user
         ]);
     }
 
     public function adminPage(Request $request, Response $response): Response
     {
-        $view = Twig::fromRequest($request);
         $users = $this->usuarioService->getUser();
 
-        return $view->render($response, 'admin.html.twig', [
+        return $this->twig->render($response, '/views/admin.html.twig', [
             'users' => $users
         ]);
     }

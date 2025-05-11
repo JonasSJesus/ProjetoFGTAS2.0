@@ -27,7 +27,7 @@ class PdfReportService
                 'atendimentos' => $atendimento
             ]);
         }catch (LoaderError|RuntimeError|SyntaxError $e) {
-            echo $e->getMessage(); // TODO: Flash Messages
+            echo $e->getMessage(); // TODO: Jogar um erro com mensagem personalizada
             throw $e;
         }
 
@@ -38,6 +38,6 @@ class PdfReportService
         $this->dompdf->render();
 
         $this->dompdf->stream($filename); // TODO: Deixar que o controller lide com o download do arquivo usando Headers.
-        // return $filename; // TODO: Implementar...
+        // return $filename;
     }
 }
