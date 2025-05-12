@@ -2,11 +2,11 @@
 
 namespace Fgtas\Services;
 
-use DI\Container;
 use Doctrine\DBAL\Connection as DBALConnection;
-use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Exception as DBALExcetpion;
 use Fgtas\Database\Connection;
 use Fgtas\Entities\Atendimento;
+use Fgtas\Exceptions\DatabaseException;
 use Fgtas\Repositories\Atendimentos\AtendimentoRepository;
 use Fgtas\Repositories\Interfaces\IAtendimentoRepository;
 use Fgtas\Repositories\Interfaces\IFormaAtendimentoRepository;
@@ -37,6 +37,13 @@ class AtendimentoService
     }
 
 
+    /**
+     * @param array $data
+     * @param int $userId
+     * @return void
+     * @throws DBALExcetpion
+     * @throws DatabaseException
+     */
     public function createAtendimento(array $data, int $userId): void
     {
         $atendimento = Atendimento::make(
@@ -64,9 +71,9 @@ class AtendimentoService
             $this->atendimentoRepository->add($idTipoAtend, $userId, $idPublico, $idFormaAtend);
 
             $this->conn->commit();
-        } catch (Exception $e) {
+        } catch (DBALExcetpion $e) {
             $this->conn->rollBack();
-            throw $e;
+            throw new DatabaseException();
         }
     }
 
@@ -78,7 +85,7 @@ class AtendimentoService
     }
 
 
-    public function delete(int $id)
+    public function delete(int $id): void
     {
         $this->atendimentoRepository->delete($id);
     }

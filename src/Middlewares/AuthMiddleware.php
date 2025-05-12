@@ -26,7 +26,7 @@ class AuthMiddleware implements MiddlewareInterface
     {
         $session = $this->session;
 
-        if (!$session->exists('user') && $session->user['is_logged'] !== true) {
+        if (!$session->exists('user') || $session->user['is_logged'] !== true) {
             $response = $this->responseFactory->createResponse();
 
             return $response

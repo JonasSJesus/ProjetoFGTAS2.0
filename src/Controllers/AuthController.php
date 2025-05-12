@@ -8,6 +8,7 @@ use Fgtas\Validations\Validator;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Respect\Validation\Validator as v;
+use Slim\Flash\Messages;
 use Slim\Views\Twig;
 
 class AuthController
@@ -15,12 +16,14 @@ class AuthController
     private AuthService $authService;
     private Validator $validator;
     private Twig $twig;
+    private Messages $flash;
 
-    public function __construct(AuthService $authService, Validator $validator, Twig $twig)
+    public function __construct(AuthService $authService, Validator $validator, Twig $twig, Messages $flash)
     {
         $this->authService = $authService;
         $this->validator = $validator;
         $this->twig = $twig;
+        $this->flash = $flash;
     }
 
 
@@ -42,20 +45,21 @@ class AuthController
         ]);
 
         if ($this->validator->failed()) {
-            // TODO: cadastrar FlashMessages
-            dump($this->validator->getErrors());
+            $this->flash->addMessage('auth-validate', $this->validator->getErrors()); // TODO: Talvez nao faca sentido printar os erros daqui...
 
-            return $response;
-//                ->withHeader('Location', '/login')
-//                ->withStatus(302);
+            return $response
+                ->withHeader('Location', '/login')
+                ->withStatus(302);
         }
 
         try {
             $this->authService->authenticate($data['email'], $data['senha']);
         } catch (InvalidPasswordException $e) {
-            dump($e->getMessage()); // TODO: Flash Message
+            $this->flash->addMessage('auth', $e->getMessage());
 
-            return $response;
+            return $response
+                ->withHeader('Location', '/login')
+                ->withStatus(302);
         }
 
         return $response

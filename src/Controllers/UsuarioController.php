@@ -7,6 +7,8 @@ use Fgtas\Exceptions\EmailAlreadyExistsException;
 use Fgtas\Exceptions\UserNotFoundException;
 use Fgtas\Services\UsuarioService;
 use Fgtas\Validations\Validator;
+use Slim\Exception\HttpNotFoundException;
+use Slim\Flash\Messages;
 use Slim\Views\Twig;
 use Respect\Validation\Validator as v;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -15,17 +17,21 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
+
+
 class UsuarioController
 {
     private UsuarioService $usuarioService;
     private Validator $validator;
     private Twig $twig;
+    private Messages $flash;
 
-    public function __construct(UsuarioService $usuarioService, Validator $validator, Twig $twig)
+    public function __construct(UsuarioService $usuarioService, Validator $validator, Twig $twig, Messages $flash)
     {
         $this->usuarioService = $usuarioService;
         $this->validator = $validator;
         $this->twig = $twig;
+        $this->flash = $flash;
     }
 
     /**
@@ -56,9 +62,9 @@ class UsuarioController
         try {
             $user = $this->usuarioService->getUser($args['id']);
         } catch (UserNotFoundException $e) {
-            dump($e->getMessage()); // TODO: Flash Message ou 404 page?
+            dump($e->getMessage()); // TODO: Flash Message ou 404 page? ---por enquanto 404
 
-            return $response;
+            throw new HttpNotFoundException($request);
         }
 
         return $this->twig->render($response, '/views/editar_usuario.html.twig', [
@@ -96,20 +102,24 @@ class UsuarioController
         ]);
 
         if ($this->validator->failed()) {
-            dump($this->validator->getErrors()); // TODO implementar flash messages!
+            $this->flash->addMessage('usuario-validate', $this->validator->getErrors());
+
+            return $response
+                ->withHeader('Location', '/register')
+                ->withStatus(302);
         }
 
         try {
             $this->usuarioService->registerUser($data);
         } catch (EmailAlreadyExistsException $e) {
-            // Todo Flash Message do erro!!!!
-            dump($e->getMessage());
+            $this->flash->addMessage('usuario-exists', $e->getMessage());
 
-            return $response;
-//                ->withHeader('Location', '/register')
-//                ->withStatus(302);
+            return $response
+                ->withHeader('Location', '/register')
+                ->withStatus(302);
         }
 
+        // TODO: Flash Message de sucesso ao criar um usuario.
         return $response
                 ->withHeader('Location', '/register')
                 ->withStatus(302);

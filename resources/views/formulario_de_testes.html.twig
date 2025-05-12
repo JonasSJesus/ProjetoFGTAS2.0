@@ -110,6 +110,12 @@
         a:hover {
             background-color: #6b7280;
         }
+
+        .danger {
+            color: red;
+            text-align: center;
+            list-style-type: none;
+        }
     </style>
 </head>
 <body>
@@ -120,6 +126,21 @@
             <a href="/logout"> Sair </a>
         </nav>
     </header>
+
+    <ul class="danger">
+    {% for message in flash('atendimento-validate') %}
+        {% for msg in message %}
+            <li>{{ msg }}</li>
+        {% endfor %}
+    {% endfor %}
+    </ul>
+
+    <ul class="danger">
+        {% for msg in flash('atendimento-create') %}
+            <li>{{ msg }}</li>
+        {% endfor %}
+    </ul>
+
     <main>
         <fieldset class="container">
             <form method="post">

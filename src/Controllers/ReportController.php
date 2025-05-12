@@ -66,7 +66,8 @@ class ReportController
 
 
         if (!array_key_exists('exp', $requestData)) {
-            $this->flash->addMessage('erro', 'Formato Inválido');
+            $this->flash->addMessage('erro', 'Formato Inválido, por favor, escolha entre PDF ou CSV');
+            dd($_SESSION);
 
             return $response
                 ->withStatus(302)

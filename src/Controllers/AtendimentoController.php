@@ -2,12 +2,15 @@
 
 namespace Fgtas\Controllers;
 
+use Doctrine\DBAL\Exception as DBALException;
 use Exception;
+use Fgtas\Exceptions\DatabaseException;
 use Fgtas\Services\AtendimentoService;
 use Fgtas\Validations\Validator;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Respect\Validation\Validator as v;
+use Slim\Flash\Messages;
 use Slim\Views\Twig;
 
 /**
@@ -18,12 +21,14 @@ class AtendimentoController
     private AtendimentoService $atendimentoService;
     private Validator $validator;
     private Twig $twig;
+    private Messages $flash;
 
-    public function __construct(AtendimentoService $atendimentoService, Validator $validator, Twig $twig)
+    public function __construct(AtendimentoService $atendimentoService, Validator $validator, Twig $twig, Messages $flash)
     {
         $this->atendimentoService = $atendimentoService;
         $this->validator = $validator;
         $this->twig = $twig;
+        $this->flash = $flash;
     }
 
 
@@ -83,17 +88,18 @@ class AtendimentoController
         $this->validator->validate($dataFromRequest, $rules);
 
         if ($this->validator->failed()) {
-            dump($this->validator->getErrors()); // Todo: Flash Messages
+            $this->flash->addMessage('atendimento-validate', $this->validator->getErrors());
 
-            return $response;
-//                ->withStatus(302)
-//                ->withHeader('Location', '/home');
+            return $response
+                ->withStatus(302)
+                ->withHeader('Location', '/home');
         }
 
         try {
             $this->atendimentoService->createAtendimento($dataFromRequest, $_SESSION['user']['id']);
-        } catch (Exception $e) {
-            dump($e->getMessage()); // Todo: Flash Messages
+        } catch (DatabaseException $e) {
+            $this->flash->addMessage('atendimento-create', $e->getMessage());
+            dd($_SESSION);
         }
 
         return $response
@@ -114,12 +120,16 @@ class AtendimentoController
 
         try {
             $this->atendimentoService->delete($id);
+
             return $response
                 ->withStatus(302)
-                ->withHeader('Location', '/usuario');
+                ->withHeader('Location', '/dashboard');
         } catch (Exception $e) {
-            echo "Error -> " . $e->getMessage(); // Implementar Flash Messages
-            return $response;
+            $this->flash->addMessage('atendimento-destroy', $e->getMessage()); // TODO: Implementar a visualizacao na pagina dashboard
+
+            return $response
+                ->withStatus(302)
+                ->withHeader('Location', '/dashboard');
         }
     }
 }

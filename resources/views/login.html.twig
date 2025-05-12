@@ -9,7 +9,24 @@
     <title>Login</title>
 </head>
 <body class="h100">
-    
+
+
+    {# Flash message, so aparece quando ocorrer algum erro #}
+    <ul class="centralizado" style="color: #d1d5db;">
+        {% for msg in flash('auth') %}
+            <li>{{ msg }}</li>
+        {% endfor %}
+    </ul>
+
+    <ul class="centralizado" style="color: #d1d5db;">
+        {% for error in flash('auth-validate') %}
+            {% for msg in error %}
+                <li>{{ msg }}</li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+    {#  Fim das flash messages  #}
+
     <form class="formulario centralizado mt12-5" method="post">
         <h1 class="formulario__titulo centralizado">Entrar</h1>
         <fieldset class="formulario__campo w80 ">
