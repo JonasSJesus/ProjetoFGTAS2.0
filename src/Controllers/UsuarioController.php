@@ -141,12 +141,17 @@ class UsuarioController
         ]);
 
         if ($this->validator->failed()) {
-            dump($this->validator->getErrors()); // TODO implementar flash messages!
+            $this->flash->addMessage('usuario-update' ,$this->validator->getErrors());
+
+            return $response
+                ->withHeader('Location', '/admin') // TODO: mudar o endereco
+                ->withStatus(302);
         }
 
         try {
             $this->usuarioService->update($data, $args['id']);
         } catch (UserNotFoundException $e) {
+            $this->flash->addMessage('usuario-erro', $e->getMessage());
             dump($e->getMessage());
 
             return $response
@@ -166,10 +171,12 @@ class UsuarioController
 
         try {
             if (!$this->usuarioService->delete($id)) {
-                $response->getBody()->write("Erro ao deletar usuario!"); // TODO: Flash message
+                $this->flash->addMessage('usuario-error', "Erro ao deletar usuario!");
+
                 return $response;
             }
         } catch (UserNotFoundException $e) {
+            $this->flash->addMessage('user-not-found', $e->getMessage());
             dump($e->getMessage()); // TODO: Flash Message
 
             return $response
