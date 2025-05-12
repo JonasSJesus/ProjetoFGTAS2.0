@@ -99,7 +99,10 @@ class AtendimentoController
             $this->atendimentoService->createAtendimento($dataFromRequest, $_SESSION['user']['id']);
         } catch (DatabaseException $e) {
             $this->flash->addMessage('atendimento-create', $e->getMessage());
-            dd($_SESSION);
+
+            return $response
+                ->withStatus(302)
+                ->withHeader('Location', '/home');
         }
 
         return $response
