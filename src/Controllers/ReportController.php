@@ -46,8 +46,12 @@ class ReportController
      */
     public function reportPage(Request $request, Response $response): Response
     {
+        $flashMessage = $this->flash->getMessage('error');
+
         return $this->twig->render(
-            $response,'/views/relatorio.html.twig');
+            $response,'/views/relatorio.html.twig', [
+                'error' => $flashMessage[0]
+            ]);
     }
 
 
@@ -66,8 +70,7 @@ class ReportController
 
 
         if (!array_key_exists('exp', $requestData)) {
-            $this->flash->addMessage('erro', 'Formato Inválido, por favor, escolha entre PDF ou CSV');
-            dd($_SESSION);
+            $this->flash->addMessage('error', 'Formato Inválido, por favor, escolha entre PDF ou CSV');
 
             return $response
                 ->withStatus(302)

@@ -17,11 +17,12 @@
         </nav>
     </header>
 
+
+    {% if error %}
     <ul class="centralizado" style="color: #d1d5db;">
-        {% for msg in flash('erro') %}
-        <li>{{ msg }}</li>
-        {% endfor %}
+        <li>{{ error }}</li>
     </ul>
+    {% endif %}
 
 
     <form method="post" class="formulario ">

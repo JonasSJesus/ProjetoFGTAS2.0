@@ -29,9 +29,14 @@ class AuthController
 
     public function loginPage(Request $request, Response $response, array $args): Response
     {
+        $flashValidation = $this->flash->getMessage('error-validate');
+        $flashAuthentication = $this->flash->getMessage('error-auth');
+
         return $this->twig->render(
-            $response, '/views/login.html.twig'
-        );
+            $response, '/views/login.html.twig', [
+                'flashValidate' => $flashValidation[0],
+                'flashAuth' => $flashAuthentication[0]
+            ]);
     }
     
     public function login(Request $request, Response $response): Response
@@ -45,7 +50,7 @@ class AuthController
         ]);
 
         if ($this->validator->failed()) {
-            $this->flash->addMessage('auth-validate', $this->validator->getErrors()); // TODO: Talvez nao faca sentido printar os erros daqui...
+            $this->flash->addMessage('error-validate', $this->validator->getErrors()); // TODO: Talvez nao faca sentido printar os erros daqui...
 
             return $response
                 ->withHeader('Location', '/login')
@@ -55,7 +60,7 @@ class AuthController
         try {
             $this->authService->authenticate($data['email'], $data['senha']);
         } catch (InvalidPasswordException $e) {
-            $this->flash->addMessage('auth', $e->getMessage());
+            $this->flash->addMessage('error-auth', $e->getMessage());
 
             return $response
                 ->withHeader('Location', '/login')

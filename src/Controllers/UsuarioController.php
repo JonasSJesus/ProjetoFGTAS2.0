@@ -46,8 +46,15 @@ class UsuarioController
      */
     public function registerPage(Request $request, Response $response): Response
     {
-        return $this->twig->render($response, '/views/cadastrar_usuario.html.twig'
-        );
+        dump($this->flash->getMessages()); // TODO: Printar os erros no template
+
+        return $this->twig->render($response, '/views/cadastrar_usuario.html.twig', [
+            'validation' => $this->flash->getMessage('usuario-validate')[0],
+            'userExists' => $this->flash->getMessage('usuario-exists')[0],
+            'update' => $this->flash->getMessage('usuario-update')[0],
+            'userNotFound' => $this->flash->getMessage('usuario-not-found')[0],
+            'userDestroyError' => $this->flash->getMessage('usuario-destroy-error')[0],
+        ]);
     }
 
     /**
@@ -151,8 +158,7 @@ class UsuarioController
         try {
             $this->usuarioService->update($data, $args['id']);
         } catch (UserNotFoundException $e) {
-            $this->flash->addMessage('usuario-erro', $e->getMessage());
-            dump($e->getMessage());
+            $this->flash->addMessage('usuario-not-found', $e->getMessage());
 
             return $response
                 ->withHeader('Location', '/admin')
@@ -171,13 +177,12 @@ class UsuarioController
 
         try {
             if (!$this->usuarioService->delete($id)) {
-                $this->flash->addMessage('usuario-error', "Erro ao deletar usuario!");
+                $this->flash->addMessage('usuario-destroy-error', "Erro ao deletar usuario!");
 
                 return $response;
             }
         } catch (UserNotFoundException $e) {
             $this->flash->addMessage('user-not-found', $e->getMessage());
-            dump($e->getMessage()); // TODO: Flash Message
 
             return $response
                 ->withHeader('Location', '/admin')

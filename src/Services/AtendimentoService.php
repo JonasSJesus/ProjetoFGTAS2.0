@@ -61,8 +61,8 @@ class AtendimentoService
             );
         }
 
-        $this->conn->beginTransaction();
         try {
+            $this->conn->beginTransaction();
             // TODO: Em vez de salvar os itens, isso poderia apenas buscar o ID de itens salvos previamente no banco de dados lookup talvez?
             $idPublico = $this->publicoRepository->add($atendimento->publico);
             $idTipoAtend = $this->tipoRepository->add($atendimento->tipoAtendimento);

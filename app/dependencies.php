@@ -24,10 +24,9 @@ return function (ContainerBuilder $container) {
         },
 
         Twig::class => function (ContainerInterface $container) {
-            $view = Twig::create(ROOT_APP . '/resources', ['cache' => false]); // TODO: Implementar cache para as templates
-            $view->addExtension(new TwigMessages($container->get(Messages::class)));
+            // TODO: Implementar cache para as templates
 
-            return $view;
+            return Twig::create(ROOT_APP . '/resources', ['cache' => false]);
         },
 
         Dompdf::class => function () {

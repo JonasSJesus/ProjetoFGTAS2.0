@@ -115,6 +115,7 @@
             color: red;
             text-align: center;
             list-style-type: none;
+            margin: 0px 0px;
         }
     </style>
 </head>
@@ -127,19 +128,17 @@
         </nav>
     </header>
 
-    <ul class="danger">
-    {% for message in flash('atendimento-validate') %}
-        {% for msg in message %}
-            <li>{{ msg }}</li>
-        {% endfor %}
-    {% endfor %}
-    </ul>
+    {% if validation %}
+        <ul class="danger">
+            {% for msg in validation %}
+                <li>{{ msg }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
-    <ul class="danger">
-        {% for msg in flash('atendimento-create') %}
-            <li>{{ msg }}</li>
-        {% endfor %}
-    </ul>
+    {% if create %}
+        {{ create }}
+    {% endif %}
 
     <main>
         <fieldset class="container">

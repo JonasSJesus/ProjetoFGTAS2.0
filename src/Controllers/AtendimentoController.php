@@ -2,7 +2,6 @@
 
 namespace Fgtas\Controllers;
 
-use Doctrine\DBAL\Exception as DBALException;
 use Exception;
 use Fgtas\Exceptions\DatabaseException;
 use Fgtas\Services\AtendimentoService;
@@ -34,10 +33,16 @@ class AtendimentoController
 
     public function formsAtendimentoPage(Request $request, Response $response): Response
     {
-        $userLoggedIn = $_SESSION['user'];
+        $userLogged = $_SESSION['user'];
+        $flashValidate = $this->flash->getMessage('atendimento-validate');
+        $flashCreate = $this->flash->getMessage('atendimento-create');
+        $flashDestroy = $this->flash->getMessage('atendimento-destroy');
 
         return $this->twig->render($response, '/views/formulario_de_testes.html.twig', [
-            'userName' => $userLoggedIn
+            'userName' => $userLogged,
+            'validation' => $flashValidate[0],
+            'create' => $flashCreate[0],
+            'destroy' => $flashDestroy[0]
         ]);
     }
 

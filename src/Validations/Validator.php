@@ -41,6 +41,7 @@ class Validator
         }
     }
 
+
     public function failed(): bool
     {
         return !empty($this->errors);
