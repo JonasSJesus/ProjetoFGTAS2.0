@@ -4,8 +4,10 @@ namespace Fgtas\Repositories\Atendimentos;
 
 use Doctrine\DBAL\Connection as DBALConnection;
 use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Exception as DBALException;
 use Fgtas\Database\Connection;
 use Fgtas\Entities\TipoAtendimento;
+use Fgtas\Exceptions\DatabaseException;
 use Fgtas\Repositories\Interfaces\ITipoAtendimentoRepository;
 
 class TipoAtendimentoRepository implements ITipoAtendimentoRepository

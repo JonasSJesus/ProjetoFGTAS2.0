@@ -46,6 +46,8 @@ class AtendimentoService
      */
     public function createAtendimento(array $data, int $userId): void
     {
+//        dd($data);
+
         $atendimento = Atendimento::make(
             $data['tipoAtendimento'],
             $data['descricao_tipo_atendimento'],
@@ -63,10 +65,10 @@ class AtendimentoService
 
         try {
             $this->conn->beginTransaction();
-            // TODO: Em vez de salvar os itens, isso poderia apenas buscar o ID de itens salvos previamente no banco de dados lookup talvez?
-            $idPublico = $this->publicoRepository->add($atendimento->publico);
+
+            $idPublico = $this->publicoRepository->findIdByName($atendimento->publico->perfilCliente);
+            $idFormaAtend = $this->formaRepository->findIdByName($atendimento->formaAtendimento->forma);
             $idTipoAtend = $this->tipoRepository->add($atendimento->tipoAtendimento);
-            $idFormaAtend = $this->formaRepository->add($atendimento->formaAtendimento);
 
             $this->atendimentoRepository->add($idTipoAtend, $userId, $idPublico, $idFormaAtend);
 

@@ -3,8 +3,10 @@
 namespace Fgtas\Repositories\Atendimentos;
 
 use Doctrine\DBAL\Connection as DBALConnection;
+use Doctrine\DBAL\Exception as DBALException;
 use Fgtas\Database\Connection;
 use Fgtas\Entities\FormaAtendimento;
+use Fgtas\Exceptions\DatabaseException;
 use Fgtas\Repositories\Interfaces\IFormaAtendimentoRepository;
 
 class FormaAtendimentoRepository implements IFormaAtendimentoRepository
@@ -61,6 +63,33 @@ class FormaAtendimentoRepository implements IFormaAtendimentoRepository
         }
 
         return FormaAtendimento::fromArray($data);
+    }
+
+    /**
+     * @param string $formaAtendimento
+     * @return int Retorna o ID do perfil de publico previamente cadastrado ou false se nenhum valor for encotrado.
+     * @throws DatabaseException
+     */
+    public function findIdByName(string $formaAtendimento): int
+    {
+        $queryBuilder = $this->conn->createQueryBuilder();
+
+        // TODO: Tirar o catch, talvez...
+        try {
+            $resultSet = $queryBuilder
+                ->select('*')
+                ->from('forma_atendimento')
+                ->where('forma = :forma')
+                ->setParameter('forma', $formaAtendimento)
+                ->executeQuery();
+
+            $data = $resultSet->fetchAssociative();
+
+            return $data['id'];
+        } catch (DBALException $e) {
+            throw new DatabaseException();
+        }
+
     }
 
     public function update(FormaAtendimento $formAtend, int $id): bool

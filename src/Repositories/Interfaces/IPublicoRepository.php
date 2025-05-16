@@ -15,6 +15,8 @@ interface IPublicoRepository
 
     public function findById(int $id): ?Publico;
 
+    public function findIdByName(string $perfilCliente): int;
+
     public function update(Publico $publico, int $id): bool;
 
     public function delete(int $id): bool;

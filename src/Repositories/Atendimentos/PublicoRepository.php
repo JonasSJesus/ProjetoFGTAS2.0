@@ -7,6 +7,7 @@ use Doctrine\DBAL\Exception as DBALException;
 use Exception;
 use Fgtas\Database\Connection;
 use Fgtas\Entities\Publico;
+use Fgtas\Exceptions\DatabaseException;
 use Fgtas\Repositories\Interfaces\IPublicoRepository;
 
 class PublicoRepository implements IPublicoRepository
@@ -116,6 +117,34 @@ class PublicoRepository implements IPublicoRepository
         }
 
         return Publico::fromArray($data);
+    }
+
+
+    /**
+     * @param string $perfilCliente
+     * @return int Retorna o ID do perfil de publico previamente cadastrado ou false se nenhum valor for encotrado.
+     * @throws DatabaseException
+     */
+    public function findIdByName(string $perfilCliente): int
+    {
+        $queryBuilder = $this->conn->createQueryBuilder();
+
+        // TODO: Tirar o catch, talvez...
+        try {
+            $resultSet = $queryBuilder
+                ->select('*')
+                ->from('publico')
+                ->where('perfil_cliente = :perfil_cliente')
+                ->setParameter('perfil_cliente', $perfilCliente)
+                ->executeQuery();
+
+            $data = $resultSet->fetchAssociative();
+
+            return $data['id'];
+        } catch (DBALException $e) {
+            throw new DatabaseException();
+        }
+
     }
 
     public function update(Publico $publico, int $id): bool

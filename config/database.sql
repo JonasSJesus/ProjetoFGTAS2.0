@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS atendimento (
     FOREIGN KEY (publico_id) REFERENCES publico(id)
 );
 
--- TODO?: Inserir possiveis dados em uma tabela LookUp -------
+-- Dados importantes para cadastrar atendimentos ------------
 
 INSERT publico (perfil_cliente) VALUES ('Empregador'),
                                        ('Trabalhador'),

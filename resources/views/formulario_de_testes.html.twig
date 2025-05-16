@@ -159,12 +159,11 @@
                             <select name="formaAtendimento" id="formaAtendimento">
                                 <option value="">Escolha a forma de atendimento...</option>
                                 <option value="presencial">Presencial</option>
-                                <option value="whats">Whatsapp</option>
-                                <option value="telefone">Ligação telefônica</option>
-                                <option value="email">E-mail</option>
-                                <option value="rede_social">Redes sociais</option>
-                                <option value="teams">Teams</option>
-                                <option value="outro">Outra</option>
+                                <option value="Whatsapp">Whatsapp</option>
+                                <option value="Ligação Telefônica">Ligação Telefônica</option>
+                                <option value="E-mail">E-mail</option>
+                                <option value="Redes Sociais">Redes Sociais</option>
+                                <option value="Teams">Teams</option>
                             </select>
                         </div>
                     </section>
@@ -175,12 +174,12 @@
                         <div>
                             <select name="perfilPublico" id="perfilPublico">
                                 <option value="">Escolha o perfil do Atendido</option>
-                                <option value="empregador">Empregador</option>
-                                <option value="trabalhador">Trabalhador</option>
+                                <option value="Empregador">Empregador</option>
+                                <option value="Trabalhador">Trabalhador</option>
+                                <option value="Outras Agências">Outras Agências</option>
                                 <option value="ADS">ADS</option>
-                                <option value="fgtas">Setores da FGTAS</option>
-                                <option value="mercadoTrabalho">Interessado no Mercado de trabalho</option>
-                                <option value="outro">Outro</option>
+                                <option value="Setores da FGTAS">Setores da FGTAS</option>
+                                <option value="Interessado em informações sobre o Mercado de Trabalho">Interessado no Mercado de trabalho</option>
                             </select>
                         </div>
                     </section>
@@ -329,7 +328,7 @@
         perfilPublicoSelect.addEventListener('change', function() {
             infoAtendidoContainer.innerHTML = '';
 
-            if (this.value === 'empregador' || this.value === 'trabalhador') {
+            if (this.value === 'Empregador' || this.value === 'Trabalhador') {
                 infoAtendidoContainer.appendChild(createInfoAtendidoFieldset());
             }
         });
