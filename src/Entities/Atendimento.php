@@ -7,7 +7,6 @@ class Atendimento
     private int $id;
     public readonly ?string $dataDeRegistro;
     public readonly ?string $usuario;
-    public readonly ?string $detalhesAtendimento;
     public readonly FormaAtendimento $formaAtendimento;
     public readonly TipoAtendimento $tipoAtendimento;
     public readonly Publico $publico;

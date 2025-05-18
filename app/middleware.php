@@ -28,7 +28,6 @@ return function (App $app, Container $container) {
 
 
 
-
     // TODO: implementar um middleware para regenerar o ID da sessão a cada X minutos
     // Este middleware deve estar por ultimo!
     $app->addErrorMiddleware(

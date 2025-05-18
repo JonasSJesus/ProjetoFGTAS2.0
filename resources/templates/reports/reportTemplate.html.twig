@@ -47,13 +47,13 @@
 
 {% for atendimento in atendimentos %}
   <tr>
-    <td>{{ atendimento.toArray['id'] }}</td>
-    <td>{{ atendimento.toArray['forma_atendimento'] }}</td>
-    <td>{{ atendimento.toArray['data_registro'] }}</td>
-    <td>{{ atendimento.toArray['usuario'] }}</td>
-    <td>{{ atendimento.toArray['tipo_atendimento'] }}</td>
-    <td>{{ atendimento.toArray['descricao_tipo_atendimento'] }}</td>
-    <td>{{ atendimento.toArray['perfil_publico'] }}</td>
+    <td>{{ atendimento.id }}</td>
+    <td>{{ atendimento.formaAtendimento.forma }}</td>
+    <td>{{ atendimento.dataDeRegistro }}</td>
+    <td>{{ atendimento.usuario }}</td>
+    <td>{{ atendimento.tipoAtendimento.tipo }}</td>
+    <td>{{ atendimento.tipoAtendimento.descricao }}</td>
+    <td>{{ atendimento.publico.perfilCliente }}</td>
   </tr>
 {% endfor %}
 

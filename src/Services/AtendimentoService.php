@@ -7,7 +7,6 @@ use Doctrine\DBAL\Exception as DBALExcetpion;
 use Fgtas\Database\Connection;
 use Fgtas\Entities\Atendimento;
 use Fgtas\Exceptions\DatabaseException;
-use Fgtas\Repositories\Atendimentos\AtendimentoRepository;
 use Fgtas\Repositories\Interfaces\IAtendimentoRepository;
 use Fgtas\Repositories\Interfaces\IFormaAtendimentoRepository;
 use Fgtas\Repositories\Interfaces\IPublicoRepository;
@@ -46,8 +45,6 @@ class AtendimentoService
      */
     public function createAtendimento(array $data, int $userId): void
     {
-//        dd($data);
-
         $atendimento = Atendimento::make(
             $data['tipoAtendimento'],
             $data['descricao_tipo_atendimento'],

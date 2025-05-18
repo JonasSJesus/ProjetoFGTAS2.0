@@ -21,7 +21,12 @@ class AuthMiddleware implements MiddlewareInterface
     }
 
 
-    // checa se $_SESSION esta definido
+    /**
+     * Verifica se a Sessão existe e é válida
+     * @param Request $request
+     * @param RequestHandler $handler
+     * @return Response
+     */
     public function process(Request $request, RequestHandler $handler): Response
     {
         $session = $this->session;

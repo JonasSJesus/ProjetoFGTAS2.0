@@ -74,9 +74,9 @@ INSERT forma_atendimento (forma) VALUES ('Presencial'),
                                         ('Redes Sociais'),
                                         ('Teams');
 
-INSERT tipo_atendimento (tipo, descricao, informacoes) VALUES ('Presencial'),
-                                            ('Whatsapp'),
-                                            ('Ligação Telefônica'),
-                                            ('E-mail'),
-                                            ('Redes Sociais'),
-                                            ('Teams');
+INSERT tipo_atendimento (tipo, descricao, informacoes) VALUES (),
+                                                              (),
+                                                              (),
+                                                              (),
+                                                              (),
+                                                              ();

@@ -68,7 +68,6 @@ class ReportController
         $requestData = $request->getParsedBody();
         $atendimento = $this->atendimentoService->all();
 
-
         if (!array_key_exists('exp', $requestData)) {
             $this->flash->addMessage('error', 'Formato Inválido, por favor, escolha entre PDF ou CSV');
 

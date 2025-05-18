@@ -2,6 +2,8 @@
 
 namespace Fgtas\Services\Reports;
 
+use Fgtas\Entities\Atendimento;
+
 class CsvReportService
 {
     public function generate(array $atendimento): string
@@ -16,11 +18,23 @@ class CsvReportService
             'Descrição do Tipo de Atendimento',
             'Perfil Publico'
         ];
-
+        
         $output = fopen('php://output', 'w');
         fputcsv($output, $header);
+
+        /** @var Atendimento $row */
         foreach ($atendimento as $row) {
-            fputcsv($output, $row->toArray());
+            $toArray = [
+                "id" => $row->getId(),
+                "Forma de Atendimento" => $row->formaAtendimento->forma,
+                "Data de Registro" => $row->dataDeRegistro,
+                "Nome" => $row->usuario,
+                "Tipo de Atendimento" => $row->tipoAtendimento->tipo,
+                "Descrição do Tipo de Atendimento" => $row->tipoAtendimento->tipo,
+                "Perfil Publico" => $row->publico->perfilCliente
+            ];
+
+            fputcsv($output, $toArray);
         }
         fclose($output);
 
