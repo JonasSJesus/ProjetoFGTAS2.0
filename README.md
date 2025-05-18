@@ -47,18 +47,62 @@ Este sistema tem como objetivo facilitar o **registro e gerenciamento de atendim
 
 ## 🚀 Instalação e Execução
 
+### 1. Clonar o repositório
+
 ```bash
-# Clone o repositório
 git clone https://github.com/JonasSJesus/ProjetoFGTAS2.0.git
 
-# Acesse o diretório do projeto
-cd ProjetoFGTAS2.0
+# entre na pasta
+cd ProjetoFGTAS2.0-main
+```
 
-# Instale as dependências (excluindo as de desenvolvimento)
+### 2. Instalar as dependências
+
+```bash
+# Instala apenas as dependências de produção
 composer install --no-dev
+```
 
-# Execute o servidor na pasta raiz
+### 3. Configurar o ambiente
+
+```bash
+# Renomeie o arquivo de exemplo para ".env"
+cp .env.example .env
+```
+
+Edite o arquivo `.env` com as configurações do seu banco de dados:
+
+```env
+DB_HOST="SERVIDOR_MYSQL"
+DB_PORT="3306"
+DB_NAME="atendimentos"
+DB_USERNAME="SEU_USUARIO"
+DB_PASSWORD="SUA_SENHA"
+```
+
+### 4. Configurar o banco de dados
+
+O script de criação do banco está localizado em:
+
+```
+/config/database.sql
+```
+
+Importe esse arquivo no seu SGBD (por exemplo, via phpMyAdmin ou CLI do MySQL):
+
+```bash
+mysql -u seu_usuario -p atendimentos < config/database.sql
+```
+
+### 5. Iniciar o servidor
+
+```bash
+# Inicia o servidor PHP embutido na porta 8080
 composer start
+```
 
-# Acesse no navegador
+Acesse no navegador:
+
+```
 http://localhost:8080/home
+```

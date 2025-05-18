@@ -1,3 +1,5 @@
+-- Copie o codigo e cole no MySQL
+
 CREATE DATABASE atendimentos;
 
 USE atendimentos;
@@ -57,6 +59,7 @@ CREATE TABLE IF NOT EXISTS atendimento (
     FOREIGN KEY (publico_id) REFERENCES publico(id)
 );
 
+-- Copie ate aqui
 -- Dados importantes para cadastrar atendimentos ------------
 
 INSERT publico (perfil_cliente) VALUES ('Empregador'),
@@ -73,10 +76,3 @@ INSERT forma_atendimento (forma) VALUES ('Presencial'),
                                         ('E-mail'),
                                         ('Redes Sociais'),
                                         ('Teams');
-
-INSERT tipo_atendimento (tipo, descricao, informacoes) VALUES (),
-                                                              (),
-                                                              (),
-                                                              (),
-                                                              (),
-                                                              ();
