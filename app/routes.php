@@ -37,7 +37,7 @@ return function (App $app) {
         });
 
         $group->group('/home', function ($g) {
-            $g->get('', [AtendimentoController::class, 'formsAtendimentoPage']);
+            $g->get('', [AtendimentoController::class, 'formsAtendimentoPage'])->setName('atendimento.home');
             $g->post('', [AtendimentoController::class, 'store']);
         });
 

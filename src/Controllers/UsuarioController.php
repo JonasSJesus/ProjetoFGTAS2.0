@@ -48,7 +48,7 @@ class UsuarioController
     {
         dump($this->flash->getMessages()); // TODO: Printar os erros no template
 
-        return $this->twig->render($response, '/views/cadastrar_usuario.html.twig', [
+        return $this->twig->render($response, '/views/register.html.twig', [
             'validation' => $this->flash->getMessage('usuario-validate')[0],
             'userExists' => $this->flash->getMessage('usuario-exists')[0],
             'update' => $this->flash->getMessage('usuario-update')[0],

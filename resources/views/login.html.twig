@@ -1,66 +1,84 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt_br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/estilos/ds.css">
-    <link rel="stylesheet" href="/estilos/pg-login.css">
     <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 </head>
-<body class="h100">
 
+<body>
+    <div class="min-vh-100 d-flex align-items-center bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow">
+                        <div class="card-body p-4">
+                            <div class="text-center mb-4">
+                                <h2 class="card-title fw-bold">Atendimentos FGTAS</h2>
+                            </div>
 
-    {# Flash message, so aparece quando ocorrer algum erro #}
+                            {% if flashAuth %}
+                                <span style="color: #d1d5db">
+                                    {{ flashAuth }}
+                                </span>
+                            {% endif %}
 
+                            <form action="#" method="post">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">E-mail</label>
+                                    <input type="" class="form-control" id="email" name="email"
+                                        placeholder="exemplo@email.com">
+                                    
+                                    {% if flashValidate['email'] %}
+                                        <span class="alert alert-warning d-flex">{{ flashValidate['email'] }}</span>
+                                    {% endif %}
+                                </div>
 
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Senha</label>
+                                    <input type="password" class="form-control" id="senha" name="senha"
+                                        placeholder="Sua senha" >
+                                    
+                                    {% if flashValidate['senha'] %}
+                                    <span class="alert alert-warning d-flex">{{ flashValidate['senha'] }}</span>
+                                    {% endif %}
+                                    
+                                </div>
 
-    {#  Fim das flash messages  #}
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                                    <label class="form-check-label" for="remember">Lembre-me</label>
+                                </div>
 
-    <form class="formulario centralizado mt12-5" method="post">
-        <h1 class="formulario__titulo centralizado">Entrar</h1>
+                                <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+                            </form>
 
-        {% if flashAuth %}
-            <span style="color: #d1d5db">
-                {{ flashAuth }}
-            </span>
-        {% endif %}
+                            <hr class="my-4">
 
-        <br>
-        <fieldset class="formulario__campo w80 ">
-
-            {% if flashValidate['email'] %}
-                <span>{{ flashValidate['email'] }}</span>
-            {% endif %}
-
-            <section>
-                <label class="formulario__etiqueta" for="login">Login</label>
-                <div class="mv0-5">
-                    <input value="" type="text" id="login" name="email" class="formulario__entrada w90"
-                        minlength="5" maxlength="100">
+                            <div class="text-center">
+                                <p class="mb-0 text-muted small">
+                                    Ainda não possui conta?
+                                    <br>
+                                    <a href="#" class="text-decoration-none">Entre em contato com um admin e solicite acesso</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </section>
-
-            {% if flashValidate['senha'] %}
-                <span>{{ flashValidate['senha'] }}</span>
-            {% endif %}
-
-            <section>
-                <label class="formulario__etiqueta" for="senha">Senha</label>
-                <div class="mv0-5">
-                    <input value="" type="password" id="senha" name="senha" class="formulario__entrada w80"
-                         minlength="5" maxlength="20">
-                    <i class="fa-solid fa-eye icone centralizado mh1" id="olho"></i>
-                </div>
-            </section>
-
-        </fieldset>
-        <div class="centralizado mv0-5 grid100 w50">
-            <input type="submit" value="Logar" class="formulario__botao formulario__botao__padrao ">
+            </div>
         </div>
-    </form>
-    <script src="https://kit.fontawesome.com/df85906e6a.js" crossorigin="anonymous"></script>
-    <script src="/js/olho.js"></script>
+    </div>
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>
