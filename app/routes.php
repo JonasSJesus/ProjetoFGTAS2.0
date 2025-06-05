@@ -48,7 +48,7 @@ return function (App $app) {
 
         $group->group('/generate-report', function ($g) {
             $g->get('', [ReportController::class, 'reportPage'])->setName('report.page');
-            $g->post('', [ReportController::class, 'generateReport']);
+            $g->post('', [ReportController::class, 'generateReport'])->setName('report.generate');
         });
 
 //        $group->get('/relatorio', [AtendimentoController::class, 'relatorioPage']);

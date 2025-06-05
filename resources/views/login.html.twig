@@ -1,84 +1,98 @@
 <!DOCTYPE html>
-<html lang="pt_br">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login - FGTAS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+          integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" href="./styles/login.css">
 </head>
 
-<body>
-    <div class="min-vh-100 d-flex align-items-center bg-light">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6 col-lg-4">
-                    <div class="card shadow">
-                        <div class="card-body p-4">
-                            <div class="text-center mb-4">
-                                <h2 class="card-title fw-bold">Atendimentos FGTAS</h2>
-                            </div>
 
-                            {% if flashAuth %}
-                                <span style="color: #d1d5db">
+<body>
+
+<div class="min-vh-100 d-flex align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+
+                        <div class="text-center mb-4">
+                            <img src="./assets/logo.png" alt="FGTAS" class="logo-fgtas">
+                            <h2 id="intro">Faça seu login</h2>
+                            <p class="text-muted">Acesso restrito</p>
+                        </div>
+
+                        {% if flashAuth %}
+                            <span style="color: #d1d5db">
                                     {{ flashAuth }}
                                 </span>
-                            {% endif %}
+                        {% endif %}
 
-                            <form action="#" method="post">
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">E-mail</label>
-                                    <input type="" class="form-control" id="email" name="email"
-                                        placeholder="exemplo@email.com">
-                                    
-                                    {% if flashValidate['email'] %}
-                                        <span class="alert alert-warning d-flex">{{ flashValidate['email'] }}</span>
-                                    {% endif %}
-                                </div>
+                        <form id="loginForm" method="post">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">E-mail</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="seu@email.com"
+                                       autocomplete="email">
 
-                                <div class="mb-3">
-                                    <label for="password" class="form-label">Senha</label>
-                                    <input type="password" class="form-control" id="senha" name="senha"
-                                        placeholder="Sua senha" >
-                                    
-                                    {% if flashValidate['senha'] %}
-                                    <span class="alert alert-warning d-flex">{{ flashValidate['senha'] }}</span>
-                                    {% endif %}
-                                    
-                                </div>
-
-                                <div class="mb-3 form-check">
-                                    <input type="checkbox" class="form-check-input" id="remember" name="remember">
-                                    <label class="form-check-label" for="remember">Lembre-me</label>
-                                </div>
-
-                                <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
-                            </form>
-
-                            <hr class="my-4">
-
-                            <div class="text-center">
-                                <p class="mb-0 text-muted small">
-                                    Ainda não possui conta?
-                                    <br>
-                                    <a href="#" class="text-decoration-none">Entre em contato com um admin e solicite acesso</a>
-                                </p>
+                                {% if flashValidate['email'] %}
+                                    <span class="alert alert-warning d-flex">{{ flashValidate['email'] }}</span>
+                                {% endif %}
                             </div>
+
+                            <div class="mb-3">
+                                <label for="senha" class="form-label">Senha</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="senha" name="senha" placeholder="Sua senha"
+                                           autocomplete="current-password">
+                                    <button type="button"
+                                            class="btn-toggle-senha position-absolute top-50 end-0 translate-middle-y me-2" id="toggleSenha">
+                                        <i class="bi bi-eye" id="iconSenha"></i>
+                                    </button>
+
+                                    {% if flashValidate['senha'] %}
+                                        <span class="alert alert-warning d-flex">{{ flashValidate['senha'] }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                                <label class="form-check-label" for="remember">Lembre-me</label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                        </form>
+
+                        <div class="text-center mt-4">
+                            <small class="text-muted">
+                                Não possui conta?
+                                <a href="cadastro-usuario.html" class="link-fgtas">Solicite acesso</a>
+                            </small>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="https://fgtas.rs.gov.br/inicial" class="btn btn-primary">
+                                <i class="bi bi-arrow-left"></i> Voltar para a Página Inicial
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
         crossorigin="anonymous"></script>
+<script src="js/login.js"></script>
+
 </body>
 
 </html>
