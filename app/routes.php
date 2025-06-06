@@ -8,10 +8,11 @@ use Fgtas\Middlewares\AuthMiddleware;
 use Fgtas\Middlewares\PermissionMiddleware;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
+use Slim\Views\Twig;
 
 return function (App $app) {
-    // Redireciona a rota raiz para home para toda a aplicação
-    $app->redirect('/', '/home', 301);
+    // Redireciona a rota raiz para dashboard para toda a aplicação
+    $app->redirect('/', '/dashboard', 301);
 
     // Rotas publicas =========================================================
     $app->group('', function (Group $group){
@@ -21,7 +22,7 @@ return function (App $app) {
             $g->post('', [AuthController::class, 'login']);
         });
 
-        $group->get('/logout', [AuthController::class, 'logout']);
+        $group->get('/logout', [AuthController::class, 'logout'])->setName("logout");
 
     });
 
@@ -47,7 +48,6 @@ return function (App $app) {
         });
 
         $group->group('/generate-report', function ($g) {
-            $g->get('', [ReportController::class, 'reportPage'])->setName('report.page');
             $g->post('', [ReportController::class, 'generateReport'])->setName('report.generate');
         });
 
@@ -76,5 +76,13 @@ return function (App $app) {
         $group->get('/delete-user/{id}', [UsuarioController::class, 'destroy'])->setName('user.delete');
 
     })->add(PermissionMiddleware::class)->add(AuthMiddleware::class);
+
+
+
+    $app->get('/test-form', function ($request, $response) {
+        $view = Twig::fromRequest($request);
+
+        return $view->render($response, "formulario_de_testes.html.twig");
+    });
 
 };

@@ -38,7 +38,7 @@ class AtendimentoController
         $flashCreate = $this->flash->getMessage('atendimento-create');
         $flashDestroy = $this->flash->getMessage('atendimento-destroy');
 
-        return $this->twig->render($response, '/views/formulario_de_testes.html.twig', [
+        return $this->twig->render($response, '/views/formulario.html.twig', [
             'userName' => $userLogged,
             'validation' => $flashValidate[0],
             'create' => $flashCreate[0],
@@ -61,7 +61,7 @@ class AtendimentoController
     {
         $atendimentos = $this->atendimentoService->all();
 
-        return $this->twig->render($response, '/views/usuario.html.twig', [
+        return $this->twig->render($response, '/views/dashboard.html.twig', [
             'atendimentos' => $atendimentos
         ]);
     }
@@ -76,6 +76,7 @@ class AtendimentoController
     public function store(Request $request, Response $response): Response
     {
         $dataFromRequest = $request->getParsedBody();
+//        dd($dataFromRequest);
 
         $rules = [
             'identificacaoAtendente' => v::notEmpty(),

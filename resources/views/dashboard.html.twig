@@ -11,8 +11,8 @@
     <title>Atendimentos</title>
 </head>
 
-<body>
 
+<body>
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
@@ -28,7 +28,7 @@
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    <li><a class="dropdown-item" href="index.html"><i
+                    <li><a class="dropdown-item" href="{{ url_for('logout') }}"><i
                                     class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
                 </ul>
             </div>
@@ -43,23 +43,30 @@
             <div class="p-3">
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item mb-2">
-                        <a class="nav-link active" href="user-dashboard.html"><i class="bi bi-speedometer"></i>
-                            Dashboard</a>
+                        <a class="nav-link active" href="{{ url_for('dashboard.user') }}">
+                            <i class="bi bi-speedometer"></i>Dashboard
+                        </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a class="nav-link" href="service-form.html"><i
-                                    class="bi bi-plus-circle me-2"></i>Adicionar Atendimento</a>
+                        <a class="nav-link" href="{{ url_for('atendimento.home') }}">
+                            <i class="bi bi-plus-circle me-2"></i>Adicionar Atendimento
+                        </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a class="nav-link" href="user-dashboard.html"><i
-                                    class="bi bi-gear me-2"></i>Atendimentos</a>
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-gear me-2"></i>Atendimentos
+                        </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a class="nav-link" href="#"><i class="bi bi-person-fill-lock"></i> Admin</a>
+                        <a class="nav-link" href="{{ url_for('dashboard.admin') }}">
+                            <i class="bi bi-person-fill-lock"></i> Admin
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
+
+
 
         <!-- Conteudo principal -->
         <div class="col-md-9 col-lg-10">
@@ -77,12 +84,14 @@
 
                 <!-- Tabela de Atendimentos -->
                 <div class="card shadow-sm">
+
                     <div class="card-header bg-white">
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="p-2 mb-0">Atendimentos cadastrados</h5>
                             <h6 class="p-2 mb-0">2 Atendimentos cadastrados</h6>
                         </div>
                     </div>
+
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-hover">
@@ -147,7 +156,8 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Cancelar</button>
+                                                                data-bs-dismiss="modal">Cancelar
+                                                        </button>
                                                         <a href="{{ url_for('atendimento.delete', { id: atendimento.getId() }) }}"
                                                            class="btn btn-danger">Excluir</a>
                                                     </div>
@@ -156,14 +166,14 @@
                                         </div>
                                     {% endfor %}
                                 {% else %}
-                                <tr>
-                                    <td colspan="11" class="text-center py-4">
-                                        <div class="text-muted">
-                                            <i class="bi bi-people fs-1 d-block mb-2"></i>
-                                            Nenhum atendimento registrado
-                                        </div>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td colspan="11" class="text-center py-4">
+                                            <div class="text-muted">
+                                                <i class="bi bi-people fs-1 d-block mb-2"></i>
+                                                Nenhum atendimento registrado
+                                            </div>
+                                        </td>
+                                    </tr>
                                 {% endif %}
 
                                 </tbody>
@@ -171,14 +181,17 @@
 
                         </div>
                     </div>
+
                     <div class="card-footer">
                         <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal">
                             Gerar Relatório
                         </button>
 
                         <!-- Modal -->
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
                             <div class="modal-dialog modal-lg modal-dialog-scrollable">
                                 <div class="modal-content">
                                     <div class="modal-header bg-primary text-white">
@@ -186,11 +199,18 @@
                                             <i class="bi bi-file-earmark-text me-2"></i>
                                             Opções de Relatório
                                         </h1>
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
                                     </div>
 
                                     <div class="modal-body">
                                         <!-- Alert de Erro -->
+                                        {% if error %}
+                                            <ul class="centralizado" style="color: #d1d5db;">
+                                                <li>{{ error }}</li>
+                                            </ul>
+                                        {% endif %}
+
                                         <div id="errorAlert" class="alert alert-danger d-none" role="alert">
                                             <i class="bi bi-exclamation-triangle me-2"></i>
                                             <span id="errorMessage"></span>
@@ -202,7 +222,8 @@
                                             Relatório gerado com sucesso!
                                         </div>
 
-                                        <form id="reportForm" method="post" action="{{ url_for('report.generate') }}" class="needs-validation" novalidate>
+                                        <form id="reportForm" method="post" action="{{ url_for('report.generate') }}"
+                                              class="needs-validation" novalidate>
                                             <!-- Seção: Tipo de Exportação -->
                                             <div class="card mb-4">
                                                 <div class="card-header bg-light">
@@ -215,7 +236,8 @@
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" value="pdf" type="radio" id="pdf" name="exp" checked>
+                                                                <input class="form-check-input" value="pdf" type="radio"
+                                                                       id="pdf" name="exp" >
                                                                 <label class="form-check-label" for="pdf">
                                                                     <i class="bi bi-file-pdf text-danger me-1"></i>
                                                                     PDF
@@ -224,7 +246,8 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" value="csv" type="radio" id="csv" name="exp">
+                                                                <input class="form-check-input" value="csv" type="radio"
+                                                                       id="csv" name="exp">
                                                                 <label class="form-check-label" for="csv">
                                                                     <i class="bi bi-file-spreadsheet text-success me-1"></i>
                                                                     CSV
@@ -246,11 +269,13 @@
                                                 <div class="card-body">
                                                     <div class="row mb-3">
                                                         <div class="col-md-6">
-                                                            <label for="formaAtendimento" class="form-label fw-semibold">
+                                                            <label for="formaAtendimento"
+                                                                   class="form-label fw-semibold">
                                                                 <i class="bi bi-person-workspace me-1"></i>
                                                                 Forma de Atendimento:
                                                             </label>
-                                                            <select name="formaAtendimento" id="formaAtendimento" class="form-select">
+                                                            <select name="formaAtendimento" id="formaAtendimento"
+                                                                    class="form-select">
                                                                 <option value="default">Sem Filtro</option>
                                                                 <option value="presencial">Presencial</option>
                                                                 <option value="whatsapp">Whatsapp</option>
@@ -274,7 +299,9 @@
                                                                 <option value="out_agen">Outras agências</option>
                                                                 <option value="ads">ADS</option>
                                                                 <option value="setores">Setores da FGTAS</option>
-                                                                <option value="mercado_trabalho">Interessado de informações sobre o Mercado de Trabalho</option>
+                                                                <option value="mercado_trabalho">Interessado de
+                                                                    informações sobre o Mercado de Trabalho
+                                                                </option>
                                                                 <option value="outro">Outro</option>
                                                             </select>
                                                         </div>
@@ -285,14 +312,24 @@
                                                             <i class="bi bi-gear me-1"></i>
                                                             Tipo de Atendimento:
                                                         </label>
-                                                        <select class="form-select" name="tipoAtendimento" id="tipoAtendimento">
+                                                        <select class="form-select" name="tipoAtendimento"
+                                                                id="tipoAtendimento">
                                                             <option value="default">Sem Filtro</option>
-                                                            <option value="trabalho">Carteira de Trabalho, SD, Vagas</option>
-                                                            <option value="pg_artesanato">Programa Gaúcho do Artesanato</option>
+                                                            <option value="trabalho">Carteira de Trabalho, SD, Vagas
+                                                            </option>
+                                                            <option value="pg_artesanato">Programa Gaúcho do
+                                                                Artesanato
+                                                            </option>
                                                             <option value="vida_centro">Vida Centro Humanístico</option>
-                                                            <option value="empreendedorismo">Orientações sobre empreendedorismo</option>
-                                                            <option value="qualificacao">Orientações sobre cursos de qualificação</option>
-                                                            <option value="mercado_trabalho_info">Informações sobre mercado de trabalho</option>
+                                                            <option value="empreendedorismo">Orientações sobre
+                                                                empreendedorismo
+                                                            </option>
+                                                            <option value="qualificacao">Orientações sobre cursos de
+                                                                qualificação
+                                                            </option>
+                                                            <option value="mercado_trabalho_info">Informações sobre
+                                                                mercado de trabalho
+                                                            </option>
                                                             <option value="outro">Outro</option>
                                                         </select>
                                                     </div>
@@ -314,7 +351,8 @@
                                                                 <i class="bi bi-calendar-event me-1"></i>
                                                                 Data inicial
                                                             </label>
-                                                            <input class="form-control" type="datetime-local" name="dataInicial" id="dataInicial" required>
+                                                            <input class="form-control" type="datetime-local"
+                                                                   name="dataInicial" id="dataInicial" required>
                                                             <div class="invalid-feedback">
                                                                 Por favor, selecione a data inicial.
                                                             </div>
@@ -325,7 +363,8 @@
                                                                 <i class="bi bi-calendar-check me-1"></i>
                                                                 Data final
                                                             </label>
-                                                            <input class="form-control" type="datetime-local" name="dataFim" id="dataFim" required>
+                                                            <input class="form-control" type="datetime-local"
+                                                                   name="dataFim" id="dataFim" required>
                                                             <div class="invalid-feedback">
                                                                 Por favor, selecione a data final.
                                                             </div>
@@ -342,7 +381,8 @@
                                             </div>
 
                                             <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                                                <button type="button" class="btn btn-outline-secondary me-md-2" data-bs-dismiss="modal">
+                                                <button type="button" class="btn btn-outline-secondary me-md-2"
+                                                        data-bs-dismiss="modal">
                                                     <i class="bi bi-x-circle me-1"></i>
                                                     Cancelar
                                                 </button>
@@ -363,6 +403,7 @@
 
             </div>
         </div>
+
     </div>
 </div>
 
