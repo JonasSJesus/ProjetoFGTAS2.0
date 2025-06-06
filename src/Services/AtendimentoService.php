@@ -52,7 +52,7 @@ class AtendimentoService
             $data['perfilPublico'],
             );
 
-        if (in_array($data['perfilPublico'], ['empregador', 'trabalhador'])){
+        if (in_array($data['perfilPublico'], ['Empregador', 'Trabalhador'])){
             $atendimento->publico->setExtraFields(
                 $data['nomePublico'],
                 $data['documentoPublico'],
@@ -64,6 +64,11 @@ class AtendimentoService
             $this->conn->beginTransaction();
 
             $idPublico = $this->publicoRepository->findIdByName($atendimento->publico->perfilCliente);
+
+            if ($atendimento->publico->haveExtraFields()) {
+                $this->publicoRepository->insertExtraFields($atendimento->publico, $idPublico);
+            }
+
             $idFormaAtend = $this->formaRepository->findIdByName($atendimento->formaAtendimento->forma);
             $idTipoAtend = $this->tipoRepository->add($atendimento->tipoAtendimento);
 

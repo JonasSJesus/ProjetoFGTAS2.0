@@ -51,7 +51,7 @@ class PublicoRepository implements IPublicoRepository
     /**
      * @throws Exception|DBALException
      */
-    private function insertExtraFields(Publico $publico, int $publicoId): void
+    public function insertExtraFields(Publico $publico, int $publicoId): void
     {
         $queryBuilder = $this->conn->createQueryBuilder();
 

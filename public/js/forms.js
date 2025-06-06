@@ -40,15 +40,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const campos = [
         {
             id: 'nomeAtendido',
-            name: 'nome_atendido'
+            name: 'nomePublico'
         },
         {
             id: 'contatoAtendido',
-            name: 'contato_atendido'
+            name: 'contatoPublico'
         },
         {
             id: 'documentoAtendido',
-            name: 'documento_atendido'
+            name: 'documentoPublico'
         }
     ];
 

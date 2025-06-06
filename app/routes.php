@@ -33,7 +33,7 @@ return function (App $app) {
     $app->group('', function (Group $group) {
 
         $group->group('/update-user/{id}', function ($g) {
-            $g->get('', [UsuarioController::class, 'updatePage'])->setName('user.update.form');
+            $g->get('', [UsuarioController::class, 'updatePage'])->setName('user.update');
             $g->post('', [UsuarioController::class, 'update'])->setName('user.update.submit');
         });
 

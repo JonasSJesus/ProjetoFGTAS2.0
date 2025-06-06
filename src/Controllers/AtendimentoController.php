@@ -62,7 +62,8 @@ class AtendimentoController
         $atendimentos = $this->atendimentoService->all();
 
         return $this->twig->render($response, '/views/dashboard.html.twig', [
-            'atendimentos' => $atendimentos
+            'atendimentos' => $atendimentos,
+            'count' => count($atendimentos)
         ]);
     }
 
@@ -76,7 +77,6 @@ class AtendimentoController
     public function store(Request $request, Response $response): Response
     {
         $dataFromRequest = $request->getParsedBody();
-//        dd($dataFromRequest);
 
         $rules = [
             'identificacaoAtendente' => v::notEmpty(),
@@ -85,10 +85,10 @@ class AtendimentoController
             'tipoAtendimento' => v::notEmpty(),
         ];
 
-        if (in_array($dataFromRequest['perfilPublico'], ['empregador', 'trabalhador'])) {
+        if (in_array($dataFromRequest['perfilPublico'], ['Empregador', 'Trabalhador'])) {
             $rules['nomePublico'] = v::notEmpty();
             $rules['contatoPublico'] = v::notEmpty()->email();
-            $rules['documentoPublico'] = $dataFromRequest['perfilPublico'] === 'empregador' ? v::cnpj() : v::cpf();
+            $rules['documentoPublico'] = $dataFromRequest['perfilPublico'] === 'Empregador' ? v::cnpj() : v::cpf();
         }
 
         $this->validator->validate($dataFromRequest, $rules);
@@ -100,6 +100,7 @@ class AtendimentoController
                 ->withStatus(302)
                 ->withHeader('Location', '/home');
         }
+
 
         try {
             $this->atendimentoService->createAtendimento($dataFromRequest, $_SESSION['user']['id']);

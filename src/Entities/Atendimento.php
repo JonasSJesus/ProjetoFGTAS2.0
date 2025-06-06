@@ -68,7 +68,7 @@ class Atendimento
         $formaAtendimento = new FormaAtendimento($data['forma']);
         $publico = new Publico($data['perfil_cliente']);
 
-        if (in_array($data['perfil_cliente'], ['empregador', 'trabalhador'])){
+        if (in_array($data['perfil_cliente'], ['Empregador', 'Trabalhador'])){
             $publico->setExtraFields(
                 $data['nome_publico'],
                 $data['contato'],
