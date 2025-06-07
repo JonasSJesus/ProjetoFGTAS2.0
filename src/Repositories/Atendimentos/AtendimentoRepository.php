@@ -24,7 +24,7 @@ class AtendimentoRepository implements IAtendimentoRepository
         $queryBuilder = $this->conn->createQueryBuilder();
 
         $queryBuilder
-            ->insert('atendimentos')
+            ->insert('atendimento')
             ->values([
                 'tipo_atendimento_id' => ':tipo_id',
                 'usuario_id' => ':usuario_id',
