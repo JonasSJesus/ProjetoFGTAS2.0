@@ -47,12 +47,14 @@ class AtendimentoController
     }
 
 
-    public function updateAtendimentoPage(Request $request, Response $response): Response
+    public function updateAtendimentoPage(Request $request, Response $response, array $args): Response
     {
         $userLoggedIn = $_SESSION['user'];
+        $atendimento = $this->atendimentoService->get($args['id']);
 
         return $this->twig->render($response, '/views/editar_atendimento.html.twig', [
-            'userName' => $userLoggedIn
+            'userName' => $userLoggedIn,
+            'atendimento' => $atendimento
         ]);
     }
 
@@ -76,31 +78,15 @@ class AtendimentoController
      */
     public function store(Request $request, Response $response): Response
     {
-        $dataFromRequest = $request->getParsedBody();
+        $dataFromRequest = $this->validateForms($request, $response);
 
-        $rules = [
-            'identificacaoAtendente' => v::notEmpty(),
-            'formaAtendimento' => v::notEmpty(),
-            'perfilPublico' => v::notEmpty(),
-            'tipoAtendimento' => v::notEmpty(),
-        ];
-
-        if (in_array($dataFromRequest['perfilPublico'], ['Empregador', 'Trabalhador'])) {
-            $rules['nomePublico'] = v::notEmpty();
-            $rules['contatoPublico'] = v::notEmpty()->email();
-            $rules['documentoPublico'] = $dataFromRequest['perfilPublico'] === 'Empregador' ? v::cnpj() : v::cpf();
-        }
-
-        $this->validator->validate($dataFromRequest, $rules);
-
-        if ($this->validator->failed()) {
+        if (!$dataFromRequest) {
             $this->flash->addMessage('atendimento-validate', $this->validator->getErrors());
 
             return $response
                 ->withStatus(302)
                 ->withHeader('Location', '/home');
         }
-
 
         try {
             $this->atendimentoService->createAtendimento($dataFromRequest, $_SESSION['user']['id']);
@@ -115,6 +101,29 @@ class AtendimentoController
         return $response
             ->withStatus(302)
             ->withHeader('Location', '/home');
+    }
+
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     * @return Response
+     */
+    public function update(Request $request, Response $response, array $args): Response
+    {
+        $dataFromRequest = $this->validateForms($request, $response);
+
+        if (!$dataFromRequest) {
+            $this->flash->addMessage('atendimento-validate', $this->validator->getErrors());
+
+            return $response
+                ->withStatus(302)
+                ->withHeader('Location', '/home');
+        }
+
+
+        return $response;
     }
 
 
@@ -141,5 +150,32 @@ class AtendimentoController
                 ->withStatus(302)
                 ->withHeader('Location', '/dashboard');
         }
+    }
+
+
+    private function validateForms(Request $request, Response $response): array|bool
+    {
+        $dataFromRequest = $request->getParsedBody();
+
+        $rules = [
+            'identificacaoAtendente' => v::notEmpty(),
+            'formaAtendimento' => v::notEmpty(),
+            'perfilPublico' => v::notEmpty(),
+            'tipoAtendimento' => v::notEmpty(),
+        ];
+
+        if (in_array($dataFromRequest['perfilPublico'], ['Empregador', 'Trabalhador'])) {
+            $rules['nomePublico'] = v::notEmpty();
+            $rules['contatoPublico'] = v::notEmpty()->email();
+            $rules['documentoPublico'] = $dataFromRequest['perfilPublico'] === 'Empregador' ? v::cnpj() : v::cpf();
+        }
+
+        $this->validator->validate($dataFromRequest, $rules);
+
+        if ($this->validator->failed()) {
+            return false;
+        }
+
+        return $dataFromRequest;
     }
 }

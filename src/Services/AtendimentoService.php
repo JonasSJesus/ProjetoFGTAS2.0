@@ -88,6 +88,11 @@ class AtendimentoService
         return $this->atendimentoRepository->findAll();
     }
 
+    public function get(int $id): Atendimento
+    {
+        return $this->atendimentoRepository->findById($id);
+    }
+
 
     public function delete(int $id): void
     {

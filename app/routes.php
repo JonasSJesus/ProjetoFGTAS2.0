@@ -14,7 +14,15 @@ return function (App $app) {
     // Redireciona a rota raiz para dashboard para toda a aplicação
     $app->redirect('/', '/dashboard', 301);
 
-    // Rotas publicas =========================================================
+
+    /**
+     * ============================================================================+
+     *                                                                             |
+     * Rotas Publicas                                                              |
+     *                                                                             |
+     * ============================================================================+
+     */
+
     $app->group('', function (Group $group){
 
         $group->group('/login', function ($g){
@@ -28,8 +36,13 @@ return function (App $app) {
 
 
     /**
-     * Rotas protegidas ========================================================
+     * ============================================================================+
+     *                                                                             |
+     * Rotas Protegias                                                             |
+     *                                                                             |
+     * ============================================================================+
      */
+
     $app->group('', function (Group $group) {
 
         $group->group('/update-user/{id}', function ($g) {
@@ -58,7 +71,14 @@ return function (App $app) {
     })->add(AuthMiddleware::class);
 
 
-    // Rotas de acesso exclusivo de Usuarios Administradores ==================
+
+    /**
+     * ============================================================================+
+     *                                                                             |
+     * Rotas de acesso exclusivo de Usuarios Administradores                       |
+     *                                                                             |
+     * ============================================================================+
+     */
 
     $app->group('', function (Group $group) {
 

@@ -77,12 +77,17 @@ class UsuarioService
             throw new UserNotFoundException();
         }
 
-//        $passwordHashed = $this->hashPWD($data['password']);
         $user = new Usuario(
             $data['nomeUsuario'],
             $data['emailUsuario'],
             $data['cargoUsuario']
         );
+
+        if (!empty($data['senhaUsuario'])) {
+            $passwordHashed = $this->hashPWD($data['senhaUsuario']);
+
+            $this->repository->updatePWD($id, $passwordHashed);
+        }
 
         $this->repository->update($user, $id);
 

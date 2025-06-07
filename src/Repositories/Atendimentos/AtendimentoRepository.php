@@ -24,7 +24,7 @@ class AtendimentoRepository implements IAtendimentoRepository
         $queryBuilder = $this->conn->createQueryBuilder();
 
         $queryBuilder
-            ->insert('atendimento')
+            ->insert('atendimentos')
             ->values([
                 'tipo_atendimento_id' => ':tipo_id',
                 'usuario_id' => ':usuario_id',
@@ -78,12 +78,42 @@ class AtendimentoRepository implements IAtendimentoRepository
 
     public function findById(int $id): ?Atendimento
     {
-        // TODO: Implement findById() method.
+        $queryBuilder = $this->conn->createQueryBuilder();
+
+        $resultSet = $queryBuilder
+            ->select(
+                'a.id',
+                'a.data_de_registro',
+                'fa.forma',
+                'ta.tipo',
+                'ta.descricao',
+                'u.nome AS nome_atendente',
+                'p.perfil_cliente',
+                'i.nome AS nome_publico',
+                'i.contato',
+                'i.documento',
+            )
+            ->from('atendimento', 'a')
+            ->innerJoin('a', 'forma_atendimento', 'fa', 'a.forma_atendimento_id = fa.id')
+            ->innerJoin('a', 'tipo_atendimento', 'ta', 'a.tipo_atendimento_id = ta.id')
+            ->innerJoin('a', 'usuario', 'u', 'a.usuario_id = u.id')
+            ->innerJoin('a', 'publico', 'p', 'a.publico_id = p.id')
+            ->leftJoin('a', 'informacoes_pessoais', 'i', 'p.id = i.publico_id')
+            ->where("a.id = :atendimento_id")
+            ->setParameter("atendimento_id", $id)
+            ->executeQuery();
+        $data = $resultSet->fetchAssociative();
+
+        if (!$data) {
+            return null;
+        }
+
+        return Atendimento::fromArray($data);
     }
 
     public function update(Atendimento $atendimento, int $id): bool
     {
-        // TODO: Implement update() method.
+        return false;
     }
 
     public function delete(int $id): bool
