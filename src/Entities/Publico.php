@@ -2,8 +2,6 @@
 
 namespace Fgtas\Entities;
 
-use Exception;
-
 class Publico
 {
     private int $id;

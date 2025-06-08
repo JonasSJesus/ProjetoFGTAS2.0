@@ -79,6 +79,38 @@
                     </div>
                 </div>
 
+                <!-- Flash Messages -->
+                {% if validation %}
+                    {% for msg in validation %}
+                        <div class="alert alert-warning">{{ msg }}</div>
+                    {% endfor %}
+                {% endif %}
+
+                {% if updateSuccess %}
+                    <div class="alert alert-success">{{ updateSuccess }} voltar para o <a href="{{ url_for('dashboard.user') }}">dashboard</a>?</div>
+                {% endif %}
+
+                {% if updateError %}
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Erro</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="alert alert-danger">
+                                        {{ updateError }}
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
                 <!-- Card com forms -->
                 <div class="card">
                     <!-- Card header -->
@@ -94,6 +126,13 @@
                             <div class="col-md-4">
                                 <label for="atendenteNome" class="form-label">Nome</label>
                                 <input type="text" class="form-control" id="atendenteNome" name="identificacaoAtendente" value="{{ atendimento.usuario }}" required readonly>
+                                <div class="valid-feedback">Parece bom!</div>
+                            </div>
+
+                            <!-- Id do atendimento (readonly) -->
+                            <div class="col-md-2">
+                                <label for="idAtendimento" class="form-label">ID</label>
+                                <input type="text" class="form-control" id="idAtendimento" value="{{ atendimento.getId() }}" required readonly>
                                 <div class="valid-feedback">Parece bom!</div>
                             </div>
 
@@ -131,21 +170,22 @@
                                 <div class="invalid-feedback">Por favor, selecione uma opção válida!</div>
                             </div>
 
+                            <!-- Informacao adicional de publico -->
                             <div class="col-md-3">
                                 <label for="nomeAtendido" class="form-label">Nome do atendido</label>
-                                <input type="text" class="form-control" id="nomeAtendido" placeholder="Nome" required disabled>
+                                <input type="text" class="form-control" id="nomeAtendido" placeholder="Nome" name="nomePublico" value="{{ atendimento.publico.getExtraFields().nome }}" {{ (atendimento.publico.getExtraFields().nome) ? '' : 'disabled' }} required>
                                 <div class="invalid-feedback">Por favor, insira um valor válido.</div>
                             </div>
 
                             <div class="col-md-3">
                                 <label for="contatoAtendido" class="form-label">Contato</label>
-                                <input type="text" class="form-control" id="contatoAtendido" placeholder="Telefone ou E-mail" required disabled>
+                                <input type="text" class="form-control" id="contatoAtendido" placeholder="Telefone ou E-mail" name="contatoPublico" value="{{ atendimento.publico.getExtraFields().contato }}" {{ (atendimento.publico.getExtraFields().contato) ? '' : 'disabled' }} required>
                                 <div class="invalid-feedback">Por favor, insira um valor válido.</div>
                             </div>
 
                             <div class="col-md-3">
                                 <label for="documentoAtendido" class="form-label">Documento</label>
-                                <input type="text" class="form-control" id="documentoAtendido" placeholder="CPF ou CNPJ" required disabled>
+                                <input type="text" class="form-control" id="documentoAtendido" placeholder="CPF ou CNPJ" name="documentoPublico" value="{{ atendimento.publico.getExtraFields().documento }}" {{ (atendimento.publico.getExtraFields().documento) ? '' : 'disabled' }} required>
                                 <div class="invalid-feedback">Por favor, insira um valor válido.</div>
                             </div>
 
@@ -201,6 +241,13 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
         crossorigin="anonymous"></script>
+
+<script>
+    var myModal = new bootstrap.Modal(document.getElementById("exampleModal"), {});
+    document.onreadystatechange = function () {
+        myModal.show();
+    };
+</script>
 
 <script>
     (() => {

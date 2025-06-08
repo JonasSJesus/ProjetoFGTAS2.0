@@ -41,9 +41,9 @@ class PublicoRepository implements IPublicoRepository
         $id = $this->conn->lastInsertId();
         //$publico->setId(intval($id));
 
-        if ($publico->haveExtraFields()) {
-            $this->insertExtraFields($publico, $id);
-        }
+//        if ($publico->haveExtraFields()) {
+//            $this->insertExtraFields($publico, $id);
+//        }
 
         return $id;
     }
@@ -51,12 +51,12 @@ class PublicoRepository implements IPublicoRepository
     /**
      * @throws Exception|DBALException
      */
-    public function insertExtraFields(Publico $publico, int $publicoId): void
+    public function insertExtraFields(Publico $publico, int $publicoId): bool
     {
         $queryBuilder = $this->conn->createQueryBuilder();
 
         if (!$publico->haveExtraFields()) {
-            return;
+            return false;
         }
 
         $queryBuilder
@@ -75,7 +75,52 @@ class PublicoRepository implements IPublicoRepository
             ]);
 
 
-        $queryBuilder->executeStatement();
+        return $queryBuilder->executeStatement();
+    }
+
+    public function updateExtraFields(Publico $publico, int $id): bool
+    {
+        $queryBuilder = $this->conn->createQueryBuilder();
+
+        if (!$publico->haveExtraFields()) {
+            return false;
+        }
+
+        $queryBuilder
+            ->update('informacoes_pessoais')
+            ->set('nome', ':nome')
+            ->set('contato', ':contato')
+            ->set('documento', ':documento')
+            ->where('documento = :documento')
+            ->setParameters([
+                'nome' => $publico->getExtraFields()->nome,
+                'contato' => $publico->getExtraFields()->contato,
+                'documento' => $publico->getExtraFields()->documento,
+                'publico_id' => $id
+            ]);
+
+
+        return $queryBuilder->executeStatement();
+    }
+
+    public function findIdByDocumento(string $documento): int|false
+    {
+        $queryBuilder = $this->conn->createQueryBuilder();
+
+        $resultSet = $queryBuilder
+            ->select('id')
+            ->from('informacoes_pessoais')
+            ->where('documento = :documento')
+            ->setParameter('documento', $documento)
+            ->executeQuery();
+
+        $data = $resultSet->fetchAssociative();
+
+        if (empty($data)) {
+            return false;
+        }
+
+        return $data['id'];
     }
 
     /**
@@ -147,7 +192,7 @@ class PublicoRepository implements IPublicoRepository
 
     }
 
-    public function update(Publico $publico, int $id): bool
+    public function update(Publico $publico, int $id): int
     {
         $queryBuilder = $this->conn->createQueryBuilder();
 
@@ -158,9 +203,10 @@ class PublicoRepository implements IPublicoRepository
             ->setParameters([
                 'perfil_cliente' => $publico->perfilCliente,
                 'id' => $id
-            ]);
+            ])
+            ->executeStatement();
 
-        return $queryBuilder->executeStatement();
+        return $id;
     }
 
     public function delete(int $id): bool

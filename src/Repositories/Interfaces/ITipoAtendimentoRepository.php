@@ -14,7 +14,7 @@ interface ITipoAtendimentoRepository
 
     public function findById(int $id): ?TipoAtendimento;
 
-    public function update(TipoAtendimento $tipoAtend, int $id): bool;
+    public function update(TipoAtendimento $tipoAtend, int $id): int;
 
     public function delete(int $id): bool;
 }

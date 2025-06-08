@@ -3,7 +3,7 @@
 namespace Fgtas\Services;
 
 use Doctrine\DBAL\Connection as DBALConnection;
-use Doctrine\DBAL\Exception as DBALExcetpion;
+use Doctrine\DBAL\Exception as DBALException;
 use Fgtas\Database\Connection;
 use Fgtas\Entities\Atendimento;
 use Fgtas\Exceptions\DatabaseException;
@@ -63,20 +63,82 @@ class AtendimentoService
         try {
             $this->conn->beginTransaction();
 
-            $idPublico = $this->publicoRepository->findIdByName($atendimento->publico->perfilCliente);
-
-            if ($atendimento->publico->haveExtraFields()) {
-                $this->publicoRepository->insertExtraFields($atendimento->publico, $idPublico);
-            }
+//            $idPublico = $this->publicoRepository->findIdByName($atendimento->publico->perfilCliente);
 
             $idFormaAtend = $this->formaRepository->findIdByName($atendimento->formaAtendimento->forma);
+            $idPublico = $this->publicoRepository->add($atendimento->publico);
+
+            if ($atendimento->publico->haveExtraFields()) {
+                $personalInfoId = $this->publicoRepository->findIdByDocumento($atendimento->publico->getExtraFields()->documento);
+
+                if (!$personalInfoId) {
+                    $this->publicoRepository->insertExtraFields($atendimento->publico, $idPublico);
+                } else {
+                    $this->publicoRepository->updateExtraFields($atendimento->publico, $personalInfoId);
+                }
+            }
+
             $idTipoAtend = $this->tipoRepository->add($atendimento->tipoAtendimento);
 
             $this->atendimentoRepository->add($idTipoAtend, $userId, $idPublico, $idFormaAtend);
 
             $this->conn->commit();
-        } catch (DBALExcetpion $e) {
+        } catch (DBALException $e) {
             $this->conn->rollBack();
+            throw new DatabaseException();
+        }
+    }
+
+    public function updateAtendimento(array $data, int $id): void
+    {
+        $atendimento = Atendimento::make(
+            $data['tipoAtendimento'],
+            $data['descricao_tipo_atendimento'],
+            $data['formaAtendimento'],
+            $data['perfilPublico'],
+            $data['idAtendente']
+        );
+
+        $atendimento->setId($id);
+
+        if (in_array($data['perfilPublico'], ['Empregador', 'Trabalhador'])){
+            $atendimento->publico->setExtraFields(
+                $data['nomePublico'],
+                $data['documentoPublico'],
+                $data['contatoPublico']
+            );
+        }
+
+        try {
+            $this->conn->beginTransaction();
+
+            $idAtendimento = $this->atendimentoRepository->findForeignKeys($atendimento->getId());
+
+            $idTipoAtend = $this->tipoRepository->update($atendimento->tipoAtendimento, $idAtendimento['tipo_atendimento_id']);
+            $idFormaAtend = $this->formaRepository->findIdByName($atendimento->formaAtendimento->forma);
+            $idPublico = $this->publicoRepository->update($atendimento->publico, $idAtendimento['publico_id']);
+
+            if ($atendimento->publico->haveExtraFields()) {
+                $personalInfoId = $this->publicoRepository->findIdByDocumento($atendimento->publico->getExtraFields()->documento);
+
+                if (!$personalInfoId) {
+                    $this->publicoRepository->insertExtraFields($atendimento->publico, $idPublico);
+                } else {
+                    $this->publicoRepository->updateExtraFields($atendimento->publico, $personalInfoId);
+                }
+            }
+
+            $this->atendimentoRepository->update(
+                $idTipoAtend,
+                $idPublico,
+                $idFormaAtend,
+                $atendimento->getId()
+            );
+
+            $this->conn->commit();
+        } catch (DBALException $e) {
+            $this->conn->rollBack();
+
             throw new DatabaseException();
         }
     }

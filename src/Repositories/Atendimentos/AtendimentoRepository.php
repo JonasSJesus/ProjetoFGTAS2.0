@@ -111,9 +111,41 @@ class AtendimentoRepository implements IAtendimentoRepository
         return Atendimento::fromArray($data);
     }
 
-    public function update(Atendimento $atendimento, int $id): bool
+    public function findForeignKeys(int $id): array|null
     {
-        return false;
+        $queryBuilder = $this->conn->createQueryBuilder();
+
+        $resultSet = $queryBuilder
+            ->select("*")
+            ->from('atendimento')
+            ->where("id = :atendimento_id")
+            ->setParameter("atendimento_id", $id)
+            ->executeQuery();
+        $data = $resultSet->fetchAssociative();
+
+        if (!$data) {
+            return null;
+        }
+
+        return $data;
+    }
+
+    public function update(int $idTipo, int $idPublico, int $idForma, int $idAtendimento): bool
+    {
+        $queryBuilder = $this->conn->createQueryBuilder();
+
+        $queryBuilder
+            ->update('atendimento')
+            ->set('publico_id', ':publico_id')
+            ->set('forma_atendimento_id', ':forma_atendimento_id')
+            ->where('id = :id')
+            ->setParameters([
+                'publico_id' => $idPublico,
+                'forma_atendimento_id' => $idForma,
+                'id' => $idAtendimento
+            ]);
+
+        return $queryBuilder->executeStatement();
     }
 
     public function delete(int $id): bool
@@ -127,6 +159,11 @@ class AtendimentoRepository implements IAtendimentoRepository
 
         return $queryBuilder->executeStatement();
     }
+
+
+
+
+
 
     private function hydrateAtendimentos(array $data): Atendimento
     {

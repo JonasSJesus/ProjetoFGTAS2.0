@@ -82,20 +82,23 @@ class TipoAtendimentoRepository implements ITipoAtendimentoRepository
         return TipoAtendimento::fromArray($data);
     }
 
-    public function update(TipoAtendimento $tipoAtend, int $id): bool
+    public function update(TipoAtendimento $tipoAtend, int $id): int
     {
         $queryBuilder = $this->conn->createQueryBuilder();
 
         $queryBuilder
             ->update('tipo_atendimento')
             ->set('tipo', ':tipo')
+            ->set('descricao', ':descricao')
             ->where('id = :id')
             ->setParameters([
                 'tipo' => $tipoAtend->tipo,
+                'descricao' => $tipoAtend->descricao,
                 'id' => $id
-            ]);
+            ])
+            ->executeStatement();
 
-        return $queryBuilder->executeStatement();
+        return $id;
     }
 
     public function delete(int $id): bool

@@ -5,7 +5,6 @@ namespace Fgtas\Entities;
 class CamposPublico
 {
     private int $id;
-    //public readonly $perfil;
     public readonly string $nome;
     public readonly string $documento;
     public readonly string $contato;

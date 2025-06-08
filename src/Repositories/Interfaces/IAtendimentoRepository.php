@@ -15,7 +15,10 @@ interface IAtendimentoRepository
 
     public function findById(int $id): ?Atendimento;
 
-    public function update(Atendimento $atendimento, int $id): bool;
+    public function findForeignKeys(int $id): array|null;
+
+//    public function update(Atendimento $atendimento, int $id): bool;
+    public function update(int $idTipo, int $idPublico, int $idForma, int $idAtendimento): bool;
 
     public function delete(int $id): bool;
 }

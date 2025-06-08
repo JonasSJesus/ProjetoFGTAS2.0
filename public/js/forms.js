@@ -39,20 +39,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const campos = [
         {
-            id: 'nomeAtendido',
-            name: 'nomePublico'
+            id: 'nomeAtendido'
         },
         {
-            id: 'contatoAtendido',
-            name: 'contatoPublico'
+            id: 'contatoAtendido'
         },
         {
-            id: 'documentoAtendido',
-            name: 'documentoPublico'
+            id: 'documentoAtendido'
         }
     ];
 
 
+    // Opcoes dinamicas em Tipo de atendimento
     selectTipo.addEventListener('change', () => {
         // Pega a <option> selecionada
         const selectedOption = selectTipo.options[selectTipo.selectedIndex];
@@ -89,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
+    // Opcoes dinamicas em publico
     publicoSelect.addEventListener('change', function () {
         const valor = publicoSelect.value;
 
@@ -97,10 +96,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (valor === 'Empregador' || valor === 'Trabalhador') {
                 input.disabled = false;
-                input.name = campo.name;
             } else {
                 input.disabled = true;
-                input.removeAttribute('name');
             }
         });
     });

@@ -51,10 +51,16 @@ class AtendimentoController
     {
         $userLoggedIn = $_SESSION['user'];
         $atendimento = $this->atendimentoService->get($args['id']);
+        $flashValidate = $this->flash->getMessage('atendimento-validate');
+        $flashUpdateSuccess = $this->flash->getMessage('atendimento-update-success');
+        $flashUpdateError = $this->flash->getMessage('atendimento-update-error');
 
         return $this->twig->render($response, '/views/editar_atendimento.html.twig', [
             'userName' => $userLoggedIn,
-            'atendimento' => $atendimento
+            'atendimento' => $atendimento,
+            'validation' => $flashValidate[0],
+            'updateSuccess' => $flashUpdateSuccess[0],
+            'updateError' => $flashUpdateError[0]
         ]);
     }
 
@@ -119,11 +125,20 @@ class AtendimentoController
 
             return $response
                 ->withStatus(302)
-                ->withHeader('Location', '/home');
+                ->withHeader('Location', '/update-atendimento/' . $args['id']);
         }
 
+        try {
+            $this->atendimentoService->updateAtendimento($dataFromRequest, $args['id']);
 
-        return $response;
+            $this->flash->addMessage('atendimento-update-success', "Atendimento atualizado com sucesso!");
+        } catch (DatabaseException $e) {
+            $this->flash->addMessage('atendimento-update-error', $e->getMessage());
+        }
+
+        return $response
+            ->withStatus(302)
+            ->withHeader('Location', '/update-atendimento/' . $args['id']);
     }
 
 

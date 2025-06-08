@@ -51,8 +51,8 @@ class Atendimento
         ?string $descricaoAtendimento,
         string $formaAtendimento,
         string $perfilPublico,
-        ?string $dataDeRegistro = null,
-        ?string $nomeUsuario = null
+        ?string $nomeUsuario = null,
+        ?string $dataDeRegistro = null
     ): Atendimento
     {
         $tipo = new TipoAtendimento($tipoAtendimento, $descricaoAtendimento);
@@ -71,8 +71,8 @@ class Atendimento
         if (in_array($data['perfil_cliente'], ['Empregador', 'Trabalhador'])){
             $publico->setExtraFields(
                 $data['nome_publico'],
-                $data['contato'],
-                $data['documento']
+                $data['documento'],
+                $data['contato']
             );
         }
 
