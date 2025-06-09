@@ -9,18 +9,15 @@ class Usuario
     public readonly string $nome;
     public readonly string $email;
     public readonly string $cargo; // Atendente ou adm
-    public readonly ?string $ativo;
 
     public function __construct(
         string $nome,
         string $email,
         string $cargo,
-        ?string $ativo = 'S'
     ) {
         $this->nome = $nome;
         $this->email = $email;
         $this->cargo = $cargo;
-        $this->ativo = $ativo;
     }
 
     public function getId(): ?int
@@ -48,7 +45,7 @@ class Usuario
         return new Usuario(
             $data['nome'],
             $data['email'],
-            $data['cargo'],
-            $data['ativo']);
+            $data['cargo']
+        );
     }
 }

@@ -6,11 +6,11 @@ use Fgtas\Entities\Publico;
 
 interface IPublicoRepository
 {
-    public function add(Publico $publico): int;
+    public function add(Publico $publico, int|null $pessoaId): int;
 
-    public function insertExtraFields(Publico $publico, int $publicoId): bool;
+    public function insertExtraFields(Publico $publico): int|false;
 
-    public function updateExtraFields(Publico $publico, int $id): bool;
+    public function updateExtraFields(Publico $publico): int|false;
 
     public function findIdByDocumento(string $documento): int|false;
 
@@ -21,7 +21,7 @@ interface IPublicoRepository
 
     public function findIdByName(string $perfilCliente): int;
 
-    public function update(Publico $publico, int $id): int;
+    public function update(Publico $publico, int $id, int|null $idPessoa): int;
 
     public function delete(int $id): bool;
 }

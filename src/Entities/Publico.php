@@ -37,10 +37,10 @@ class Publico
         return $this->informacoesPessoais;
     }
 
-    public function setExtraFields(string $nome, string $documento, string $contato): void
+    public function setExtraFields(string $nome, string $documento, string $email): void
     {
         // TODO: Verificar se o usuario precisa de campos extras (se for empregador ou trabalhador)
-        $this->informacoesPessoais = new CamposPublico($nome, $documento, $contato);
+        $this->informacoesPessoais = new CamposPublico($nome, $documento, $email);
     }
 
     public static function fromArray(array $data): Publico
@@ -49,7 +49,7 @@ class Publico
         $publico->setId($data['id']);
 
         if ($publico->perfilCliente == 'empregador' || $publico->perfilCliente == 'trabalhador') {
-            $publico->setExtraFields($data['nome'], $data['documento'], $data['contato']);
+            $publico->setExtraFields($data['nome'], $data['documento'], $data['email']);
         }
 
         return $publico;

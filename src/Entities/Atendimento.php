@@ -72,7 +72,7 @@ class Atendimento
             $publico->setExtraFields(
                 $data['nome_publico'],
                 $data['documento'],
-                $data['contato']
+                $data['email']
             );
         }
 

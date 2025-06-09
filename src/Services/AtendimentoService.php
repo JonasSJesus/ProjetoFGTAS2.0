@@ -40,7 +40,7 @@ class AtendimentoService
      * @param array $data
      * @param int $userId
      * @return void
-     * @throws DBALExcetpion
+     * @throws DBALException
      * @throws DatabaseException
      */
     public function createAtendimento(array $data, int $userId): void
@@ -63,21 +63,20 @@ class AtendimentoService
         try {
             $this->conn->beginTransaction();
 
-//            $idPublico = $this->publicoRepository->findIdByName($atendimento->publico->perfilCliente);
-
             $idFormaAtend = $this->formaRepository->findIdByName($atendimento->formaAtendimento->forma);
-            $idPublico = $this->publicoRepository->add($atendimento->publico);
+            $pessoaId = null;
 
             if ($atendimento->publico->haveExtraFields()) {
-                $personalInfoId = $this->publicoRepository->findIdByDocumento($atendimento->publico->getExtraFields()->documento);
+                $pessoaId = $this->publicoRepository->findIdByDocumento($atendimento->publico->getExtraFields()->documento);
 
-                if (!$personalInfoId) {
-                    $this->publicoRepository->insertExtraFields($atendimento->publico, $idPublico);
+                if (!$pessoaId) {
+                    $pessoaId = $this->publicoRepository->insertExtraFields($atendimento->publico);
                 } else {
-                    $this->publicoRepository->updateExtraFields($atendimento->publico, $personalInfoId);
+                    $this->publicoRepository->updateExtraFields($atendimento->publico);
                 }
             }
 
+            $idPublico = $this->publicoRepository->add($atendimento->publico, $pessoaId);
             $idTipoAtend = $this->tipoRepository->add($atendimento->tipoAtendimento);
 
             $this->atendimentoRepository->add($idTipoAtend, $userId, $idPublico, $idFormaAtend);
@@ -85,10 +84,18 @@ class AtendimentoService
             $this->conn->commit();
         } catch (DBALException $e) {
             $this->conn->rollBack();
+
             throw new DatabaseException();
         }
     }
 
+    /**
+     * @param array $data
+     * @param int $id
+     * @return void
+     * @throws DBALException
+     * @throws DatabaseException
+     */
     public function updateAtendimento(array $data, int $id): void
     {
         $atendimento = Atendimento::make(
@@ -116,18 +123,19 @@ class AtendimentoService
 
             $idTipoAtend = $this->tipoRepository->update($atendimento->tipoAtendimento, $idAtendimento['tipo_atendimento_id']);
             $idFormaAtend = $this->formaRepository->findIdByName($atendimento->formaAtendimento->forma);
-            $idPublico = $this->publicoRepository->update($atendimento->publico, $idAtendimento['publico_id']);
+            $pessoaId = null;
 
             if ($atendimento->publico->haveExtraFields()) {
-                $personalInfoId = $this->publicoRepository->findIdByDocumento($atendimento->publico->getExtraFields()->documento);
+                $pessoaId = $this->publicoRepository->findIdByDocumento($atendimento->publico->getExtraFields()->documento);
 
-                if (!$personalInfoId) {
-                    $this->publicoRepository->insertExtraFields($atendimento->publico, $idPublico);
+                if (!$pessoaId) {
+                    $pessoaId = $this->publicoRepository->insertExtraFields($atendimento->publico);
                 } else {
-                    $this->publicoRepository->updateExtraFields($atendimento->publico, $personalInfoId);
+                    $this->publicoRepository->updateExtraFields($atendimento->publico);
                 }
             }
 
+            $idPublico = $this->publicoRepository->update($atendimento->publico, $idAtendimento['publico_id'], $pessoaId);
             $this->atendimentoRepository->update(
                 $idTipoAtend,
                 $idPublico,

@@ -25,33 +25,32 @@ class PublicoRepository implements IPublicoRepository
      * @return int
      * @throws Exception
      */
-    public function add(Publico $publico): int
+    public function add(Publico $publico, int|null $pessoaId): int
     {
         $queryBuilder = $this->conn->createQueryBuilder();
 
         $queryBuilder
             ->insert('publico')
-            ->values([
-                'perfil_cliente' => ':perfil_cliente'
-            ])
+            ->setValue('perfil_cliente', ':perfil_cliente')
             ->setParameter('perfil_cliente', $publico->perfilCliente);
+
+        if ($pessoaId != null) {
+            $queryBuilder
+                ->setValue('pessoa_id', ':pessoa_id')
+                ->setParameter('pessoa_id', $pessoaId);
+        }
 
         $queryBuilder->executeStatement();
 
-        $id = $this->conn->lastInsertId();
         //$publico->setId(intval($id));
 
-//        if ($publico->haveExtraFields()) {
-//            $this->insertExtraFields($publico, $id);
-//        }
-
-        return $id;
+        return $this->conn->lastInsertId();
     }
 
     /**
      * @throws Exception|DBALException
      */
-    public function insertExtraFields(Publico $publico, int $publicoId): bool
+    public function insertExtraFields(Publico $publico): int|false
     {
         $queryBuilder = $this->conn->createQueryBuilder();
 
@@ -60,25 +59,24 @@ class PublicoRepository implements IPublicoRepository
         }
 
         $queryBuilder
-            ->insert('informacoes_pessoais')
+            ->insert('pessoa')
             ->values([
-                'publico_id' => ':publico_id',
                 'nome' => ':nome',
-                'contato' => ':contato',
+                'email' => ':email',
                 'documento' => ':documento'
             ])
             ->setParameters([
-                'publico_id' => $publicoId,
                 'nome' => $publico->getExtraFields()->nome,
-                'contato' => $publico->getExtraFields()->contato,
+                'email' => $publico->getExtraFields()->contato,
                 'documento' => $publico->getExtraFields()->documento
             ]);
 
+        $queryBuilder->executeStatement();
 
-        return $queryBuilder->executeStatement();
+        return $this->conn->lastInsertId();
     }
 
-    public function updateExtraFields(Publico $publico, int $id): bool
+    public function updateExtraFields(Publico $publico): int|false
     {
         $queryBuilder = $this->conn->createQueryBuilder();
 
@@ -87,20 +85,20 @@ class PublicoRepository implements IPublicoRepository
         }
 
         $queryBuilder
-            ->update('informacoes_pessoais')
+            ->update('pessoa')
             ->set('nome', ':nome')
-            ->set('contato', ':contato')
+            ->set('email', ':email')
             ->set('documento', ':documento')
             ->where('documento = :documento')
             ->setParameters([
                 'nome' => $publico->getExtraFields()->nome,
-                'contato' => $publico->getExtraFields()->contato,
-                'documento' => $publico->getExtraFields()->documento,
-                'publico_id' => $id
+                'email' => $publico->getExtraFields()->contato,
+                'documento' => $publico->getExtraFields()->documento
             ]);
 
+        $queryBuilder->executeStatement();
 
-        return $queryBuilder->executeStatement();
+        return 123;
     }
 
     public function findIdByDocumento(string $documento): int|false
@@ -109,7 +107,7 @@ class PublicoRepository implements IPublicoRepository
 
         $resultSet = $queryBuilder
             ->select('id')
-            ->from('informacoes_pessoais')
+            ->from('pessoa')
             ->where('documento = :documento')
             ->setParameter('documento', $documento)
             ->executeQuery();
@@ -192,17 +190,20 @@ class PublicoRepository implements IPublicoRepository
 
     }
 
-    public function update(Publico $publico, int $id): int
+    public function update(Publico $publico, int $id, int|null $idPessoa): int
     {
         $queryBuilder = $this->conn->createQueryBuilder();
+
 
         $queryBuilder
             ->update('publico')
             ->set('perfil_cliente', ':perfil_cliente')
+            ->set('pessoa_id', ':pessoa_id')
             ->where('id = :id')
             ->setParameters([
                 'perfil_cliente' => $publico->perfilCliente,
-                'id' => $id
+                'id' => $id,
+                'pessoa_id' => $idPessoa
             ])
             ->executeStatement();
 

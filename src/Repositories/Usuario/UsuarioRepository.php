@@ -111,14 +111,12 @@ class UsuarioRepository implements IUsuarioRepository
                 'nome' => ':nome',
                 'email' => ':email',
                 'senha' => ':senha',
-                'cargo' => ':cargo',
-                'ativo' => ':ativo'
+                'cargo' => ':cargo'
             ])->setParameters([
                 'nome' => $user->nome,
                 'email' => $user->email,
                 'senha' => $user->getSenha(),
-                'cargo' => $user->cargo,
-                'ativo' => $user->ativo
+                'cargo' => $user->cargo
             ]);
 
         return $queryBuilder->executeStatement();
@@ -139,13 +137,11 @@ class UsuarioRepository implements IUsuarioRepository
             ->set('nome', ':nome')
             ->set('email', ':email')
             ->set('cargo', ':cargo')
-            ->set('ativo', ':ativo')
             ->where('id = :id')
             ->setParameters([
                 'nome' => $user->nome,
                 'email' => $user->email,
                 'cargo' => $user->cargo,
-                'ativo' => $user->ativo,
                 'id' => $id
             ]);
 
@@ -202,8 +198,7 @@ class UsuarioRepository implements IUsuarioRepository
         $user = new Usuario(
             $data['nome'],
             $data['email'],
-            $data['cargo'],
-            $data['ativo']
+            $data['cargo']
         );
         $user->setSenha($data['senha']);
         $user->setId($data['id']);
