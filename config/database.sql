@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS usuario (
     senha VARCHAR(255) NOT NULL
 );
 
--- Tabela para cadastrar pessoas. Usada no caso de Publico ser empregador, trabalhador ou outra (personalizado)
+-- Tabela para cadastrar pessoas. Usada no caso de Publico ser empregador (CNPJ) ou trabalhador (CPF)
 CREATE TABLE IF NOT EXISTS pessoa (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,

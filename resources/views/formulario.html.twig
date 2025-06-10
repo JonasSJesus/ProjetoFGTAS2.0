@@ -44,17 +44,12 @@
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item mb-2">
                         <a class="nav-link" href="{{ url_for('dashboard.user') }}">
-                            <i class="bi bi-speedometer"></i>Dashboard
+                            <i class="bi bi-speedometer"></i> Dashboard
                         </a>
                     </li>
                     <li class="nav-item mb-2">
                         <a class="nav-link active" href="{{ url_for('atendimento.home') }}">
                             <i class="bi bi-plus-circle me-2"></i>Adicionar Atendimento
-                        </a>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <a class="nav-link" href="#">
-                            <i class="bi bi-gear me-2"></i>Atendimentos
                         </a>
                     </li>
                     <li class="nav-item mb-2">
@@ -75,7 +70,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
                         <h1 class="h3 fw-bold">Formulário</h1>
-                        <p class="text-muted">Cadastrar novos atendimentos</p>
+                        <p class="text-muted">Revise bem os dados antes de enviar o formulário. Quando os dados estiverem confirmados, clique em "Declaro que os dados inseridos estão corretos"</p>
                     </div>
                 </div>
 
@@ -86,7 +81,11 @@
                     {% endfor %}
                 {% endif %}
 
-                {% if create %}
+                {% if createSuccess %}
+                    <div class="alert alert-success">{{ createSuccess }} voltar para o <a href="{{ url_for('dashboard.user') }}">dashboard</a>?</div>
+                {% endif %}
+
+                {% if createError %}
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -96,7 +95,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="alert alert-danger">
-                                        {{ create }}
+                                        {{ createError }}
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -112,7 +111,7 @@
                 <div class="card">
                     <!-- Card header -->
                     <div class="card-header">
-                        <h4>Lorem</h4>
+                        <h4>Cadastrar Atendimento</h4>
                     </div>
 
                     <!-- Card corpo -->

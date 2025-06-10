@@ -34,14 +34,27 @@ class AtendimentoController
     public function formsAtendimentoPage(Request $request, Response $response): Response
     {
         $userLogged = $_SESSION['user'];
-        $flashValidate = $this->flash->getMessage('atendimento-validate');
-        $flashCreate = $this->flash->getMessage('atendimento-create');
-        $flashDestroy = $this->flash->getMessage('atendimento-destroy');
+        $flashValidate = $this
+            ->flash
+            ->getMessage('atendimento-validate');
+
+        $flashCreateSuccess = $this
+            ->flash
+            ->getMessage('atendimento-create-success');
+
+        $flashCreateError = $this
+            ->flash
+            ->getMessage('atendimento-create-error');
+
+        $flashDestroy = $this
+            ->flash
+            ->getMessage('atendimento-destroy');
 
         return $this->twig->render($response, '/views/formulario.html.twig', [
             'userName' => $userLogged,
             'validation' => $flashValidate[0],
-            'create' => $flashCreate[0],
+            'createSuccess' => $flashCreateSuccess[0],
+            'createError' => $flashCreateError[0],
             'destroy' => $flashDestroy[0]
         ]);
     }
@@ -50,10 +63,21 @@ class AtendimentoController
     public function updateAtendimentoPage(Request $request, Response $response, array $args): Response
     {
         $userLoggedIn = $_SESSION['user'];
-        $atendimento = $this->atendimentoService->get($args['id']);
-        $flashValidate = $this->flash->getMessage('atendimento-validate');
-        $flashUpdateSuccess = $this->flash->getMessage('atendimento-update-success');
-        $flashUpdateError = $this->flash->getMessage('atendimento-update-error');
+        $atendimento = $this
+            ->atendimentoService
+            ->get($args['id']);
+
+        $flashValidate = $this
+            ->flash
+            ->getMessage('atendimento-validate');
+
+        $flashUpdateSuccess = $this
+            ->flash
+            ->getMessage('atendimento-update-success');
+
+        $flashUpdateError = $this
+            ->flash
+            ->getMessage('atendimento-update-error');
 
         return $this->twig->render($response, '/views/editar_atendimento.html.twig', [
             'userName' => $userLoggedIn,
@@ -96,8 +120,10 @@ class AtendimentoController
 
         try {
             $this->atendimentoService->createAtendimento($dataFromRequest, $_SESSION['user']['id']);
+
+            $this->flash->addMessage('atendimento-create-success', "Atendimento criado com sucesso!");
         } catch (DatabaseException $e) {
-            $this->flash->addMessage('atendimento-create', $e->getMessage());
+            $this->flash->addMessage('atendimento-create-error', $e->getMessage());
 
             return $response
                 ->withStatus(302)

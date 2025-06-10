@@ -68,7 +68,7 @@ class AuthController
         }
 
         return $response
-            ->withHeader('Location', '/home')
+            ->withHeader('Location', '/dashboard')
             ->withStatus(302);
     }
 
