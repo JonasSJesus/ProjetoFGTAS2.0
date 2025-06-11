@@ -46,7 +46,7 @@ class UsuarioController
      */
     public function registerPage(Request $request, Response $response): Response
     {
-        var_dump($this->flash->getMessages()); // TODO: Printar os erros no template
+//        var_dump($this->flash->getMessages()); // TODO: Printar os erros no template
 
         return $this->twig->render($response, '/views/register.html.twig', [
             'validation' => $this->flash->getMessage('usuario-validate')[0],
