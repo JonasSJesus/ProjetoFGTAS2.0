@@ -91,11 +91,13 @@ class AtendimentoController
 
     public function dashboardPage(Request $request, Response $response): Response
     {
-        $atendimentos = $this->atendimentoService->all();
+        $atendimentos = $this->atendimentoService->listAtendimentos();
+        $flashReportError = $this->flash->getMessage('report-error');
 
         return $this->twig->render($response, '/views/dashboard.html.twig', [
             'atendimentos' => $atendimentos,
-            'count' => count($atendimentos)
+            'count' => count($atendimentos),
+            'reportError' => $flashReportError[0]
         ]);
     }
 

@@ -35,8 +35,9 @@ class ReportController
 
 
     /**
-     * Renderiza a página de geração de relatórios
-     *
+     *  Gera relatórios.
+     *  Formatos suportados até o momento:
+     *  PDF e CSV
      * @param Request $request
      * @param Response $response
      * @return Response
@@ -44,46 +45,35 @@ class ReportController
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function reportPage(Request $request, Response $response): Response
-    {
-        $flashMessage = $this->flash->getMessage('error');
-
-        return $this->twig->render(
-            $response,'/views/relatorio.html.twig', [
-                'error' => $flashMessage[0]
-            ]);
-    }
-
-
-    /**
-     * Gera relatórios.
-     * Formatos suportados até o momento:
-     * PDF e CSV
-     * @param Request $request
-     * @param Response $response
-     * @return Response
-     */
     public function generateReport(Request $request, Response $response): Response
     {
         $requestData = $request->getParsedBody();
-        $atendimento = $this->atendimentoService->all();
 
-        if (!array_key_exists('exp', $requestData)) {
-            $this->flash->addMessage('error', 'Formato Inválido, por favor, escolha entre PDF ou CSV');
+        if (!array_key_exists('exp', $requestData) && empty($requestData['exp'])) {
+            $this->flash->addMessage('report-error', 'Erro ao gerar relatório, por favor marque uma opção entre PDF ou CSV');
 
             return $response
                 ->withStatus(302)
-                ->withHeader('Location', '/generate-report');
+                ->withHeader('Location', '/dashboard');
         }
 
+        $atendimento = $this->atendimentoService->listAtendimentos($requestData);
+
+        if (!$atendimento) {
+            $this->flash->addMessage('report-error', 'Nenhum atendimento encontrado. Tente trocar os filtros. caso o problema persista, entre em contato com um superior');
+
+            return $response
+                ->withStatus(302)
+                ->withHeader('Location', '/dashboard');
+        }
 
         switch ($requestData['exp']) {
             case 'pdf':
-                $this->pdfReportService->generate($atendimento, $requestData); // TODO: Guardar a mensagem de erro como Flash Message
+                $this->pdfReportService->generate($atendimento); // TODO: Guardar a mensagem de erro como Flash Message
 
                 return $response;
             case 'csv':
-                $filename = $this->csvReportService->generate($atendimento, $requestData);
+                $filename = $this->csvReportService->generate($atendimento);
 
                 return $response
                     ->withHeader("Content-Type", "application/csv")

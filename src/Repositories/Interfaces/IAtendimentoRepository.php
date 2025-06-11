@@ -11,7 +11,7 @@ interface IAtendimentoRepository
     public function add(int $idTipoAtend, int $idUsuario, int $idPublico, int $idForma): bool;
 
     /** @return null|Atendimento[] */
-    public function findAll(): ?array;
+    public function findAll(array $filters): ?array;
 
     public function findById(int $id): ?Atendimento;
 

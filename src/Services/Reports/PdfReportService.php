@@ -19,7 +19,7 @@ class PdfReportService
         $this->dompdf = $dompdf;
     }
 
-    public function generate(array $atendimento, array $filters): void
+    public function generate(array $atendimento): void
     {
         $twigEnv = $this->twig->getEnvironment();
         try {

@@ -77,6 +77,21 @@
                     </a>
                 </div>
 
+                <!-- Alertas -->
+                <!-- Alerta de Erro -->
+                {% if reportError %}
+                    <div class="alert alert-danger" role="alert">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <span id="errorMessage">{{ reportError }}</span>
+                    </div>
+                {% endif %}
+                <!-- Alert de Sucesso -->
+                <div id="successAlert" class="alert alert-success d-none" role="alert">
+                    <i class="bi bi-check-circle me-2"></i>
+                    Relatório gerado com sucesso!
+                </div>
+                <!-- Alertas fim -->
+
                 <!-- Tabela de Atendimentos -->
                 <div class="card shadow-sm">
 
@@ -199,24 +214,8 @@
                                     </div>
 
                                     <div class="modal-body">
-                                        <!-- Alert de Erro -->
-                                        {% if error %}
-                                            <ul class="centralizado" style="color: #d1d5db;">
-                                                <li>{{ error }}</li>
-                                            </ul>
-                                        {% endif %}
 
-                                        <div id="errorAlert" class="alert alert-danger d-none" role="alert">
-                                            <i class="bi bi-exclamation-triangle me-2"></i>
-                                            <span id="errorMessage"></span>
-                                        </div>
-
-                                        <!-- Alert de Sucesso -->
-                                        <div id="successAlert" class="alert alert-success d-none" role="alert">
-                                            <i class="bi bi-check-circle me-2"></i>
-                                            Relatório gerado com sucesso!
-                                        </div>
-
+                                        <!-- Formulario com opcoes de filtro -->
                                         <form id="reportForm" method="post" action="{{ url_for('report.generate') }}"
                                               class="needs-validation" novalidate>
                                             <!-- Seção: Tipo de Exportação -->
@@ -271,14 +270,13 @@
                                                             </label>
                                                             <select name="formaAtendimento" id="formaAtendimento"
                                                                     class="form-select">
-                                                                <option value="default">Sem Filtro</option>
-                                                                <option value="presencial">Presencial</option>
-                                                                <option value="whatsapp">Whatsapp</option>
-                                                                <option value="telefone">Ligação telefônica</option>
-                                                                <option value="email">E-mail</option>
-                                                                <option value="redes">Redes sociais</option>
-                                                                <option value="teams">Teams</option>
-                                                                <option value="outro">Outro</option>
+                                                                <option value="">Sem Filtro</option>
+                                                                <option value="Presencial">Presencial</option>
+                                                                <option value="Whatsapp">Whatsapp</option>
+                                                                <option value="Ligação Telefônica">Ligação telefônica</option>
+                                                                <option value="E-mail">E-mail</option>
+                                                                <option value="Redes Sociais">Redes sociais</option>
+                                                                <option value="Teams">Teams</option>
                                                             </select>
                                                         </div>
 
@@ -288,16 +286,15 @@
                                                                 Perfil Público:
                                                             </label>
                                                             <select name="publico" id="publico" class="form-select">
-                                                                <option value="default">Sem Filtro</option>
-                                                                <option value="empregador">Empregador</option>
-                                                                <option value="trabalhador">Trabalhador</option>
-                                                                <option value="out_agen">Outras agências</option>
-                                                                <option value="ads">ADS</option>
-                                                                <option value="setores">Setores da FGTAS</option>
-                                                                <option value="mercado_trabalho">Interessado de
-                                                                    informações sobre o Mercado de Trabalho
+                                                                <option value="">Sem Filtro</option>
+                                                                <option value="Empregador">Empregador</option>
+                                                                <option value="Trabalhador">Trabalhador</option>
+                                                                <option value="Outras Agências">Outras agências</option>
+                                                                <option value="ADS">ADS</option>
+                                                                <option value="Setores da FGTAS">Setores da FGTAS</option>
+                                                                <option value="Interessado em informações sobre o Mercado de Trabalho">
+                                                                    Interessado no Mercado de Trabalho
                                                                 </option>
-                                                                <option value="outro">Outro</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -309,23 +306,22 @@
                                                         </label>
                                                         <select class="form-select" name="tipoAtendimento"
                                                                 id="tipoAtendimento">
-                                                            <option value="default">Sem Filtro</option>
-                                                            <option value="trabalho">Carteira de Trabalho, SD, Vagas
+                                                            <option value="">Sem Filtro</option>
+                                                            <option value="carteira de trabalho, SD, vagas">Carteira de Trabalho, SD, Vagas
                                                             </option>
-                                                            <option value="pg_artesanato">Programa Gaúcho do
+                                                            <option value="programa gaucho de artesanato">Programa Gaúcho do
                                                                 Artesanato
                                                             </option>
-                                                            <option value="vida_centro">Vida Centro Humanístico</option>
-                                                            <option value="empreendedorismo">Orientações sobre
+                                                            <option value="Vida Centro Humanistico">Vida Centro Humanístico</option>
+                                                            <option value="orientações sobre empreendedorismo">Orientações sobre
                                                                 empreendedorismo
                                                             </option>
-                                                            <option value="qualificacao">Orientações sobre cursos de
+                                                            <option value="orientações sobre cursos de qualificação">Orientações sobre cursos de
                                                                 qualificação
                                                             </option>
-                                                            <option value="mercado_trabalho_info">Informações sobre
+                                                            <option value="informações sobre mercado de trabalho">Informações sobre
                                                                 mercado de trabalho
                                                             </option>
-                                                            <option value="outro">Outro</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -387,6 +383,7 @@
                                                 </button>
                                             </div>
                                         </form>
+
                                     </div>
                                 </div>
                             </div>

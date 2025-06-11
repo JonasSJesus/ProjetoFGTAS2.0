@@ -4,6 +4,7 @@ namespace Fgtas\Repositories\Atendimentos;
 
 use Doctrine\DBAL\Connection as DBALConnection;
 use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Fgtas\Database\Connection;
 use Fgtas\Entities\Atendimento;
 use Fgtas\Repositories\Interfaces\IAtendimentoRepository;
@@ -45,7 +46,7 @@ class AtendimentoRepository implements IAtendimentoRepository
      * @inheritDoc
      * @throws Exception
      */
-    public function findAll(): ?array
+    public function findAll(array $filters = []): ?array
     {
         $queryBuilder = $this->conn->createQueryBuilder();
 
@@ -68,13 +69,19 @@ class AtendimentoRepository implements IAtendimentoRepository
             ->innerJoin('a', 'usuario', 'u', 'a.usuario_id = u.id')
             ->innerJoin('a', 'publico', 'p', 'a.publico_id = p.id')
             ->leftJoin('a', 'pessoa', 'pi', 'p.pessoa_id = pi.id')
-            ->orderBy('id', 'DESC');
+            ->orderBy('data_de_registro', 'DESC');
+
+        if (!empty($filters)) {
+            $this->applyFilters($queryBuilder, $filters);
+        }
+
         $resultSet = $queryBuilder->executeQuery();
 
         $data = $resultSet->fetchAllAssociative();
 
         return array_map(Atendimento::fromArray(...), $data);
     }
+
 
     public function findById(int $id): ?Atendimento
     {
@@ -110,6 +117,7 @@ class AtendimentoRepository implements IAtendimentoRepository
 
         return Atendimento::fromArray($data);
     }
+
 
     public function findForeignKeys(int $id): array|null
     {
@@ -162,11 +170,35 @@ class AtendimentoRepository implements IAtendimentoRepository
 
 
 
-
-
-
-    private function hydrateAtendimentos(array $data): Atendimento
+    private function applyFilters(QueryBuilder $qb, array $filters = []): void
     {
-        // TODO: implement hydrateAtendimentos() method.
+        $filterMap = [
+            "formaAtendimento" => [
+                "row" => "fa.forma",
+                "param" => ":forma",
+                "paramValue" => "forma"
+            ],
+            "publico" => [
+                "row" => "p.perfil_cliente",
+                "param" => ":publico",
+                "paramValue" => "publico"
+            ],
+            "tipoAtendimento" => [
+                "row" => "ta.tipo",
+                "param" => ":tipo",
+                "paramValue" => "tipo"
+            ]
+        ];
+
+        if (!isset($filters)) {
+            return;
+        }
+
+        foreach ($filters as $key => $value) {
+            if (array_key_exists($key, $filterMap)){
+                $qb->andWhere("{$filterMap[$key]['row']} = {$filterMap[$key]['param']}")
+                    ->setParameter("{$filterMap[$key]['paramValue']}", $value);
+            }
+        }
     }
 }

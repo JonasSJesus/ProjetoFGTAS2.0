@@ -153,9 +153,13 @@ class AtendimentoService
 
 
     /** @return Atendimento[] */
-    public function all(): array
+    public function listAtendimentos(array $filters = []): array
     {
-        return $this->atendimentoRepository->findAll();
+        $filter = array_filter($filters, function ($value) {
+            return !empty($value) && $value != 'pdf' && $value != 'csv';
+        });
+
+        return $this->atendimentoRepository->findAll($filter);
     }
 
     public function get(int $id): Atendimento

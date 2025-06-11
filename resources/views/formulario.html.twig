@@ -82,7 +82,10 @@
                 {% endif %}
 
                 {% if createSuccess %}
-                    <div class="alert alert-success">{{ createSuccess }} voltar para o <a href="{{ url_for('dashboard.user') }}">dashboard</a>?</div>
+                    <div class="alert alert-success" role="alert">
+                        <i class="bi bi-check-circle me-2"></i>
+                        {{ createSuccess }} voltar para o <a href="{{ url_for('dashboard.user') }}">dashboard</a>?
+                    </div>
                 {% endif %}
 
                 {% if createError %}
