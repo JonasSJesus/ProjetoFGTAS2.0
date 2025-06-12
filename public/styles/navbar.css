@@ -1,0 +1,226 @@
+/* ============================
+   VARIÁVEIS DE CORES E FONTE
+=============================== */
+:root {
+    --fgtas-primary: #113978;     /* Azul escuro - principal */
+    --fgtas-secondary: #f0f0f0;   /* Cinza claro - fundo */
+    --fgtas-accent: #54625696;      /* Azul claro - destaque */
+}
+
+body {
+    background-color: var(--fgtas-secondary);
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    overflow-x: hidden;
+}
+
+
+.container-fluid,
+.row {
+    margin: 0;
+    padding: 0;
+}
+
+.col-md-9,
+.col-lg-10 {
+    overflow-x: auto;
+    padding-left: 0;
+}
+
+/* ============================
+   NAVBAR
+=============================== */
+.navbar {
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    background-color: var(--fgtas-primary) !important;
+    border-bottom: 1px solid #e0e0e0;
+    overflow: visible;
+}
+.navbar-brand{
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+}
+.navbar-brand,
+.navbar .nav-link {
+    color: var(--fgtas-secondary) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.navbar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.05); /* ou transparente */
+    color: white !important;
+
+}
+.navbar.bg-primary .logo-fgtas-navbar,
+.sidebar-dark .logo-fgtas-sidebar {
+    filter: brightness(0) invert(1);
+}
+
+/* ============================
+   DROPDOWN MENU
+=============================== */
+.dropdown-menu {
+    position: absolute;
+    right: 0;
+    left: auto;
+    margin-top: 0.5rem;
+    min-width: 200px;
+    max-width: 100%;
+    background-color:  var(--fgtas-secondary);
+    white-space: nowrap;
+    overflow-x: auto;
+    padding: 0.5rem;
+    z-index: 9999;
+    transform: translateX(-10%);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .dropdown-menu {
+        transform: translateX(-50%);
+        left: 50% !important;
+        right: auto !important;
+    }
+}
+
+.dropdown-item {
+    overflow: visible;
+    text-overflow: unset;
+}
+
+.dropdown-item:hover {
+    background-color: var(--fgtas-accent);
+    color:white!important;
+}
+
+/* ============================
+   LOGOTIPOS
+=============================== */
+.logo-fgtas-navbar {
+    display: block;
+    margin: 0 auto;
+    padding: 0;
+    width: 100px;
+    height: auto;
+    margin-left: 0.5rem;
+}
+
+.logo-fgtas-sidebar {
+    width: 120px;
+    height: auto;
+    margin-bottom: 1rem;
+}
+
+/* ============================
+   SIDEBAR LINKS
+=============================== */
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background-color: transparent;
+    color: var(--fgtas-primary) !important;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+    background-color: var(--fgtas-accent);
+    color: white !important;
+}
+
+.nav-link.active {
+    background-color: var(--fgtas-primary);
+    color: #fff !important;
+}
+
+.nav-link i {
+    margin-right: 0.5rem;
+}
+
+/* ============================
+   BOTÕES
+=============================== */
+.btn-primary {
+    background-color: var(--fgtas-primary);
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #095e38;
+    border: none;
+}
+
+/* ============================
+   CARDS
+=============================== */
+.card {
+    border-radius: 0.75rem;
+    border: none;
+}
+
+.card-header {
+    background-color: var(--fgtas-accent);
+}
+
+.card-body {
+    padding: 1rem;
+}
+
+/* ============================
+   TABELA
+=============================== */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table {
+    table-layout: auto;
+    width: 100%;
+    min-width: 600px;
+}
+
+/* ============================
+   MODAL
+=============================== */
+.modal-content {
+    max-width: 100%;
+}
+
+
+.sidebar-custom {
+    background-color: var(--fgtas-primary); /* Azul escuro */
+    color: white;
+    margin: 0;
+    border: none;
+    box-shadow: none;
+}
+
+/* Deixe os links legíveis */
+.sidebar-custom .nav-link {
+    color: white !important;
+}
+
+.sidebar-custom .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white !important;
+}
+
+.sidebar-custom .nav-link.active {
+    background-color: var(--fgtas-secondary);
+    color: var(--fgtas-primary) !important;
+    font-weight: bold;
+    border-radius: 0;
+    margin-right: 0;
+    box-shadow: none;
+}
