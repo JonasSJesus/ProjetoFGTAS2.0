@@ -3,6 +3,7 @@
 
 use DI\ContainerBuilder;
 use Dompdf\Dompdf;
+use Fgtas\Helpers\SessionTwigExtension;
 use Glazilla\Slim\Views\TwigMessages;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -26,7 +27,10 @@ return function (ContainerBuilder $container) {
         Twig::class => function (ContainerInterface $container) {
             // TODO: Implementar cache para as templates
 
-            return Twig::create(ROOT_APP . '/resources', ['cache' => false]);
+            $twig = Twig::create(ROOT_APP . '/resources', ['cache' => false]);
+            $twig->addExtension(new SessionTwigExtension());
+
+            return $twig;
         },
 
         Dompdf::class => function () {

@@ -67,8 +67,9 @@ class Validator
             "{{name}} must be valid email" => "O campo {{name}} deve ser um e-mail válido.",
             "{{name}} must be a valid CNPJ number" => "O campo {{name}} deve ser um CNPJ válido.",
             "{{name}} must be a valid CPF number" => "O campo {{name}} deve ser um CPF válido.",
+            "{{name}} must have a length greater than or equal to {{minValue}}" => "A {{name}} deve ter pelo menos {{minValue}} caracteres."
         ];
 
-        return $translations[$message] ?? "Erro desconhecido, contate o administrador do sistema para obter ajuda.";
+        return $translations[$message] ?? $message;# "Erro desconhecido, contate o administrador do sistema para obter ajuda.";
     }
 }

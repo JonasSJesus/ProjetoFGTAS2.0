@@ -46,7 +46,7 @@ class AuthController
 
         $this->validator->validate($data, [
             'email' => v::notEmpty()->email(),
-            'senha' => v::notEmpty()->min(5)
+            'senha' => v::notEmpty()->length(5)
         ]);
 
         if ($this->validator->failed()) {

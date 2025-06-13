@@ -34,27 +34,46 @@
                             </div>
                         {% endif %}
 
-                        <form id="loginForm" method="post">
+                        <form id="loginForm" class="needs-validation" method="post" novalidate>
                             <div class="mb-3">
                                 <label for="email" class="form-label">E-mail</label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="seu@email.com"
-                                       autocomplete="email">
+                                <input type="email"
+                                       class="form-control"
+                                       id="email"
+                                       name="email"
+                                       placeholder="seu@email.com"
+                                       autocomplete="email"
+                                       required>
+                                <div class="invalid-feedback">Por favor, o campo E-Mail não deve estar vazio.</div>
 
                                 {% if flashValidate['email'] %}
-                                    <span class="alert alert-warning d-flex">{{ flashValidate['email'] }}</span>
+                                    <div class="alert alert-warning alert-dismissible show d-flex py-2 mt-2">
+                                        {{ flashValidate['email'] }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
                                 {% endif %}
                             </div>
 
                             <div class="mb-3">
                                 <label for="senha" class="form-label">Senha</label>
                                 <div class="input-group">
-                                    <input type="password" class="form-control" id="senha" name="senha" placeholder="Sua senha" autocomplete="current-password">
+                                    <input type="password"
+                                           class="form-control"
+                                           id="senha"
+                                           name="senha"
+                                           placeholder="Sua senha"
+                                           autocomplete="current-password"
+                                           required>
                                     <button type="button" class="btn-toggle-senha position-absolute top-50 end-0 translate-middle-y me-2" id="toggleSenha">
                                         <i class="bi bi-eye" id="iconSenha"></i>
                                     </button>
+                                    <div class="invalid-feedback">Por favor, insira uma senha válida.</div>
 
                                     {% if flashValidate['senha'] %}
-                                        <span class="alert alert-warning d-flex">{{ flashValidate['senha'] }}</span>
+                                        <div class="alert alert-warning alert-dismissible show d-flex py-2 mt-2">
+                                            {{ flashValidate['senha'] }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
                                     {% endif %}
                                 </div>
                             </div>
@@ -90,6 +109,8 @@
         integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
         crossorigin="anonymous"></script>
 <script src="/js/login.js"></script>
+<script src="/js/validation.js"></script>
+
 
 </body>
 

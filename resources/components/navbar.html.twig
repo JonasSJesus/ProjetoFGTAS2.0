@@ -14,17 +14,16 @@
 
 <body>
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary border-0">
     <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="{{ url_for('dashboard.user') }}"><img src="../assets/logo.png" alt="FGTAS Logo"
-                                                               class="logo-fgtas-navbar"></a>
+        <a class="navbar-brand fw-bold" href="{{ url_for('dashboard.user') }}"><img src="../assets/logo.png" alt="FGTAS Logo" class="my-2 logo-fgtas-navbar"></a>
         <div class="navbar-nav ms-auto">
             <div class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">
                     <i class="bi bi-person-circle me-1"></i>Usuario
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Perfil</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('user.update', { id: session['user']['id'] }) }}"><i class="bi bi-person me-2"></i>Editar Perfil</a></li>
                     <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Configurações</a></li>
                     <li>
                         <hr class="dropdown-divider">
@@ -38,10 +37,56 @@
     </div>
 </nav>
 
+<!-- Botão Hamburger - visível apenas em telas pequenas -->
+<nav class="navbar navbar-dark bg-light d-md-none pb-2">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</nav>
+
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
-        <div class="col-md-3 col-lg-2 sidebar-custom min-vh-100">
+
+        <!-- Sidebar como Offcanvas para mobile -->
+        <div class="offcanvas offcanvas-start d-md-none sidebar-custom" tabindex="-1" id="sidebarOffcanvas">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title">Menu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+            </div>
+            <div class="offcanvas-body p-0">
+                <div class="p-3">
+                    <ul class="nav nav-pills flex-column">
+                        <li class="nav-item mb-2">
+                            <a class="nav-link {{ is_current_url('dashboard.user') ? 'active' : ''}}" href="{{ url_for('dashboard.user') }}">
+                                <i class="bi bi-speedometer me-2"></i> Dashboard </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link {{ is_current_url('atendimento.home') ? 'active' : ''}}" href="{{ url_for('atendimento.home') }}">
+                                <i class="bi bi-plus-circle me-2"></i>Adicionar Atendimento
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <hr class="my-2 mx-3">
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link {{ is_current_url('dashboard.admin') ? 'active' : ''}}" href="{{ url_for('dashboard.admin') }}">
+                                <i class="bi bi-person-fill-lock"></i> Admin
+                            </a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link {{ is_current_url('user.register.form') ? 'active' : ''}}" href="{{ url_for('user.register.form') }}">
+                                <i class="bi bi-person-add me-2"></i>Adicionar usuário
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar para desktop -->
+        <div class="col-md-3 col-lg-2 sidebar-custom min-vh-100 d-none d-md-block">
             <div class="p-3">
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item mb-2">
@@ -53,9 +98,17 @@
                             <i class="bi bi-plus-circle me-2"></i>Adicionar Atendimento
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <hr class="my-2 mx-3">
+                    </li>
                     <li class="nav-item mb-2">
                         <a class="nav-link {{ is_current_url('dashboard.admin') ? 'active' : ''}}" href="{{ url_for('dashboard.admin') }}">
                             <i class="bi bi-person-fill-lock"></i> Admin
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link {{ is_current_url('user.register.form') ? 'active' : ''}}" href="{{ url_for('user.register.form') }}">
+                            <i class="bi bi-person-add me-2"></i>Adicionar usuário
                         </a>
                     </li>
                 </ul>

@@ -24,11 +24,6 @@
                         <span id="errorMessage">{{ reportError }}</span>
                     </div>
                 {% endif %}
-                <!-- Alert de Sucesso -->
-                <div id="successAlert" class="alert alert-success d-none" role="alert">
-                    <i class="bi bi-check-circle me-2"></i>
-                    Relatório gerado com sucesso!
-                </div>
                 <!-- Alertas fim -->
 
                 <!-- Tabela de Atendimentos -->
@@ -95,13 +90,8 @@
                                              tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Excluir
-                                                            atendimento
-                                                            {{ atendimento.getId() }}?
-                                                        </h1>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
+                                                    <div class="modal-body">
+                                                        <h4>Excluir atendimento {{ atendimento.getId() }}?</h4>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
@@ -143,7 +133,7 @@
                              aria-hidden="true">
                             <div class="modal-dialog modal-lg modal-dialog-scrollable">
                                 <div class="modal-content">
-                                    <div class="modal-header bg-primary text-white">
+                                    <div class="modal-header text-white">
                                         <h1 class="modal-title fs-4" id="exampleModalLabel">
                                             <i class="bi bi-file-earmark-text me-2"></i>
                                             Opções de Relatório
