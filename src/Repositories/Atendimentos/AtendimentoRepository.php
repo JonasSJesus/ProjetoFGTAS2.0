@@ -2,6 +2,7 @@
 
 namespace Fgtas\Repositories\Atendimentos;
 
+use DateTime;
 use Doctrine\DBAL\Connection as DBALConnection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Query\QueryBuilder;
@@ -187,18 +188,40 @@ class AtendimentoRepository implements IAtendimentoRepository
                 "row" => "ta.tipo",
                 "param" => ":tipo",
                 "paramValue" => "tipo"
-            ]
+            ],
         ];
 
         if (!isset($filters)) {
             return;
         }
 
+        // Filtros gerais
         foreach ($filters as $key => $value) {
             if (array_key_exists($key, $filterMap)){
                 $qb->andWhere("{$filterMap[$key]['row']} = {$filterMap[$key]['param']}")
                     ->setParameter("{$filterMap[$key]['paramValue']}", $value);
             }
+        }
+
+        // Filtro por data de inicio
+        if (!empty($filters['dataInicio'])) {
+            $dataInicio = (new DateTime($filters['dataInicio']))
+                ->setTime(0, 0, 0)
+                ->format('Y-m-d H:i:s');
+
+            $qb->andWhere('a.data_de_registro >= :dataInicio')
+                ->setParameter('dataInicio', $dataInicio);
+        }
+
+        // Filtro por data de fim
+        if (!empty($filters['dataFim'])) {
+            $dataFim = (new DateTime($filters['dataFim']))
+                ->modify('+1 day')
+                ->setTime(0, 0, 0)
+                ->format('Y-m-d H:i:s');
+
+            $qb->andWhere('a.data_de_registro <= :dataFim')
+                ->setParameter('dataFim', $dataFim);
         }
     }
 }

@@ -128,7 +128,7 @@
                             <i class="bi bi-file-earmark-bar-graph"></i> Gerar Relatório
                         </button>
 
-                        <!-- Modal -->
+                        <!-- Modal Relatorio -->
                         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                              aria-hidden="true">
                             <div class="modal-dialog modal-lg modal-dialog-scrollable">
@@ -266,13 +266,14 @@
                                                 </div>
                                                 <div class="card-body">
                                                     <div class="row">
+
                                                         <div class="col-md-6">
                                                             <label class="form-label fw-semibold" for="dataInicial">
                                                                 <i class="bi bi-calendar-event me-1"></i>
                                                                 Data inicial
                                                             </label>
-                                                            <input class="form-control" type="datetime-local"
-                                                                   name="dataInicial" id="dataInicial" required>
+                                                            <input class="form-control" type="date"
+                                                                   name="dataInicio" id="dataInicial" required>
                                                             <div class="invalid-feedback">
                                                                 Por favor, selecione a data inicial.
                                                             </div>
@@ -283,7 +284,7 @@
                                                                 <i class="bi bi-calendar-check me-1"></i>
                                                                 Data final
                                                             </label>
-                                                            <input class="form-control" type="datetime-local"
+                                                            <input class="form-control" type="date"
                                                                    name="dataFim" id="dataFim" required>
                                                             <div class="invalid-feedback">
                                                                 Por favor, selecione a data final.
