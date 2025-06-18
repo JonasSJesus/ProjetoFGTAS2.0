@@ -205,7 +205,9 @@ class AtendimentoRepository implements IAtendimentoRepository
 
         // Filtro por data de inicio
         if (!empty($filters['dataInicio'])) {
-            $dataInicio = (new DateTime($filters['dataInicio']))
+            $dataInicio = new DateTime($filters['dataInicio']);
+
+            $dataInicio
                 ->setTime(0, 0, 0)
                 ->format('Y-m-d H:i:s');
 
@@ -215,7 +217,9 @@ class AtendimentoRepository implements IAtendimentoRepository
 
         // Filtro por data de fim
         if (!empty($filters['dataFim'])) {
-            $dataFim = (new DateTime($filters['dataFim']))
+            $dataFim = new DateTime($filters['dataFim']);
+
+            $dataFim
                 ->modify('+1 day')
                 ->setTime(0, 0, 0)
                 ->format('Y-m-d H:i:s');
