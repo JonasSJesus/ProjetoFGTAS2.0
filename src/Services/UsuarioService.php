@@ -52,7 +52,7 @@ class UsuarioService
      * @return array|Usuario
      * @throws UserNotFoundException
      */
-    public function getUser(int $id = null): array|Usuario
+    public function getUser(?int $id = null): array|Usuario
     {
         if (isset($id)) {
             $user = $this->repository->findById($id);

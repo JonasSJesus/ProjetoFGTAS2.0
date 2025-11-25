@@ -52,10 +52,10 @@ class AtendimentoController
 
         return $this->twig->render($response, '/views/formulario.html.twig', [
             'userName' => $userLogged,
-            'validation' => $flashValidate[0],
-            'createSuccess' => $flashCreateSuccess[0],
-            'createError' => $flashCreateError[0],
-            'destroy' => $flashDestroy[0]
+            'validation' => $flashValidate[0] ?? null,
+            'createSuccess' => $flashCreateSuccess[0] ?? null,
+            'createError' => $flashCreateError[0] ?? null,
+            'destroy' => $flashDestroy[0] ?? null
         ]);
     }
 
@@ -97,7 +97,7 @@ class AtendimentoController
         return $this->twig->render($response, '/views/dashboard.html.twig', [
             'atendimentos' => $atendimentos,
             'count' => count($atendimentos),
-            'reportError' => $flashReportError[0]
+            'reportError' => $flashReportError[0] ?? null
         ]);
     }
 
