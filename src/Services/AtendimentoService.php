@@ -47,7 +47,7 @@ class AtendimentoService
     {
         $atendimento = Atendimento::make(
             $data['tipoAtendimento'],
-            $data['descricao_tipo_atendimento'],
+            $data['descricao_tipo_atendimento'] ?? null,
             $data['formaAtendimento'],
             $data['perfilPublico'],
             );

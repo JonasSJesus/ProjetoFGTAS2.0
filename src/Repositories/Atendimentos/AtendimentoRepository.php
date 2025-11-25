@@ -207,25 +207,25 @@ class AtendimentoRepository implements IAtendimentoRepository
         if (!empty($filters['dataInicio'])) {
             $dataInicio = new DateTime($filters['dataInicio']);
 
-            $dataInicio
+            $dataInicioFormatted = $dataInicio
                 ->setTime(0, 0, 0)
                 ->format('Y-m-d H:i:s');
 
             $qb->andWhere('a.data_de_registro >= :dataInicio')
-                ->setParameter('dataInicio', $dataInicio);
+                ->setParameter('dataInicio', $dataInicioFormatted);
         }
 
         // Filtro por data de fim
         if (!empty($filters['dataFim'])) {
             $dataFim = new DateTime($filters['dataFim']);
 
-            $dataFim
+            $dataFimFormatted = $dataFim
                 ->modify('+1 day')
                 ->setTime(0, 0, 0)
                 ->format('Y-m-d H:i:s');
 
             $qb->andWhere('a.data_de_registro <= :dataFim')
-                ->setParameter('dataFim', $dataFim);
+                ->setParameter('dataFim', $dataFimFormatted);
         }
     }
 }
