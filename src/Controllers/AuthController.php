@@ -34,8 +34,8 @@ class AuthController
 
         return $this->twig->render(
             $response, '/views/login.html.twig', [
-                'flashValidate' => $flashValidation[0],
-                'flashAuth' => $flashAuthentication[0]
+                'flashValidate' => $flashValidation[0] ?? null,
+                'flashAuth' => $flashAuthentication[0] ?? null
             ]);
     }
     

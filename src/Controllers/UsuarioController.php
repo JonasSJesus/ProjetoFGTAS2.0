@@ -49,11 +49,11 @@ class UsuarioController
 //        var_dump($this->flash->getMessages()); // TODO: Printar os erros no template
 
         return $this->twig->render($response, '/views/register.html.twig', [
-            'validation' => $this->flash->getMessage('usuario-validate')[0],
-            'userExists' => $this->flash->getMessage('usuario-exists')[0],
-            'update' => $this->flash->getMessage('usuario-update')[0],
-            'userNotFound' => $this->flash->getMessage('usuario-not-found')[0],
-            'userDestroyError' => $this->flash->getMessage('usuario-destroy-error')[0],
+            'validation' => $this->flash->getMessage('usuario-validate')[0] ?? null,
+            'userExists' => $this->flash->getMessage('usuario-exists')[0] ?? null,
+            'update' => $this->flash->getMessage('usuario-update')[0] ?? null,
+            'userNotFound' => $this->flash->getMessage('usuario-not-found')[0] ?? null,
+            'userDestroyError' => $this->flash->getMessage('usuario-destroy-error')[0] ?? null,
         ]);
     }
 

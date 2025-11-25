@@ -42,21 +42,28 @@ class FormaAtendimentoRepository implements IFormaAtendimentoRepository
      */
     public function findAll(): ?array
     {
-        $sql = "SELECT * FROM forma_atendimento";
-        $stmt = $this->pdo->query($sql);
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $queryBuilder = $this->conn->createQueryBuilder();
+        $data = $queryBuilder
+            ->select('*')
+            ->from('forma_atendimento')
+            ->executeQuery()
+            ->fetchAllAssociative();
+        dd($data);
 
         return array_map(FormaAtendimento::fromArray(...), $data);
     }
 
     public function findById(int $id): ?FormaAtendimento
     {
-        $sql = "SELECT * FROM forma_atendimento WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':id', $id);
-        $stmt->execute();
-
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $queryBuilder = $this->conn->createQueryBuilder();
+        
+        $data = $queryBuilder
+            ->select('*')
+            ->from('forma_atendimento')
+            ->where('id = :id')
+            ->setParameter('id', $id)
+            ->executeQuery()
+            ->fetchAssociative();
 
         if (empty($data)) {
             return null;
@@ -94,20 +101,29 @@ class FormaAtendimentoRepository implements IFormaAtendimentoRepository
 
     public function update(FormaAtendimento $formAtend, int $id): bool
     {
-        $sql = "UPDATE forma_atendimento SET forma = :forma WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':forma', $formAtend->forma);
-        $stmt->bindValue(':id', $id);
+        $queryBuilder = $this->conn->createQueryBuilder();
+        
+        $affectedRows = $queryBuilder
+            ->update('forma_atendimento')
+            ->set('forma', ':forma')
+            ->where('id = :id')
+            ->setParameter('forma', $formAtend->forma)
+            ->setParameter('id', $id)
+            ->executeStatement();
 
-        return $stmt->execute();
+        return $affectedRows > 0;
     }
 
     public function delete(int $id): bool
     {
-        $sql = "DELETE FROM forma_atendimento WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':id', $id);
+        $queryBuilder = $this->conn->createQueryBuilder();
+        
+        $affectedRows = $queryBuilder
+            ->delete('forma_atendimento')
+            ->where('id = :id')
+            ->setParameter('id', $id)
+            ->executeStatement();
 
-        return $stmt->execute();
+        return $affectedRows > 0;
     }
 }
