@@ -203,7 +203,7 @@ def test_formulario_atendimento():
 
 
 # ====================================
-# Teste 5: Validação de Campos Obrigatórios
+# Teste 4: Validação de Campos Obrigatórios
 # ====================================
 def test_validacao_campos_obrigatorios():
     """Teste de validação de campos obrigatórios no formulário"""
@@ -211,7 +211,7 @@ def test_validacao_campos_obrigatorios():
 
     try:
         print("\n" + "="*50)
-        print("TESTE 5: Validação de Campos Obrigatórios")
+        print("TESTE 4: Validação de Campos Obrigatórios")
         print("="*50)
         
         # Primeiro faz login
