@@ -153,7 +153,7 @@ class AtendimentoService
 
 
     /** @return Atendimento[] */
-    public function listAtendimentos(array $filters = []): array
+    public function listAtendimentos(array $filters = []): ?array
     {
         $filter = array_filter($filters, function ($value) {
             return !empty($value) && $value != 'pdf' && $value != 'csv';
