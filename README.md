@@ -106,3 +106,8 @@ Acesse no navegador:
 ```
 http://localhost:8080/home
 ```
+
+Para rodar os testes:
+```
+composer test
+```
