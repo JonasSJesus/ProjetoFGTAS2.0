@@ -107,7 +107,29 @@ Acesse no navegador:
 http://localhost:8080/home
 ```
 
-Para rodar os testes:
+---
+
+## 🧪 Testes E2E (End-to-End)
+
+Este projeto inclui uma suíte completa de **testes automatizados E2E** usando **Selenium WebDriver**.
+
+### 📦 Testes Disponíveis
+
+**Testes Principais:**
+- ✅ Login com sucesso
+- ❌ Login com credenciais inválidas
+- 👤 Cadastro de novo usuário
+- 📋 Formulário de atendimento completo
+- ⚠️ Validação de campos obrigatórios
+
+### 🚀 Executar Testes
+
+#### 1. Instalar Selenium
+```bash
+pip install selenium
 ```
-composer test
+
+#### 2. Executar todos os testes
+```bash
+python testes_e2e.py
 ```
