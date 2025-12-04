@@ -23,7 +23,8 @@
         "phpunit/phpunit": "^12"
     },
     "scripts": {
-        "start": "php -S localhost:8080 -t public"
+        "start": "php -S localhost:8080 -t public",
+        "test": "./vendor/bin/phpunit"
     },
     "config": {
         "process-timeout": 0
